@@ -1,0 +1,192 @@
+@host = https://localhost:7067
+
+### ============ AUTH ============
+
+### 1. Register
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "mia",
+  "email": "mia@example.com",
+  "password": "secret1234"
+}
+
+### 1b. Register invalid data (expected 400)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "ab",
+  "email": "invalid-mail",
+  "password": "secret"
+}
+
+### 2. Login
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "mia@example.com",
+  "password": "secret1234"
+}
+
+### 2b. Login wrong password (expected 401)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "mia@example.com",
+  "password": "toastbread"
+}
+
+### ============ Appointments ============
+
+### 3. Create appointment (expected 201)
+# @name createAppointment
+POST {{host}}/api/appointments
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "title": "Dentist",
+  "startTime": "2026-10-10T09:00:00",
+  "endTime": "2026-10-10T10:00:00",
+  "location": "Wien",
+  "isAllDay": false
+}
+
+### 3b. Appointment with invalid EndTime (expected 400)
+POST {{host}}/api/appointments
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "title": "Test",
+  "startTime": "2026-10-10T10:00:00",
+  "endTime": "2026-10-10T09:00:00",
+  "location": null,
+  "isAllDay": false
+}
+
+### 4. All appointments
+GET {{host}}/api/appointments
+Authorization: Bearer {{login.response.body.$.token}}
+
+### 5. Get one appointment
+GET {{host}}/api/appointments/{{createAppointment.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+
+### 6. Update appointment
+PUT {{host}}/api/appointments/{{createAppointment.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "title": "Dentist appointment (postponed)",
+  "startTime": "2026-10-11T14:00:00",
+  "endTime": "2026-10-11T15:00:00",
+  "location": "Graz",
+  "isAllDay": false
+}
+
+### 7. Delete appointment (expected 204)
+DELETE {{host}}/api/appointments/{{createAppointment.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+
+### 7b. Get deleted appointment (expected 404)
+GET {{host}}/api/appointments/{{createAppointment.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+
+### 7c. No token (expected 401)
+GET {{host}}/api/appointments
+
+### ============ Subscriptions & Payment ============
+
+### 8. Available subscriptions (no login)
+GET {{host}}/api/subscriptions
+
+### 9. Premium status (before purchase: isPremium = false)
+GET {{host}}/api/subscriptions/me
+Authorization: Bearer {{login.response.body.$.token}}
+
+### 10. Purchase with valid card (expected 200)
+# @name checkout
+POST {{host}}/api/payments/checkout
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "subscriptionId": 1,
+  "cardNumber": "4242 4242 4242 4242",
+  "expiryMonth": 12,
+  "expiryYear": 2030,
+  "cvc": "123"
+}
+
+### 10b. Purchase with declined card (expected 402)
+POST {{host}}/api/payments/checkout
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "subscriptionId": 1,
+  "cardNumber": "4000 0000 0000 0002",
+  "expiryMonth": 12,
+  "expiryYear": 2030,
+  "cvc": "123"
+}
+
+### 10c. Purchase with invalid card number (expected 400)
+POST {{host}}/api/payments/checkout
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "subscriptionId": 1,
+  "cardNumber": "1234 5678 9012 3456",
+  "expiryMonth": 12,
+  "expiryYear": 2030,
+  "cvc": "123"
+}
+
+### 10d. Purchase with an expired card (expected 400)
+POST {{host}}/api/payments/checkout
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "subscriptionId": 1,
+  "cardNumber": "4242 4242 4242 4242",
+  "expiryMonth": 1,
+  "expiryYear": 2020,
+  "cvc": "123"
+}
+
+### 10e. Purchase with unknown subscription (expected 404)
+POST {{host}}/api/payments/checkout
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "subscriptionId": 999,
+  "cardNumber": "4242 4242 4242 4242",
+  "expiryMonth": 12,
+  "expiryYear": 2030,
+  "cvc": "123"
+}
+
+### 11. Premium status after purchase (isPremium = true)
+GET {{host}}/api/subscriptions/me
+Authorization: Bearer {{login.response.body.$.token}}
+
+### ============ Invoices ============
+
+### 12. Get invoices
+GET {{host}}/api/invoices
+Authorization: Bearer {{login.response.body.$.token}}
+
+### 13. Download invoice PDF
+GET {{host}}/api/invoices/{{checkout.response.body.$.invoiceNumber}}/pdf
+Authorization: Bearer {{login.response.body.$.token}}
