@@ -2,8 +2,11 @@
 
 <header class="header">
     <div class="brand">
-        <button class="icon-btn" type="button" aria-label="Hauptmenü">
-            <Icon Name="menu" />
+        <button class="icon-btn menu-btn" type="button"
+                aria-label="Seitenleiste ein- oder ausklappen"
+                aria-expanded="@SidebarOpen"
+                @onclick="OnMenu">
+            <Icon Name="menu" Size="40" />
         </button>
 
         <a class="logo" href="/">Planno</a>
@@ -43,6 +46,8 @@
     [Parameter] public EventCallback OnToday { get; set; }
     [Parameter] public EventCallback OnPrev { get; set; }
     [Parameter] public EventCallback OnNext { get; set; }
+    [Parameter] public EventCallback OnMenu { get; set; }
+    [Parameter] public bool SidebarOpen { get; set; } = true;
 
     private string Title => View switch
     {

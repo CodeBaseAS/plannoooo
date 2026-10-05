@@ -13,6 +13,7 @@ export function registerShortcuts(dotNet) {
         if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
         const t = e.target;
         if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+        if (t && t.closest && t.closest("[data-no-shortcuts]")) return;   // z. B. im Termin-Fenster
         dotNet.invokeMethodAsync("OnShortcut", e.key);
     };
     document.addEventListener("keydown", keyHandler);
@@ -55,4 +56,48 @@ export function registerWheelPaging(element, dotNet) {
         unlockTimer = setTimeout(() => { locked = false; }, 200);
         dotNet.invokeMethodAsync("Page", direction);
     }, { passive: false });
+}
+
+// ---------- Fenster verschieben (Termin-Fenster) ----------
+export function registerDrag(handle, dialog) {
+    let startX = 0, startY = 0, originLeft = 0, originTop = 0, dragging = false;
+
+    handle.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0) return;
+        const r = dialog.getBoundingClientRect();
+        originLeft = r.left; originTop = r.top;
+        startX = e.clientX; startY = e.clientY;
+        dragging = true;
+
+        // von der CSS-Startposition auf feste Pixelwerte umstellen
+        dialog.style.left = r.left + "px";
+        dialog.style.top = r.top + "px";
+
+        handle.setPointerCapture(e.pointerId);
+        e.preventDefault();
+    });
+
+    handle.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const w = dialog.offsetWidth;
+        // Mindestens 80 px bleiben sichtbar, die Kopfzeile bleibt im Fenster
+        const left = Math.min(Math.max(originLeft + e.clientX - startX, 80 - w), window.innerWidth - 80);
+        const top = Math.min(Math.max(originTop + e.clientY - startY, 0), window.innerHeight - 48);
+        dialog.style.left = left + "px";
+        dialog.style.top = top + "px";
+    });
+
+    const end = (e) => {
+        dragging = false;
+        if (handle.hasPointerCapture(e.pointerId)) handle.releasePointerCapture(e.pointerId);
+    };
+    handle.addEventListener("pointerup", end);
+    handle.addEventListener("pointercancel", end);
+}
+
+// ---------- Zeit-Liste: gewählten Eintrag nach oben scrollen ----------
+export function scrollSelectedToTop(list) {
+    if (!list) return;
+    const selected = list.querySelector(".selected");
+    if (selected) list.scrollTop = selected.offsetTop;
 }

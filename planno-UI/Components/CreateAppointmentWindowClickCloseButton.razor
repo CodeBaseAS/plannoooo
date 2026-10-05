@@ -1,0 +1,27 @@
+<div class="scrim" data-no-shortcuts @onkeydown="OnKeyDown">
+    <div class="confirm" role="alertdialog" aria-modal="true" aria-labelledby="discard-title">
+        <p id="discard-title" class="confirm-title">Nicht gespeicherte Änderungen verwerfen?</p>
+
+        <div class="confirm-actions">
+            <button type="button" class="text-btn" @ref="_cancel" @onclick="OnCancel">Abbrechen</button>
+            <button type="button" class="filled-btn" @onclick="OnDiscard">Verwerfen</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnDiscard { get; set; }
+
+    private ElementReference _cancel;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) await _cancel.FocusAsync();
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape") await OnCancel.InvokeAsync();
+    }
+}

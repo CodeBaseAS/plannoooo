@@ -1,0 +1,298 @@
+@using System.Globalization
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<div class="dialog @(Expanded ? "expanded" : "")"
+     data-no-shortcuts
+     role="dialog"
+     aria-label="Termin erstellen"
+     tabindex="-1"
+     @ref="_dialog"
+     @onkeydown="OnKeyDown">
+
+    <div class="dlg-head">
+        <div class="drag-zone" @ref="_handle" title="Verschieben">
+            <Icon Name="drag" />
+        </div>
+        <button type="button" class="icon-btn dlg-close" aria-label="Schließen" @onclick="RequestClose">
+            <Icon Name="close" />
+        </button>
+    </div>
+
+    @if (_popup != Popup.None)
+    {
+        <div class="popup-backdrop" @onclick="ClosePopup"></div>
+    }
+
+    <div class="dlg-title">
+        <input @ref="_titleInput" class="title-input" type="text" placeholder="Titel hinzufügen" aria-label="Titel"
+               autocomplete="off"
+               @bind="_title" @bind:event="oninput" @onfocus="ClosePopup" />
+    </div>
+
+    <div class="dlg-row time-row @(_popup is Popup.Date or Popup.Start or Popup.End ? "raised" : "")">
+        <span class="row-icon"><Icon Name="schedule" /></span>
+
+        <div class="field-wrap">
+            <button type="button" class="field date-field @(_popup == Popup.Date ? "active" : "")"
+                    aria-haspopup="dialog" @onclick="() => TogglePopup(Popup.Date)">@DateLabel</button>
+
+            @if (_popup == Popup.Date)
+            {
+                <div class="popup date-popup">
+                    <MiniCalendar Selected="_date" SelectedChanged="SelectDate" />
+                </div>
+            }
+        </div>
+
+        @if (!_allDay)
+        {
+            <div class="field-wrap start-wrap">
+                <button type="button" class="field time-field @(_popup == Popup.Start ? "active" : "")"
+                        aria-label="Startzeit" aria-haspopup="listbox" @onclick="() => TogglePopup(Popup.Start)">@TimeLabel(_start)</button>
+
+                @if (_popup == Popup.Start)
+                {
+                    <div class="popup time-popup" role="listbox" @ref="_timeList">
+                        @foreach (var m in StartOptions())
+                        {
+                            var v = m;
+                            <button type="button" role="option" aria-selected="@(v == _start)"
+                                    class="time-item @(v == _start ? "selected" : "")"
+                                    @onclick="() => SelectStart(v)">@TimeLabel(v)</button>
+                        }
+                    </div>
+                }
+            </div>
+
+            <span class="dash">–</span>
+
+            <div class="field-wrap">
+                <button type="button" class="field time-field @(_popup == Popup.End ? "active" : "")"
+                        aria-label="Endzeit" aria-haspopup="listbox" @onclick="() => TogglePopup(Popup.End)">@TimeLabel(_end)</button>
+
+                @if (_popup == Popup.End)
+                {
+                    <div class="popup time-popup" role="listbox" @ref="_timeList">
+                        @foreach (var m in EndOptions())
+                        {
+                            var v = m;
+                            <button type="button" role="option" aria-selected="@(v == _end)"
+                                    class="time-item @(v == _end ? "selected" : "")"
+                                    @onclick="() => SelectEnd(v)">@TimeLabel(v)</button>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <label class="dlg-row all-day">
+        <input type="checkbox" checked="@_allDay" @onchange="OnAllDayChanged" />
+        <span>Ganztägig</span>
+    </label>
+
+    <div class="dlg-row loc-row @(_popup == Popup.Location ? "raised" : "")">
+        <span class="row-icon"><Icon Name="location" /></span>
+
+        <div class="field-wrap loc-wrap">
+            <input type="text" class="field loc-field @(_popup == Popup.Location ? "active" : "")"
+                   placeholder="Ort hinzufügen" aria-label="Ort" autocomplete="off"
+                   @bind="_location" @bind:event="oninput" @bind:after="OnLocationTyped"
+                   @onfocus="() => OpenPopup(Popup.Location)"
+                   @onclick="() => OpenPopup(Popup.Location)" />
+
+            @if (_popup == Popup.Location)
+            {
+                var suggestions = Suggestions();
+                if (suggestions.Count > 0)
+                {
+                    <div class="popup loc-popup" role="listbox">
+                        @foreach (var s in suggestions)
+                        {
+                            var place = s;
+                            <button type="button" role="option" class="loc-item" @onclick="() => SelectPlace(place)">
+                                <span class="loc-name">@place.Name</span>
+                                <span class="loc-region">@place.Region</span>
+                            </button>
+                        }
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="dlg-foot">
+        <button type="button" class="filled-btn" @onclick="Save">Speichern</button>
+    </div>
+</div>
+
+@if (_confirmOpen)
+{
+    <CreateAppointmentWindowClickCloseButton OnCancel="() => _confirmOpen = false"
+                                             OnDiscard="Discard" />
+}
+
+@code {
+    private enum Popup { None, Date, Start, End, Location }
+
+    private static readonly CultureInfo De = new("de-DE");
+
+    private static readonly (string Name, string Region)[] Places =
+    {
+        ("Wien", "Österreich"),
+        ("Wiener Neustadt", "Österreich"),
+        ("Wien-Flughafen", "Schwechat, Österreich"),
+        ("Wiener Neudorf", "Österreich"),
+        ("Graz", "Österreich"),
+        ("Linz", "Österreich"),
+        ("Salzburg", "Österreich"),
+        ("Innsbruck", "Österreich"),
+        ("Klagenfurt", "Österreich"),
+        ("Berlin", "Deutschland"),
+        ("München", "Deutschland"),
+        ("Zürich", "Schweiz"),
+    };
+
+    [Parameter] public DateTime Date { get; set; } = DateTime.Today;
+
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    [Parameter] public EventCallback<AppointmentRequest> OnSave { get; set; }
+
+    private ElementReference _dialog, _handle, _titleInput, _timeList;
+    private IJSObjectReference? _module;
+
+    private Popup _popup;
+    private bool _scrollPending, _confirmOpen, _allDay;
+    private DateTime _date;
+    private int _start, _end; 
+    private string _title = "", _location = "";
+
+    private string DateLabel => _date.ToString("dddd, d. MMMM", De);
+
+    private bool Expanded => _popup switch
+    {
+        Popup.None => false,
+        Popup.Location => Suggestions().Count > 0,
+        _ => true
+    };
+
+    protected override void OnInitialized()
+    {
+        _date = Date.Date;
+        _start = _date == DateTime.Today ? DateTime.Now.Hour * 60 : 9 * 60;
+        _end = Math.Min(_start + 60, 1439);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
+            await _module.InvokeVoidAsync("registerDrag", _handle, _dialog);
+            await _titleInput.FocusAsync();
+        }
+
+        if (_scrollPending && _module is not null)
+        {
+            _scrollPending = false;
+            await _module.InvokeVoidAsync("scrollSelectedToTop", _timeList);
+        }
+    }
+
+    private void TogglePopup(Popup p)
+    {
+        _popup = _popup == p ? Popup.None : p;
+        _scrollPending = _popup is Popup.Start or Popup.End;
+    }
+
+    private void OpenPopup(Popup p) => _popup = p;
+    private void ClosePopup() => _popup = Popup.None;
+
+    private void SelectDate(DateTime d)
+    {
+        _date = d.Date;
+        _popup = Popup.None;
+    }
+
+    private void SelectStart(int minutes)
+    {
+        var duration = Math.Max(_end - _start, 15);
+        _start = minutes;
+        _end = Math.Min(_start + duration, 1439);
+        if (_end <= _start) _end = Math.Min(_start + 15, 1439);
+        _popup = Popup.None;
+    }
+
+    private void SelectEnd(int minutes)
+    {
+        _end = minutes;
+        _popup = Popup.None;
+    }
+
+    private void OnAllDayChanged(ChangeEventArgs e)
+    {
+        _allDay = e.Value is true;
+        _popup = Popup.None;
+    }
+
+    private void OnLocationTyped() => _popup = Popup.Location;
+
+    private void SelectPlace((string Name, string Region) place)
+    {
+        _location = $"{place.Name}, {place.Region}";
+        _popup = Popup.None;
+    }
+
+    private static IEnumerable<int> StartOptions() => Enumerable.Range(0, 96).Select(i => i * 15);
+
+    private IEnumerable<int> EndOptions()
+    {
+        var options = StartOptions().Where(m => m > _start).ToList();
+        if (options.Count == 0) options.Add(1439);
+        return options;
+    }
+
+    private List<(string Name, string Region)> Suggestions()
+    {
+        var query = _location.Trim();
+        return Places
+            .Where(p => query.Length == 0 || p.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+            .Take(4)
+            .ToList();
+    }
+
+    private static string TimeLabel(int minutes)
+    {
+        var h = minutes / 60;
+        var m = minutes % 60;
+        var h12 = h % 12 == 0 ? 12 : h % 12;
+        return $"{h12}:{m:00}{(h < 12 ? "AM" : "PM")}";
+    }
+
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key != "Escape") return;
+
+        if (_popup != Popup.None) ClosePopup();
+        else RequestClose();
+    }
+
+    private void RequestClose() => _confirmOpen = true;
+
+    private Task Discard() => OnClose.InvokeAsync();
+
+    private Task Save()
+    {
+        var start = _allDay ? _date : _date.AddMinutes(_start);
+        var end = _allDay ? _date.AddDays(1) : _date.AddMinutes(_end);
+        return OnSave.InvokeAsync(new AppointmentRequest(_title.Trim(), start, end, _location.Trim(), _allDay));
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_module is null) return;
+        try { await _module.DisposeAsync(); } catch (JSDisconnectedException) { }
+    }
+}

@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @implements IAsyncDisposable
 @inject IJSRuntime JS
+@inject AppointmentService AppointmentService
 
 <PageTitle>Planno</PageTitle>
 
@@ -11,11 +12,13 @@
                     ViewChanged="SetView"
                     OnToday="Today"
                     OnPrev="() => Shift(-1)"
-                    OnNext="() => Shift(1)" />
+                    OnNext="() => Shift(1)"
+                    OnMenu="ToggleSidebar"
+                    SidebarOpen="_sidebarOpen" />
 
     <div class="body">
-        <aside class="sidebar">
-            <button class="create" type="button">
+        <aside class="sidebar @(_sidebarOpen ? "" : "collapsed")">
+            <button class="create" type="button" aria-label="Termin" title="Termin" @onclick="OpenCreate">
                 <Icon Name="add" />
                 <span>Termin</span>
             </button>
@@ -25,7 +28,6 @@
 
         @if (_view is CalendarView.Day or CalendarView.Week)
         {
-            @* Gleiche Instanz für Tag und Woche, damit die Scroll-Position erhalten bleibt *@
             <WeekView Date="_date"
                       DayCount="@(_view == CalendarView.Day ? 1 : 7)"
                       OnDayPicked="OpenDay" />
@@ -43,17 +45,44 @@
             </PageScroller>
         }
     </div>
+
+    @if (_createOpen)
+    {
+        <CreateAppointmentWindow Date="_date" OnClose="CloseCreate" OnSave="@(app => SaveAppointment(app))" />
+    }
 </div>
 
 @code {
     private DateTime _date = DateTime.Today;
     private CalendarView _view = CalendarView.Week;
+    private bool _sidebarOpen = true;
+    private bool _createOpen;
+    private List<AppointmentResponse> _appointments = new();
 
     private IJSObjectReference? _module;
     private DotNetObjectReference<Home>? _self;
 
     private DateTime MonthKey => new(_date.Year, _date.Month, 1);
     private DateTime YearKey => new(_date.Year, 1, 1);
+
+    private void ToggleSidebar() => _sidebarOpen = !_sidebarOpen;
+    private void OpenCreate() => _createOpen = true;
+    private void CloseCreate() => _createOpen = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _appointments = await AppointmentService.GetAppointmentListAsync() ?? new();
+    }
+
+    private async Task SaveAppointment(AppointmentRequest request)
+    {
+        var response = await AppointmentService.PostAppointmentAsync(request);
+        if (response is not null)
+        {
+            _appointments.Add(response);
+        }
+        _createOpen = false;
+    }
 
     private void Today() => _date = DateTime.Today;
     private void SetView(CalendarView view) => _view = view;
@@ -87,7 +116,6 @@
         await _module.InvokeVoidAsync("registerShortcuts", _self);
     }
 
-    // Tastenkürzel: D / W / M / Y wechseln die Ansicht, T springt zu heute
     [JSInvokable]
     public async Task OnShortcut(string key)
     {
