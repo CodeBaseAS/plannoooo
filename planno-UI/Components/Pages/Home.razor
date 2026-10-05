@@ -3,6 +3,7 @@
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 @inject AppointmentService AppointmentService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Planno</PageTitle>
 
@@ -71,7 +72,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _appointments = await AppointmentService.GetAppointmentListAsync() ?? new();
+        try
+        {
+            _appointments = await AppointmentService.GetAppointmentListAsync() ?? new();
+        }
+        catch (HttpRequestException ex) when (ex.Message.Contains("401"))
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+        catch (Exception)
+        {
+            _appointments = new();
+        }
     }
 
     private async Task SaveAppointment(AppointmentRequest request)

@@ -1,5 +1,32 @@
 ﻿@page "/login"
 
 @using static Models.Dtos.AuthDtos
-@inject planno_UI.Services.AuthService AuthService
-@inject NavigationManager Navigation
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+@inject TokenAuthenticationStateProvider TokenAuthenticationStateProvider
+
+<input @bind="_username" placeholder="username" />
+<input @bind="_password" type="password" placeholder="password" />
+<button @onclick="LoginAsync">Anmelden</button>
+
+@if (_err)
+{
+    <p>Invalid username or password.</p>
+}
+
+@code {
+    private string _username = string.Empty;
+    private string _password = string.Empty;
+    private bool _err;
+
+    private async Task LoginAsync()
+    {
+        bool success = await AuthService.LoginAsync(_username, _password);
+        _err = !success;
+        if (success)
+        {
+            TokenAuthenticationStateProvider.ReportStatusChange();
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

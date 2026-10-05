@@ -5,19 +5,21 @@ namespace planno_UI.Services
 {
     public class AppointmentService(HttpClient httpClient)
     {
+        private readonly HttpClient _httpClient = httpClient;
+
         public async Task<List<AppointmentResponse>?> GetAppointmentListAsync()
         {
-            return await httpClient.GetFromJsonAsync<List<AppointmentResponse>>("Appointments");
+            return await _httpClient.GetFromJsonAsync<List<AppointmentResponse>>("Appointments");
         }
        
         public async Task<AppointmentResponse?> GetAppointmentByIdAsync(int id)
         {
-            return await httpClient.GetFromJsonAsync<AppointmentResponse>($"Appointments/{id}");
+            return await _httpClient.GetFromJsonAsync<AppointmentResponse>($"Appointments/{id}");
         }
        
         public async Task<AppointmentResponse?> PostAppointmentAsync(AppointmentRequest appointmentRequest)
         {
-            var response = await httpClient.PostAsJsonAsync("Appointments", appointmentRequest);
+            var response = await _httpClient.PostAsJsonAsync("Appointments", appointmentRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -29,7 +31,7 @@ namespace planno_UI.Services
        
         public async Task<AppointmentResponse?> UpdateAppointmentAsync(int id, AppointmentRequest appointmentRequest)
         {
-            var response = await httpClient.PatchAsJsonAsync($"Appointments/{id}", appointmentRequest);
+            var response = await _httpClient.PatchAsJsonAsync($"Appointments/{id}", appointmentRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -41,7 +43,7 @@ namespace planno_UI.Services
 
         public async Task DeleteAppointmentAsync(int id)
         {
-            await httpClient.DeleteAsync($"Appointments/{id}");
+            await _httpClient.DeleteAsync($"Appointments/{id}");
         }
     }
 }
