@@ -43,11 +43,7 @@
     private static readonly CultureInfo De = new("de-DE");
 
     [Parameter] public DateTime Date { get; set; } = DateTime.Today;
-
-    /// <summary>1 = Tagesansicht, 7 = Wochenansicht</summary>
     [Parameter] public int DayCount { get; set; } = 7;
-
-    /// <summary>Wird ausgelöst, wenn in der Wochenansicht ein Tag angeklickt wird.</summary>
     [Parameter] public EventCallback<DateTime> OnDayPicked { get; set; }
 
     private ElementReference _scroll;

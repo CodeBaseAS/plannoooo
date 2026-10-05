@@ -1,7 +1,6 @@
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 
-@* Container ohne Scrollbar: Mausrad / Trackpad blättert seitenweise. *@
 <div class="pager" @ref="_root">
     <div class="page @_dir" @key="PageKey">
         @ChildContent
@@ -9,10 +8,8 @@
 </div>
 
 @code {
-    /// <summary>Identifiziert die aktuelle Seite (z. B. Monatsanfang). Bei Änderung wird neu gerendert + animiert.</summary>
     [Parameter, EditorRequired] public DateTime PageKey { get; set; }
 
-    /// <summary>-1 = vorherige Seite, +1 = nächste Seite</summary>
     [Parameter] public EventCallback<int> OnPage { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }

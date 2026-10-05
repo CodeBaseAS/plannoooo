@@ -41,7 +41,6 @@
 
     protected override void OnParametersSet()
     {
-        // Monat nur nachziehen, wenn sich das gewählte Datum von außen ändert
         if (Selected.Date != _seen)
         {
             _seen = Selected.Date;
@@ -51,7 +50,7 @@
 
     private IEnumerable<DateTime> Cells()
     {
-        var offset = ((int)_month.DayOfWeek + 6) % 7;                    // Woche beginnt am Montag
+        var offset = ((int)_month.DayOfWeek + 6) % 7;
         var start = _month.AddDays(-offset);
         var rows = (int)Math.Ceiling((offset + DateTime.DaysInMonth(_month.Year, _month.Month)) / 7.0);
         for (var i = 0; i < rows * 7; i++) yield return start.AddDays(i);

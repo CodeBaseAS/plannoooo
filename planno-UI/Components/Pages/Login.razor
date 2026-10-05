@@ -1,5 +1,5 @@
 ﻿@page "/login"
-@rendermode InteractiveServer
-@inject AuthService AuthService
 
-<PageTitle>Planno | Login</PageTitle>
+@using static Models.Dtos.AuthDtos
+@inject planno_UI.Services.AuthService AuthService
+@inject NavigationManager Navigation

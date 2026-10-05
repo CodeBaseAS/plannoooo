@@ -26,7 +26,7 @@
     [Parameter] public EventCallback<DateTime> OnDayPicked { get; set; }
 
     private DateTime First => new(Date.Year, Date.Month, 1);
-    private int Offset => ((int)First.DayOfWeek + 6) % 7;                 // Woche beginnt am Montag
+    private int Offset => ((int)First.DayOfWeek + 6) % 7;
     private int Rows => (int)Math.Ceiling((Offset + DateTime.DaysInMonth(Date.Year, Date.Month)) / 7.0);
 
     private IEnumerable<DateTime> Cells()

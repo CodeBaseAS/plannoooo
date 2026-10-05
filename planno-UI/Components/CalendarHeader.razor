@@ -57,11 +57,9 @@
         _                 => Date.ToString("MMMM yyyy", De)
     };
 
-    // Feste Abkürzungen, damit das Ergebnis nicht von ICU/Betriebssystem abhängt
     private static readonly string[] ShortMonths =
         { "Jan.", "Feb.", "März", "Apr.", "Mai", "Juni", "Juli", "Aug.", "Sept.", "Okt.", "Nov.", "Dez." };
 
-    // Woche über zwei Monate: „Sept. – Okt. 2026“
     private string WeekTitle()
     {
         var start = Date.Date.AddDays(-(((int)Date.DayOfWeek + 6) % 7));

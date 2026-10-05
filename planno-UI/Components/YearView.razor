@@ -36,14 +36,12 @@
     [Parameter] public EventCallback<DateTime> OnDayPicked { get; set; }
     [Parameter] public EventCallback<DateTime> OnMonthPicked { get; set; }
 
-    // Immer 6 Wochen, damit alle Monate gleich hoch sind
     private static IEnumerable<DateTime> Cells(DateTime month)
     {
         var start = month.AddDays(-(((int)month.DayOfWeek + 6) % 7));
         for (var i = 0; i < 42; i++) yield return start.AddDays(i);
     }
 
-    // Hervorhebung nur im eigenen Monat, sonst erscheint ein Tag doppelt markiert
     private string StateClass(DateTime d, DateTime month)
     {
         if (d.Month != month.Month) return "";
