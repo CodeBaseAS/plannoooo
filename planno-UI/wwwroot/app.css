@@ -16,6 +16,9 @@
     --shadow-1: 0 1px 2px rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
     --shadow-menu: 0 2px 6px 2px rgba(60, 64, 67, .15), 0 1px 2px rgba(60, 64, 67, .3);
 
+    --sidebar-w: 290px;
+    --period-w: 170px;     /* Platz für den Titel (Monat/Woche/…) */
+    --header-gap: 32px;    /* gleicher Abstand links und rechts der Suchleiste */
     --hour-h: 48px;
     --gutter: 65px;
     --font: "Google Sans", "Google Sans Text", "Product Sans", Roboto, "Segoe UI", Arial, sans-serif;
@@ -33,19 +36,23 @@ a { color: inherit; text-decoration: none; }
 .body { flex: 1; min-height: 0; display: flex; }
 
 /* ---------- Header ---------- */
-.header { height: 96px; flex: none; display: flex; align-items: center; padding: 0 24px 0 24px; }
+.header { height: 96px; flex: none; display: flex; align-items: center; padding: 0 24px 0 0; }
+/* Feste Breite wie die Sidebar: „Heute“ beginnt so exakt an der linken Kante des Kalenders */
+.brand { width: var(--sidebar-w); flex: none; display: flex; align-items: center; padding-left: 24px; }
 
 .icon-btn { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; }
 .icon-btn:hover, .mini-nav:hover, .dom:hover { background: var(--hover); }
 
-.logo   { margin: 0 48px 0 24px; font-size: 40px; line-height: 1; letter-spacing: -.5px; }
+.logo   { margin-left: 24px; font-size: 40px; line-height: 1; letter-spacing: -.5px; white-space: nowrap; }
 .nav    { display: flex; margin-left: 12px; }
-.period { margin: 0 0 0 20px; font-size: 22px; font-weight: 400; white-space: nowrap; }
+/* Feste Breite: die Suchleiste bleibt an derselben Stelle, egal wie lang der Titel ist */
+.period { flex: none; width: var(--period-w); margin: 0 var(--header-gap) 0 20px; font-size: 22px; font-weight: 400; white-space: nowrap; }
+.period.long { font-size: 18px; }   /* lange Titel, z. B. „Dez. 2026 – Jan. 2027“ */
 
 .pill { height: 40px; padding: 0 24px; border: 1px solid var(--outline); border-radius: 20px; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; }
 .pill:hover, .pill.open { background: var(--hover); }
 
-.search { flex: 1; max-width: 654px; height: 48px; margin-left: 48px; padding: 0 24px; display: flex; align-items: center; gap: 14px;
+.search { position: relative; flex: 1; min-width: 0; height: 48px; margin-right: var(--header-gap); padding: 0 24px; display: flex; align-items: center; gap: 14px;
           background: var(--surface); border-radius: 24px; box-shadow: var(--shadow-1); color: var(--text); }
 .search input { flex: 1; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: var(--text); }
 .search input::placeholder { color: var(--text-2); }
@@ -68,7 +75,7 @@ a { color: inherit; text-decoration: none; }
 .menu-item.active { font-weight: 500; }
 
 /* ---------- Sidebar ---------- */
-.sidebar { width: 290px; flex: none; padding: 4px 49px 0 37px; }
+.sidebar { width: var(--sidebar-w); flex: none; padding: 4px 49px 0 37px; }
 
 .create { width: 100%; height: 56px; padding: 0 24px; display: flex; align-items: center; gap: 22px;
           background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-1); font-size: 14px; font-weight: 500; }

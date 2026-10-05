@@ -1,11 +1,13 @@
 @using System.Globalization
 
 <header class="header">
-    <button class="icon-btn" type="button" aria-label="Hauptmenü">
-        <Icon Name="menu" />
-    </button>
+    <div class="brand">
+        <button class="icon-btn" type="button" aria-label="Hauptmenü">
+            <Icon Name="menu" />
+        </button>
 
-    <a class="logo" href="/">Planno</a>
+        <a class="logo" href="/">Planno</a>
+    </div>
 
     <button class="pill" type="button" @onclick="OnToday">Heute</button>
 
@@ -18,7 +20,7 @@
         </button>
     </div>
 
-    <h1 class="period">@Title</h1>
+    <h1 class="period @(Title.Length > 17 ? "long" : "")">@Title</h1>
 
     <label class="search">
         <Icon Name="search" Size="22" />
@@ -50,13 +52,18 @@
         _                 => Date.ToString("MMMM yyyy", De)
     };
 
+    // Feste Abkürzungen, damit das Ergebnis nicht von ICU/Betriebssystem abhängt
+    private static readonly string[] ShortMonths =
+        { "Jan.", "Feb.", "März", "Apr.", "Mai", "Juni", "Juli", "Aug.", "Sept.", "Okt.", "Nov.", "Dez." };
+
+    // Woche über zwei Monate: „Sept. – Okt. 2026“
     private string WeekTitle()
     {
         var start = Date.Date.AddDays(-(((int)Date.DayOfWeek + 6) % 7));
         var end = start.AddDays(6);
 
         if (start.Month == end.Month) return end.ToString("MMMM yyyy", De);
-        if (start.Year == end.Year) return $"{start.ToString("MMMM", De)} – {end.ToString("MMMM yyyy", De)}";
-        return $"{start.ToString("MMMM yyyy", De)} – {end.ToString("MMMM yyyy", De)}";
+        if (start.Year == end.Year) return $"{ShortMonths[start.Month - 1]} – {ShortMonths[end.Month - 1]} {end.Year}";
+        return $"{ShortMonths[start.Month - 1]} {start.Year} – {ShortMonths[end.Month - 1]} {end.Year}";
     }
 }
