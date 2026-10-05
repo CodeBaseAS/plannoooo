@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Models.Models;
 using System.Security.Claims;
 using System.Text;
-using static planno_API.Dtos.AuthDtos;
+using static Models.Dtos.AuthDtos;
 
 namespace planno_API.Services
 {

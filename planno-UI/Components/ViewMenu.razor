@@ -1,0 +1,71 @@
+<div class="view-menu" @onkeydown="OnKeyDown">
+    <button type="button"
+            class="pill view-switch @(_open ? "open" : "")"
+            aria-haspopup="menu"
+            aria-expanded="@_open"
+            @onclick="Toggle">
+        <span>@LabelOf(View)</span>
+        <Icon Name="arrow_drop_down" Size="20" />
+    </button>
+
+    @if (_open)
+    {
+        <div class="menu-backdrop" @onclick="Close"></div>
+        <div class="menu" role="menu">
+            @foreach (var item in Items)
+            {
+                var v = item.View;
+                <button type="button"
+                        role="menuitemradio"
+                        aria-checked="@(v == View)"
+                        class="menu-item @(v == View ? "active" : "")"
+                        @onclick="() => Select(v)">
+                    <span>@item.Label</span>
+                    <kbd>@item.Key</kbd>
+                </button>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private static readonly (CalendarView View, string Label, string Key)[] Items =
+    {
+        (CalendarView.Day,   "Tag",   "D"),
+        (CalendarView.Week,  "Woche", "W"),
+        (CalendarView.Month, "Monat", "M"),
+        (CalendarView.Year,  "Jahr",  "Y"),
+    };
+
+    [Parameter] public CalendarView View { get; set; }
+    [Parameter] public EventCallback<CalendarView> ViewChanged { get; set; }
+
+    private bool _open;
+    private CalendarView _last;
+
+    private static string LabelOf(CalendarView v) => Items.First(i => i.View == v).Label;
+
+    protected override void OnParametersSet()
+    {
+        // Menü schließen, wenn die Ansicht z. B. per Tastenkürzel gewechselt wurde
+        if (View != _last)
+        {
+            _open = false;
+            _last = View;
+        }
+    }
+
+    private void Toggle() => _open = !_open;
+    private void Close() => _open = false;
+
+    private async Task Select(CalendarView v)
+    {
+        _open = false;
+        await ViewChanged.InvokeAsync(v);
+    }
+
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape") _open = false;
+    }
+}

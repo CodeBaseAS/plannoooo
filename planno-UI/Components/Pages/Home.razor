@@ -1,7 +1,118 @@
-﻿@page "/"
+@page "/"
+@rendermode InteractiveServer
+@implements IAsyncDisposable
+@inject IJSRuntime JS
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Planno</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="app">
+    <CalendarHeader Date="_date"
+                    View="_view"
+                    ViewChanged="SetView"
+                    OnToday="Today"
+                    OnPrev="() => Shift(-1)"
+                    OnNext="() => Shift(1)" />
 
-Welcome to your new app.
+    <div class="body">
+        <aside class="sidebar">
+            <button class="create" type="button">
+                <Icon Name="add" />
+                <span>Termin</span>
+            </button>
+
+            <MiniCalendar @bind-Selected="_date" />
+        </aside>
+
+        @if (_view is CalendarView.Day or CalendarView.Week)
+        {
+            @* Gleiche Instanz für Tag und Woche, damit die Scroll-Position erhalten bleibt *@
+            <WeekView Date="_date"
+                      DayCount="@(_view == CalendarView.Day ? 1 : 7)"
+                      OnDayPicked="OpenDay" />
+        }
+        else if (_view == CalendarView.Month)
+        {
+            <PageScroller PageKey="MonthKey" OnPage="Shift">
+                <MonthView Date="_date" OnDayPicked="OpenDay" />
+            </PageScroller>
+        }
+        else
+        {
+            <PageScroller PageKey="YearKey" OnPage="Shift">
+                <YearView Date="_date" OnDayPicked="OpenDay" OnMonthPicked="OpenMonth" />
+            </PageScroller>
+        }
+    </div>
+</div>
+
+@code {
+    private DateTime _date = DateTime.Today;
+    private CalendarView _view = CalendarView.Week;
+
+    private IJSObjectReference? _module;
+    private DotNetObjectReference<Home>? _self;
+
+    private DateTime MonthKey => new(_date.Year, _date.Month, 1);
+    private DateTime YearKey => new(_date.Year, 1, 1);
+
+    private void Today() => _date = DateTime.Today;
+    private void SetView(CalendarView view) => _view = view;
+
+    private void Shift(int steps) => _date = _view switch
+    {
+        CalendarView.Day   => _date.AddDays(steps),
+        CalendarView.Week  => _date.AddDays(7 * steps),
+        CalendarView.Month => _date.AddMonths(steps),
+        _                  => _date.AddYears(steps)
+    };
+
+    private void OpenDay(DateTime day)
+    {
+        _date = day;
+        _view = CalendarView.Day;
+    }
+
+    private void OpenMonth(DateTime month)
+    {
+        _date = month;
+        _view = CalendarView.Month;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        _self = DotNetObjectReference.Create(this);
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
+        await _module.InvokeVoidAsync("registerShortcuts", _self);
+    }
+
+    // Tastenkürzel: D / W / M / Y wechseln die Ansicht, T springt zu heute
+    [JSInvokable]
+    public async Task OnShortcut(string key)
+    {
+        switch (key.ToLowerInvariant())
+        {
+            case "d": _view = CalendarView.Day; break;
+            case "w": _view = CalendarView.Week; break;
+            case "m": _view = CalendarView.Month; break;
+            case "y": _view = CalendarView.Year; break;
+            case "t": _date = DateTime.Today; break;
+            default: return;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _self?.Dispose();
+        if (_module is null) return;
+        try
+        {
+            await _module.InvokeVoidAsync("unregisterShortcuts");
+            await _module.DisposeAsync();
+        }
+        catch (JSDisconnectedException) { }
+    }
+}

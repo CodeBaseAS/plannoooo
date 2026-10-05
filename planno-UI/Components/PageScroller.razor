@@ -1,0 +1,52 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+@* Container ohne Scrollbar: Mausrad / Trackpad blättert seitenweise. *@
+<div class="pager" @ref="_root">
+    <div class="page @_dir" @key="PageKey">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    /// <summary>Identifiziert die aktuelle Seite (z. B. Monatsanfang). Bei Änderung wird neu gerendert + animiert.</summary>
+    [Parameter, EditorRequired] public DateTime PageKey { get; set; }
+
+    /// <summary>-1 = vorherige Seite, +1 = nächste Seite</summary>
+    [Parameter] public EventCallback<int> OnPage { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private ElementReference _root;
+    private IJSObjectReference? _module;
+    private DotNetObjectReference<PageScroller>? _self;
+    private DateTime _prevKey;
+    private string _dir = "";
+
+    protected override void OnParametersSet()
+    {
+        if (_prevKey != default && PageKey != _prevKey)
+            _dir = PageKey > _prevKey ? "next" : "prev";
+
+        _prevKey = PageKey;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        _self = DotNetObjectReference.Create(this);
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
+        await _module.InvokeVoidAsync("registerWheelPaging", _root, _self);
+    }
+
+    [JSInvokable]
+    public Task Page(int direction) => InvokeAsync(() => OnPage.InvokeAsync(direction));
+
+    public async ValueTask DisposeAsync()
+    {
+        _self?.Dispose();
+        if (_module is null) return;
+        try { await _module.DisposeAsync(); } catch (JSDisconnectedException) { }
+    }
+}

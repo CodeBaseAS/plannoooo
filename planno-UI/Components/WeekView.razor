@@ -1,0 +1,93 @@
+@using System.Globalization
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<section class="week">
+    <div class="week-scroll" style="--cols:@DayCount" @ref="_scroll">
+
+        <div class="week-head @(DayCount == 1 ? "single" : "")">
+            <div></div>
+            @foreach (var d in Days())
+            {
+                var today = d.Date == DateTime.Today;
+                <div class="day-head @(today ? "today" : "")" @onclick="() => PickDay(d)">
+                    <span class="dow">@d.ToString("ddd", De).TrimEnd('.')</span>
+                    <button type="button" class="dom" aria-current="@(today ? "date" : null)">@d.Day</button>
+                </div>
+            }
+        </div>
+
+        <div class="week-grid">
+            <div class="hours" aria-hidden="true">
+                @for (var h = 1; h < 24; h++)
+                {
+                    <span style="top:@(h * HourHeight)px">@HourLabel(h)</span>
+                }
+            </div>
+
+            @foreach (var d in Days())
+            {
+                <div class="day-col" data-date="@d.ToString("yyyy-MM-dd")">
+                    @if (d.Date == DateTime.Today)
+                    {
+                        <div class="now" style="top:@(NowTop)px"></div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    private const int HourHeight = 48;
+    private static readonly CultureInfo De = new("de-DE");
+
+    [Parameter] public DateTime Date { get; set; } = DateTime.Today;
+
+    /// <summary>1 = Tagesansicht, 7 = Wochenansicht</summary>
+    [Parameter] public int DayCount { get; set; } = 7;
+
+    /// <summary>Wird ausgelöst, wenn in der Wochenansicht ein Tag angeklickt wird.</summary>
+    [Parameter] public EventCallback<DateTime> OnDayPicked { get; set; }
+
+    private ElementReference _scroll;
+    private IJSObjectReference? _module;
+    private System.Threading.Timer? _timer;
+    private DateTime _now = DateTime.Now;
+
+    private int NowTop => (int)Math.Round(_now.TimeOfDay.TotalMinutes / 60.0 * HourHeight);
+
+    private IEnumerable<DateTime> Days()
+    {
+        if (DayCount == 1) return new[] { Date.Date };
+
+        var start = Date.Date.AddDays(-(((int)Date.DayOfWeek + 6) % 7));
+        return Enumerable.Range(0, 7).Select(i => start.AddDays(i));
+    }
+
+    private Task PickDay(DateTime day) =>
+        DayCount > 1 ? OnDayPicked.InvokeAsync(day) : Task.CompletedTask;
+
+    private static string HourLabel(int h) => h < 12 ? $"{h} AM" : h == 12 ? "12 PM" : $"{h - 12} PM";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        _timer = new System.Threading.Timer(async _ =>
+        {
+            _now = DateTime.Now;
+            await InvokeAsync(StateHasChanged);
+        }, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
+        await _module.InvokeVoidAsync("scrollTo", _scroll, 7 * HourHeight);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _timer?.Dispose();
+        if (_module is null) return;
+        try { await _module.DisposeAsync(); } catch (JSDisconnectedException) { }
+    }
+}

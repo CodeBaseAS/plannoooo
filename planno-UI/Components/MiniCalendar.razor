@@ -1,0 +1,65 @@
+@using System.Globalization
+
+<section class="mini" aria-label="Monatsübersicht">
+    <div class="mini-head">
+        <span class="mini-title">@_month.ToString("MMMM yyyy", De)</span>
+        <button class="mini-nav" type="button" aria-label="Vorheriger Monat" @onclick="() => _month = _month.AddMonths(-1)">
+            <Icon Name="chevron_left" Size="18" />
+        </button>
+        <button class="mini-nav" type="button" aria-label="Nächster Monat" @onclick="() => _month = _month.AddMonths(1)">
+            <Icon Name="chevron_right" Size="18" />
+        </button>
+    </div>
+
+    <div class="mini-grid">
+        @foreach (var letter in "MDMDFSS")
+        {
+            <span class="mini-dow">@letter</span>
+        }
+
+        @foreach (var day in Cells())
+        {
+            var d = day;
+            <button type="button"
+                    class="mini-day @StateClass(d)"
+                    aria-current="@(d.Date == DateTime.Today ? "date" : null)"
+                    @onclick="() => Pick(d)">
+                @d.Day
+            </button>
+        }
+    </div>
+</section>
+
+@code {
+    private static readonly CultureInfo De = new("de-DE");
+
+    [Parameter] public DateTime Selected { get; set; } = DateTime.Today;
+    [Parameter] public EventCallback<DateTime> SelectedChanged { get; set; }
+
+    private DateTime _month;
+    private DateTime _seen;
+
+    protected override void OnParametersSet()
+    {
+        // Monat nur nachziehen, wenn sich das gewählte Datum von außen ändert
+        if (Selected.Date != _seen)
+        {
+            _seen = Selected.Date;
+            _month = new DateTime(Selected.Year, Selected.Month, 1);
+        }
+    }
+
+    private IEnumerable<DateTime> Cells()
+    {
+        var offset = ((int)_month.DayOfWeek + 6) % 7;                    // Woche beginnt am Montag
+        var start = _month.AddDays(-offset);
+        var rows = (int)Math.Ceiling((offset + DateTime.DaysInMonth(_month.Year, _month.Month)) / 7.0);
+        for (var i = 0; i < rows * 7; i++) yield return start.AddDays(i);
+    }
+
+    private string StateClass(DateTime d) =>
+        d.Date == DateTime.Today ? "today" :
+        d.Date == Selected.Date ? "selected" : "";
+
+    private Task Pick(DateTime d) => SelectedChanged.InvokeAsync(d.Date);
+}
