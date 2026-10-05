@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using planno_API.Services;
 using System.Security.Claims;
-using static planno_API.Dtos.BillingDtos;
+using static Models.Dtos.BillingDtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 
@@ -16,14 +16,18 @@ namespace planno_API.Controllers
         private int CurrentUserId => int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
         [HttpGet]
-        public async Task<List<InvoiceResponse>> GetMine() =>
-            await db.Invoices
-                .Where(i => i.Payment.UserId == CurrentUserId)
-                .OrderByDescending(i => i.IssuedAt)
-                .Select(i => new InvoiceResponse(
-                    i.Id, i.InvoiceNumber, i.IssuedAt, i.Payment.Amount,
-                    i.Payment.Subscription.Description, i.PdfUrl))
-                .ToListAsync();
+        public async Task<List<InvoiceResponse>> GetInvoices()
+        {
+            return await db.Invoices.Where(i => i.Payment.UserId == CurrentUserId).OrderByDescending(i => i.IssuedAt).Select(i => 
+            new InvoiceResponse(
+                    i.Id, i.InvoiceNumber, 
+                    i.IssuedAt, 
+                    i.Payment.Amount,
+                    i.Payment.Subscription.Description, 
+                    i.PdfUrl
+                    )
+            ).ToListAsync();
+        }
 
         [HttpGet("{invoiceNumber}/pdf")]
         public async Task<IActionResult> DownloadPdf(string invoiceNumber)

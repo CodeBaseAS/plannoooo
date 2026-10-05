@@ -21,7 +21,7 @@ namespace planno_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("planno_API.Models.Appointment", b =>
+            modelBuilder.Entity("Models.Models.Appointment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +57,7 @@ namespace planno_API.Migrations
                     b.ToTable("appointments", (string)null);
                 });
 
-            modelBuilder.Entity("planno_API.Models.CardDetails", b =>
+            modelBuilder.Entity("Models.Models.CardDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,7 +92,7 @@ namespace planno_API.Migrations
                     b.ToTable("card_details", (string)null);
                 });
 
-            modelBuilder.Entity("planno_API.Models.Invoice", b =>
+            modelBuilder.Entity("Models.Models.Invoice", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -130,7 +130,7 @@ namespace planno_API.Migrations
                     b.ToTable("invoices", (string)null);
                 });
 
-            modelBuilder.Entity("planno_API.Models.Payment", b =>
+            modelBuilder.Entity("Models.Models.Payment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -169,7 +169,7 @@ namespace planno_API.Migrations
                     b.ToTable("payments", (string)null);
                 });
 
-            modelBuilder.Entity("planno_API.Models.Subscription", b =>
+            modelBuilder.Entity("Models.Models.Subscription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -212,7 +212,7 @@ namespace planno_API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("planno_API.Models.User", b =>
+            modelBuilder.Entity("Models.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -260,7 +260,7 @@ namespace planno_API.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("planno_API.Models.UserAppointment", b =>
+            modelBuilder.Entity("Models.Models.UserAppointment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -286,9 +286,9 @@ namespace planno_API.Migrations
                     b.ToTable("user_appointments", (string)null);
                 });
 
-            modelBuilder.Entity("planno_API.Models.CardDetails", b =>
+            modelBuilder.Entity("Models.Models.CardDetails", b =>
                 {
-                    b.HasOne("planno_API.Models.User", "User")
+                    b.HasOne("Models.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -297,9 +297,9 @@ namespace planno_API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("planno_API.Models.Invoice", b =>
+            modelBuilder.Entity("Models.Models.Invoice", b =>
                 {
-                    b.HasOne("planno_API.Models.Payment", "Payment")
+                    b.HasOne("Models.Models.Payment", "Payment")
                         .WithMany()
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -308,21 +308,21 @@ namespace planno_API.Migrations
                     b.Navigation("Payment");
                 });
 
-            modelBuilder.Entity("planno_API.Models.Payment", b =>
+            modelBuilder.Entity("Models.Models.Payment", b =>
                 {
-                    b.HasOne("planno_API.Models.CardDetails", "Card")
+                    b.HasOne("Models.Models.CardDetails", "Card")
                         .WithMany()
                         .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("planno_API.Models.Subscription", "Subscription")
+                    b.HasOne("Models.Models.Subscription", "Subscription")
                         .WithMany()
                         .HasForeignKey("SubscriptionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("planno_API.Models.User", "User")
+                    b.HasOne("Models.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -335,9 +335,9 @@ namespace planno_API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("planno_API.Models.User", b =>
+            modelBuilder.Entity("Models.Models.User", b =>
                 {
-                    b.HasOne("planno_API.Models.Subscription", "ActiveSubscription")
+                    b.HasOne("Models.Models.Subscription", "ActiveSubscription")
                         .WithMany()
                         .HasForeignKey("ActiveSubscriptionId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -345,15 +345,15 @@ namespace planno_API.Migrations
                     b.Navigation("ActiveSubscription");
                 });
 
-            modelBuilder.Entity("planno_API.Models.UserAppointment", b =>
+            modelBuilder.Entity("Models.Models.UserAppointment", b =>
                 {
-                    b.HasOne("planno_API.Models.Appointment", "Appointment")
+                    b.HasOne("Models.Models.Appointment", "Appointment")
                         .WithMany()
                         .HasForeignKey("AppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("planno_API.Models.User", "User")
+                    b.HasOne("Models.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

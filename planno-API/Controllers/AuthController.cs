@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using planno_API.Models;
+using Models.Models;
 using planno_API.Services;
-using static planno_API.Dtos.AuthDtos;
+using static Models.Dtos.AuthDtos;
 
 namespace planno_API.Controllers
 {

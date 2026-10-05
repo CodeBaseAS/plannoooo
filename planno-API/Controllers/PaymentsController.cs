@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using planno_API.Models;
+using Models.Models;
 using planno_API.Services;
 using System.Security.Claims;
-using static planno_API.Dtos.BillingDtos;
+using static Models.Dtos.BillingDtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 
@@ -14,8 +14,6 @@ namespace planno_API.Controllers
     [Authorize]
     public class PaymentsController(PlannoDbContext db, IInvoicePdfGenerator pdfGenerator, InvoiceFileStore files) : ControllerBase
     {
-        private const string DeclinedTestCard = "4000000000000002";
-
         private int CurrentUserId => int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
         [HttpPost("checkout")]
@@ -35,16 +33,12 @@ namespace planno_API.Controllers
 
             string number = request.CardNumber.Replace(" ", "");
 
-            if (number == DeclinedTestCard)
-            {
-                return Problem(statusCode: StatusCodes.Status402PaymentRequired, title: "Payment declined", detail: "The card was declined.");
-            }
-
             string brand = number[0] switch { '4' => "Visa", '5' => "Mastercard", '3' => "American Express", _ => "Unknown" };
             string last4 = number[^4..];
             DateTime cardExpiresAt = new DateTime(request.ExpiryYear, request.ExpiryMonth, 1).AddMonths(1).AddSeconds(-1);
 
-            CardDetails card = await db.CardDetails.FirstOrDefaultAsync(c => c.UserId == user.Id && c.CardBrand == brand && c.CardLast4 == last4 && c.ExpiresAt == cardExpiresAt) 
+            CardDetails card = await db.CardDetails
+                .FirstOrDefaultAsync(c => c.UserId == user.Id && c.CardBrand == brand && c.CardLast4 == last4 && c.ExpiresAt == cardExpiresAt) 
                 ?? new CardDetails 
                 { 
                     UserId = user.Id, 

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using planno_API.Models;
+using Models.Models;
 using System.Security.Claims;
-using static planno_API.Dtos.BillingDtos;
+using static Models.Dtos.BillingDtos;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace planno_API.Controllers
@@ -15,7 +15,10 @@ namespace planno_API.Controllers
         private int CurrentUserId => int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
         [HttpGet]
-        public async Task<List<SubscriptionResponse>> GetAll() => await db.Subscriptions.OrderBy(s => s.Price).Select(s => new SubscriptionResponse(s.Id, s.Description, s.Price, s.Interval)).ToListAsync();
+        public async Task<List<SubscriptionResponse>> GetAll()
+        {
+            return await db.Subscriptions.OrderBy(s => s.Price).Select(s => new SubscriptionResponse(s.Id, s.Description, s.Price, s.Interval)).ToListAsync();
+        }
 
         [Authorize]
         [HttpGet("me")]

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace planno_API.Dtos
+namespace Models.Dtos
 {
     public class BillingDtos
     {

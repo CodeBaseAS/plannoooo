@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "App",
+    "Projects": [
+      {
+        "Path": "planno-API\\planno-API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "planno-UI\\planno-UI.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

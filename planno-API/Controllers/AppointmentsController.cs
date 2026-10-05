@@ -3,8 +3,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
-using planno_API.Models;
-using static planno_API.Dtos.AppointmentDtos;
+using static Models.Dtos.AppointmentDtos;
+using Models.Models;
 
 namespace planno_API.Controllers
 {
@@ -15,14 +15,14 @@ namespace planno_API.Controllers
     {
         private int CurrentUserId => int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
-        private IQueryable<Appointment> Mine() => db.Appointments.Where(a => db.UserAppointments.Any(ua => ua.AppointmentId == a.Id && ua.UserId == CurrentUserId));
+        private IQueryable<Appointment> QueryUserAppointments() => db.Appointments.Where(a => db.UserAppointments.Any(ua => ua.AppointmentId == a.Id && ua.UserId == CurrentUserId));
 
         private static AppointmentResponse ToResponse(Appointment a) => new(a.Id, a.Title, a.StartTime, a.EndTime, a.Location, a.IsAllDay);
 
         [HttpGet]
         public async Task<ActionResult<List<AppointmentResponse>>> GetAll()
         {
-            List<Appointment> list = await Mine().OrderBy(a => a.StartTime).ToListAsync();
+            List<Appointment> list = await QueryUserAppointments().OrderBy(a => a.StartTime).ToListAsync();
 
             return list.Select(ToResponse).ToList();
         }
@@ -30,7 +30,7 @@ namespace planno_API.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<AppointmentResponse>> GetById(int id)
         {
-            Appointment? appointment = await Mine().FirstOrDefaultAsync(a => a.Id == id);
+            Appointment? appointment = await QueryUserAppointments().FirstOrDefaultAsync(a => a.Id == id);
 
             return appointment is null ? NotFound() : ToResponse(appointment);
         }
@@ -60,7 +60,7 @@ namespace planno_API.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<AppointmentResponse>> Update(int id, AppointmentRequest request)
         {
-            Appointment? appointment = await Mine().FirstOrDefaultAsync(a => a.Id == id);
+            Appointment? appointment = await QueryUserAppointments().FirstOrDefaultAsync(a => a.Id == id);
             if (appointment is null)
             {
                 return NotFound();

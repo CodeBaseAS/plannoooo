@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using planno_API.Models;
+using Models.Models;
 using System.Security.Claims;
 using System.Text;
 using static planno_API.Dtos.AuthDtos;

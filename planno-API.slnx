@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="Models/Models.csproj" Id="fecc47f0-47e5-452f-a1d1-207762133ad6" />
   <Project Path="planno-API/planno-API.csproj" />
+  <Project Path="planno-UI/planno-UI.csproj" Id="d2b9867e-9a72-4337-a18c-77d81e7485e1" />
 </Solution>

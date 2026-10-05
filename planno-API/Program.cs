@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using planno_API.Models;
+using Models.Models;
 using planno_API.Services;
 using QuestPDF.Infrastructure;
 using System.Text;

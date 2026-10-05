@@ -1,4 +1,5 @@
-﻿namespace planno_API.Models
+﻿namespace Models.Models
+
 {
     public class Invoice
     {

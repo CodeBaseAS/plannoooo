@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using planno_API.Models;
+using Models.Models;
 
 public class PlannoDbContext : DbContext
 {
