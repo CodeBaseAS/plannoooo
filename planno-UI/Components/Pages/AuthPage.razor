@@ -1,0 +1,158 @@
+@using System.Net
+@using planno_UI.Services
+@using static Models.Dtos.AuthDtos
+@inject NavigationManager Nav
+@inject AuthService Auth
+@inject TokenAuthenticationStateProvider AuthState
+
+<main class="auth">
+    <section class="auth-card">
+
+        <div class="auth-intro">
+            <h1 class="auth-title">@(IsLogin ? "Anmelden" : "Konto erstellen")</h1>
+            <p class="auth-sub">
+                @(IsLogin ? "Weiter zu Planno" : "Plane deine Termine und behalte jede Woche im Blick.")
+            </p>
+        </div>
+
+        <div class="auth-form">
+            @if (_error is not null)
+            {
+                <div class="auth-alert" role="alert">@_error</div>
+            }
+            @if (_info is not null)
+            {
+                <div class="auth-alert info" role="status">@_info</div>
+            }
+
+            @if (IsLogin)
+            {
+                <EditForm Model="_login" OnValidSubmit="SubmitLoginAsync" novalidate>
+                    <DataAnnotationsValidator />
+
+                    <div class="auth-fields">
+                        <TextField Label="E-Mail-Adresse" Type="email" Autocomplete="username" Autofocus="true"
+                                   @bind-Value="_login.Email" />
+                        <TextField Label="Passwort" Type="@PasswordType" Autocomplete="current-password"
+                                   @bind-Value="_login.Password" />
+                    </div>
+
+                    <label class="check">
+                        <input type="checkbox" checked="@_showPassword" @onchange="e => _showPassword = e.Value is true" />
+                        <span>Passwort anzeigen</span>
+                    </label>
+                    <label class="check">
+                        <InputCheckbox @bind-Value="_login.RememberMe" />
+                        <span>Angemeldet bleiben</span>
+                    </label>
+
+                    <div class="auth-actions">
+                        <a class="text-btn" href="register">Konto erstellen</a>
+                        <button type="submit" class="filled-btn" disabled="@_busy">
+                            @if (_busy) { <span class="spinner" aria-label="Bitte warten"></span> } else { <span>Anmelden</span> }
+                        </button>
+                    </div>
+                </EditForm>
+            }
+            else
+            {
+                <EditForm Model="_register" OnValidSubmit="SubmitRegisterAsync" novalidate>
+                    <DataAnnotationsValidator />
+
+                    <div class="auth-fields">
+                        <TextField Label="Name" Autocomplete="name" Autofocus="true" @bind-Value="_register.Name" />
+                        <TextField Label="E-Mail-Adresse" Type="email" Autocomplete="username" @bind-Value="_register.Email" />
+
+                        <div class="auth-row">
+                            <TextField Label="Passwort" Type="@PasswordType" Autocomplete="new-password"
+                                       Hint="Mindestens 8 Zeichen." @bind-Value="_register.Password" />
+                            <TextField Label="Bestätigen" Type="@PasswordType" Autocomplete="new-password"
+                                       @bind-Value="_register.ConfirmPassword" />
+                        </div>
+                    </div>
+
+                    <label class="check">
+                        <input type="checkbox" checked="@_showPassword" @onchange="e => _showPassword = e.Value is true" />
+                        <span>Passwort anzeigen</span>
+                    </label>
+
+                    <div class="auth-actions">
+                        <a class="text-btn" href="login">Stattdessen anmelden</a>
+                        <button type="submit" class="filled-btn" disabled="@_busy">
+                            @if (_busy) { <span class="spinner" aria-label="Bitte warten"></span> } else { <span>Registrieren</span> }
+                        </button>
+                    </div>
+                </EditForm>
+            }
+        </div>
+    </section>
+</main>
+
+@code {
+    [Parameter, EditorRequired] public AuthMode Mode { get; set; }
+
+    private readonly LoginModel _login = new();
+    private readonly RegisterModel _register = new();
+
+    private bool _showPassword, _busy;
+    private string? _error, _info;
+
+    private bool IsLogin => Mode == AuthMode.Login;
+    private string PasswordType => _showPassword ? "text" : "password";
+
+    private Task SubmitLoginAsync() => RunAsync(async () =>
+    {
+        bool success = await Auth.LoginAsync(_login.Email.Trim(), _login.Password, _login.RememberMe);
+        if (!success)
+        {
+            _error = "E-Mail-Adresse oder Passwort ist falsch.";
+            _login.Password = "";
+            return;
+        }
+
+        AuthState.ReportStatusChange();
+        Nav.NavigateTo("/");
+    });
+
+    private Task SubmitRegisterAsync() => RunAsync(async () =>
+    {
+        string email = _register.Email.Trim();
+
+        await Auth.RegisterAsync(new RegisterRequest(_register.Name.Trim(), email, _register.Password));
+
+        if (await Auth.LoginAsync(email, _register.Password, rememberMe: true))
+        {
+            AuthState.ReportStatusChange();
+            Nav.NavigateTo("/");
+        }
+        else
+        {
+            Nav.NavigateTo("/login");
+        }
+    });
+
+    private async Task RunAsync(Func<Task> action)
+    {
+        _busy = true;
+        _error = _info = null;
+
+        try
+        {
+            await action();
+        }
+        catch (HttpRequestException ex)
+        {
+            _error = ex.StatusCode switch
+            {
+                HttpStatusCode.Conflict   => "Diese E-Mail-Adresse oder dieser Name ist bereits vergeben.",
+                HttpStatusCode.BadRequest => "Bitte überprüfe deine Eingaben.",
+                null                      => "Der Server ist nicht erreichbar. Bitte versuche es später erneut.",
+                _                         => "Das hat leider nicht geklappt. Bitte versuche es erneut."
+            };
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+}

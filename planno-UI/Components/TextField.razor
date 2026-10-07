@@ -1,0 +1,69 @@
+@using System.Linq.Expressions
+@implements IDisposable
+
+<div class="tf @(HasError ? "invalid" : "")">
+    <input @ref="_input"
+           id="@_id"
+           class="tf-input"
+           type="@Type"
+           placeholder=" "
+           autocomplete="@Autocomplete"
+           value="@Value"
+           aria-invalid="@(HasError ? "true" : null)"
+           aria-describedby="@($"{_id}-msg")"
+           @oninput="OnInput"
+           @onchange="OnChange" />
+    <label class="tf-label" for="@_id">@Label</label>
+    <div class="tf-msg" id="@($"{_id}-msg")" role="@(HasError ? "alert" : null)">@(Error ?? Hint)</div>
+</div>
+
+@code {
+    [CascadingParameter] private EditContext? EditContext { get; set; }
+
+    [Parameter, EditorRequired] public string Label { get; set; } = "";
+    [Parameter] public string Type { get; set; } = "text";
+    [Parameter] public string? Autocomplete { get; set; }
+    [Parameter] public string? Hint { get; set; }
+    [Parameter] public bool Autofocus { get; set; }
+
+    // Für @bind-Value
+    [Parameter] public string Value { get; set; } = "";
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public Expression<Func<string>>? ValueExpression { get; set; }
+
+    private readonly string _id = $"tf-{Guid.NewGuid():N}";
+    private ElementReference _input;
+    private FieldIdentifier _field;
+
+    private string? Error => EditContext is null || ValueExpression is null
+        ? null
+        : EditContext.GetValidationMessages(_field).FirstOrDefault();
+
+    private bool HasError => Error is not null;
+
+    protected override void OnInitialized()
+    {
+        if (EditContext is null || ValueExpression is null) return;
+
+        _field = FieldIdentifier.Create(ValueExpression);
+        EditContext.OnValidationStateChanged += OnValidationChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Autofocus) await _input.FocusAsync();
+    }
+
+    // Wert sofort ins Modell schreiben, Validierung erst beim Verlassen des Feldes
+    private Task OnInput(ChangeEventArgs e) => ValueChanged.InvokeAsync(e.Value?.ToString() ?? "");
+
+    private void OnChange() => EditContext?.NotifyFieldChanged(_field);
+
+    private void OnValidationChanged(object? sender, ValidationStateChangedEventArgs e)
+        => _ = InvokeAsync(StateHasChanged);
+
+    public void Dispose()
+    {
+        if (EditContext is not null) EditContext.OnValidationStateChanged -= OnValidationChanged;
+    }
+}

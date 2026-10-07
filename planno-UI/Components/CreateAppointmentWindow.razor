@@ -173,9 +173,9 @@
 
     private bool Expanded => _popup switch
     {
-        Popup.None => false,
+        Popup.Date => true,
         Popup.Location => Suggestions().Count > 0,
-        _ => true
+        _ => false
     };
 
     protected override void OnInitialized()

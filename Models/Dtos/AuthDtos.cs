@@ -1,5 +1,6 @@
 ﻿namespace Models.Dtos
 {
+
     public class AuthDtos
     {
         public record RegisterRequest(string Username, string Email, string Password);

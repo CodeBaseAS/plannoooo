@@ -1,7 +1,9 @@
 @page "/"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @implements IAsyncDisposable
+@using System.Net
 @inject IJSRuntime JS
+@inject AuthService AuthService
 @inject AppointmentService AppointmentService
 @inject NavigationManager NavigationManager
 
@@ -72,12 +74,20 @@
 
     protected override async Task OnInitializedAsync()
     {
+        string? token = await AuthService.GetTokenAsync();
+        if (string.IsNullOrEmpty(token))
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
         try
         {
             _appointments = await AppointmentService.GetAppointmentListAsync() ?? new();
         }
-        catch (HttpRequestException ex) when (ex.Message.Contains("401"))
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
+            await AuthService.LogoutAsync();
             NavigationManager.NavigateTo("/login");
         }
         catch (Exception)

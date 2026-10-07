@@ -176,7 +176,7 @@ a { color: inherit; text-decoration: none; }
           min-height: 345px; display: flex; flex-direction: column; background: var(--bg); border-radius: 28px; outline: 0;
           box-shadow: 0 4px 8px 3px rgba(0, 0, 0, .15), 0 1px 3px rgba(0, 0, 0, .3);
           transition: min-height .2s cubic-bezier(.2, 0, 0, 1); }
-.dialog.expanded { min-height: min(649px, calc(100vh - 24px)); }
+.dialog.expanded { min-height: min(600px, calc(100vh - 24px)); }
 
 .dlg-head, .dlg-title, .dlg-row, .dlg-foot { position: relative; z-index: 2; flex: none; }
 .dlg-row.raised { z-index: 3; }
@@ -203,11 +203,19 @@ a { color: inherit; text-decoration: none; }
 .field { height: 40px; padding: 0 14px; border: 0; border-bottom: 2px solid transparent; border-radius: 4px 4px 0 0;
          background: var(--field); font: inherit; font-size: 14px; color: var(--text); text-align: left; }
 .field.active, .field:focus-visible { border-bottom-color: var(--accent); outline: 0; }
-.date-field { width: 155px; }
+.date-field { width: 150px; padding: 0 8px; white-space: nowrap; }
 .time-field { width: 81px; padding: 0; text-align: center; }
 .dash { width: 25px; text-align: center; color: var(--text-2); }
 
-.all-day { height: 52px; margin-bottom: 4px; gap: 20px; font-size: 14px; cursor: pointer; }
+.all-day {
+    height: 52px;
+    margin-bottom: 4px;
+    gap: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    width: fit-content;
+    padding-left: 68px;
+}
 .all-day input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin: 0; display: grid; place-content: center;
                  border: 2px solid var(--text-2); border-radius: 2px; cursor: pointer; }
 .all-day input:checked { background: var(--accent); border-color: var(--accent); }
@@ -255,3 +263,97 @@ a { color: inherit; text-decoration: none; }
 .confirm-actions { display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
 
 @media (prefers-reduced-motion: reduce) { .dialog { transition: none; } }
+
+/* ---------- Login / Registrierung ---------- */
+:root { --error: #B3261E; }
+
+.auth { min-height: 100vh; padding: 24px; display: grid; place-items: center;
+        background:
+            radial-gradient(900px 520px at 0% 0%, rgba(216, 226, 244, .75), transparent 62%),
+            radial-gradient(760px 520px at 100% 100%, rgba(216, 226, 244, .6), transparent 62%),
+            var(--bg); }
+
+.auth-card { width: 100%; max-width: 1000px; padding: 48px 40px 36px; display: grid; gap: 56px;
+             grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+             background: var(--surface); border-radius: 28px;
+             box-shadow: 0 1px 2px rgba(60, 64, 67, .15), 0 4px 16px rgba(60, 64, 67, .08); }
+
+.auth-logo  { display: inline-block; font-size: 40px; line-height: 1; letter-spacing: -.5px; }
+.auth-title { margin: 28px 0 12px; font-size: 36px; line-height: 44px; font-weight: 400; }
+.auth-sub   { margin: 0; font-size: 16px; line-height: 24px; }
+
+.auth-fields { display: flex; flex-direction: column; gap: 4px; padding-top: 8px; }
+.auth-row    { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.auth-actions { margin-top: 36px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.link-btn { margin: 0 0 8px -12px; }
+
+.auth-alert { margin-bottom: 16px; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 20px; background: #FCE8E6; color: var(--error); }
+.auth-alert.info { background: var(--hover); color: var(--accent); }
+
+/* Eingabefeld mit schwebendem Label */
+.tf { position: relative; }
+.tf-input { width: 100%; height: 56px; padding: 0 16px; border: 1px solid var(--outline); border-radius: 4px; background: transparent;
+            font: inherit; font-size: 16px; color: var(--text); outline: 0; transition: border-color .15s, box-shadow .15s; }
+.tf-input:hover { border-color: var(--text); }
+.tf-input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.tf-label { position: absolute; left: 12px; top: 28px; padding: 0 4px; background: var(--surface); color: var(--text-2);
+            font-size: 16px; line-height: 1.2; pointer-events: none; transform: translateY(-50%); transform-origin: left center;
+            transition: top .15s, transform .15s, color .15s; }
+.tf-input:focus + .tf-label,
+.tf-input:not(:placeholder-shown) + .tf-label { top: 0; transform: translateY(-50%) scale(.75); }
+.tf-input:focus + .tf-label { color: var(--accent); }
+.tf-msg { min-height: 20px; margin: 4px 16px 0; font-size: 12px; line-height: 16px; color: var(--text-2); }
+.tf.invalid .tf-input { border-color: var(--error); box-shadow: 0 0 0 1px var(--error); }
+.tf.invalid .tf-label, .tf.invalid .tf-msg { color: var(--error); }
+
+/* Checkbox */
+.check { width: fit-content; padding: 4px 0; display: flex; align-items: center; gap: 12px; font-size: 14px; cursor: pointer; }
+.check input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin: 0; display: grid; place-content: center;
+               border: 2px solid var(--text-2); border-radius: 2px; cursor: pointer; }
+.check input:checked { background: var(--accent); border-color: var(--accent); }
+.check input:checked::after { content: ""; width: 5px; height: 10px; margin-top: -2px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.check input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Buttons: Links als Textbutton, Ladezustand */
+a.text-btn { display: inline-flex; align-items: center; }
+.filled-btn { display: inline-flex; align-items: center; justify-content: center; }
+.filled-btn:disabled { cursor: default; filter: none; box-shadow: none; opacity: .85; }
+.spinner { width: 18px; height: 18px; border: 2px solid rgba(255, 255, 255, .4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 760px) {
+    .auth-card  { grid-template-columns: 1fr; gap: 24px; padding: 32px 24px 24px; }
+    .auth-title { margin-top: 20px; font-size: 28px; line-height: 36px; }
+    .auth-row   { grid-template-columns: 1fr; }
+}
+
+/* ---------- Konto-Menü (Klick auf den Avatar) ---------- */
+.avatar { cursor: pointer; transition: box-shadow .15s; }
+.avatar:hover { box-shadow: 0 0 0 4px var(--hover); }
+
+.menu-scrim { position: fixed; inset: 0; z-index: 60; }
+.account-menu { position: fixed; z-index: 61; top: 12px; right: 16px; width: 400px; max-width: calc(100vw - 16px); padding: 0 16px 16px;
+                background: #E9EEF6; border-radius: 28px; outline: 0; transform-origin: top right;
+                box-shadow: 0 4px 8px 3px rgba(0, 0, 0, .15), 0 1px 3px rgba(0, 0, 0, .3);
+                animation: account-menu-in .15s cubic-bezier(.2, 0, 0, 1); }
+@keyframes account-menu-in { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: none; } }
+
+.am-top { height: 52px; margin-right: -8px; display: flex; align-items: center; justify-content: flex-end; }
+.am-close { width: 40px; height: 40px; }
+
+.am-group { display: flex; flex-direction: column; gap: 2px; }
+.am-profile { padding: 16px 20px; display: flex; align-items: center; gap: 16px; background: var(--surface); border-radius: 24px 24px 4px 4px; }
+.am-avatar { width: 56px; height: 56px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--text-2); color: #fff; font-size: 28px; }
+.am-who { min-width: 0; }
+.am-name  { font-size: 20px; line-height: 28px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.am-email { font-size: 14px; line-height: 20px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.am-row { width: 100%; height: 56px; padding: 0 20px; display: flex; align-items: center; gap: 20px; background: var(--surface);
+          border-radius: 4px; font-size: 14px; font-weight: 500; text-align: left; }
+.am-row:last-child { border-radius: 4px 4px 24px 24px; }
+.am-row:hover { background: var(--hover); }
+.am-icon { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; }
+.am-plus { background: var(--hover); color: var(--accent); }
+.am-row:hover .am-plus { background: #fff; }
+
+@media (prefers-reduced-motion: reduce) { .account-menu { animation: none; } }

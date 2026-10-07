@@ -1,4 +1,8 @@
 @using System.Globalization
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@implements IDisposable
+@inject AuthenticationStateProvider AuthProvider
 
 <header class="header">
     <div class="brand">
@@ -34,7 +38,17 @@
 
     <button class="upgrade" type="button">Upgrade</button>
 
-    <div class="avatar" aria-label="Konto">A</div>
+    <button type="button" class="avatar"
+            aria-label="@($"Konto: {_userName}")"
+            aria-haspopup="dialog"
+            aria-expanded="@_menuOpen"
+            title="@_userName"
+            @onclick="() => _menuOpen = !_menuOpen">@_initial</button>
+
+    @if (_menuOpen)
+    {
+        <AccountMenu UserName="@_userName" Email="@_email" Initial="@_initial" OnClose="() => _menuOpen = false" />
+    }
 </header>
 
 @code {
@@ -48,6 +62,49 @@
     [Parameter] public EventCallback OnNext { get; set; }
     [Parameter] public EventCallback OnMenu { get; set; }
     [Parameter] public bool SidebarOpen { get; set; } = true;
+
+    private string _initial = "?";
+    private string _userName = "";
+    private string? _email;
+    private bool _menuOpen;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
+        await UpdateUserAsync(AuthProvider.GetAuthenticationStateAsync());
+    }
+
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+        => _ = InvokeAsync(async () =>
+        {
+            await UpdateUserAsync(task);
+            StateHasChanged();
+        });
+
+    private async Task UpdateUserAsync(Task<AuthenticationState> task)
+    {
+        AuthenticationState state = await task;
+        string? name = FindUserName(state.User);
+
+        _userName = name ?? "";
+        _email = state.User.FindFirst("email")?.Value ?? state.User.FindFirst(ClaimTypes.Email)?.Value;
+        _initial = string.IsNullOrWhiteSpace(name)
+            ? "?"
+            : StringInfo.GetNextTextElement(name.Trim()).ToUpper(De);
+    }
+
+    private static string? FindUserName(ClaimsPrincipal user)
+    {
+        if (user.Identity?.IsAuthenticated != true) return null;
+
+        return user.Identity.Name
+            ?? user.FindFirst("name")?.Value
+            ?? user.FindFirst("preferred_username")?.Value
+            ?? user.FindFirst(ClaimTypes.Name)?.Value
+            ?? user.FindFirst("email")?.Value;
+    }
+
+    public void Dispose() => AuthProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
 
     private string Title => View switch
     {
