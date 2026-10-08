@@ -1,4 +1,3 @@
-@using System.Globalization
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 
@@ -10,7 +9,7 @@
             @foreach (var d in Days())
             {
                 var today = d.Date == DateTime.Today;
-                var allDay = AppointmentLayout.AllDayOn(Appointments, d);
+                var allDay = AppointmentHelper.AllDayOn(Appointments, d);
 
                 <div class="day-head @(today ? "today" : "")" data-date="@Iso(d)">
                     <div class="day-id" @onclick="() => PickDay(d)">
@@ -24,7 +23,7 @@
                         <div class="allday-list">
                             @foreach (var a in allDay)
                             {
-                                <div class="event-chip" data-id="@a.Id" title="@AppointmentLayout.Tooltip(a)">@AppointmentLayout.DisplayTitle(a)</div>
+                                <div class="event-chip" data-id="@a.Id" title="@AppointmentHelper.Tooltip(a)">@AppointmentHelper.DisplayTitle(a)</div>
                             }
                         </div>
                     }
@@ -43,15 +42,15 @@
             @foreach (var d in Days())
             {
                 <div class="day-col" data-date="@Iso(d)">
-                    @foreach (var p in AppointmentLayout.Layout(Appointments, d))
+                    @foreach (var p in AppointmentHelper.Layout(Appointments, d))
                     {
                         var compact = p.End - p.Start < 60;
 
                         <div class="event-box @(compact ? "compact" : "")"
                              data-id="@p.Item.Id" data-start="@p.Start" data-end="@p.End"
-                             style="@BoxStyle(p)" title="@AppointmentLayout.Tooltip(p.Item)">
-                            <div class="event-title">@AppointmentLayout.DisplayTitle(p.Item)</div>
-                            <div class="event-time">@(compact ? AppointmentLayout.TimeLabel(p.Start) : AppointmentLayout.Range(p))</div>
+                             style="@BoxStyle(p)" title="@AppointmentHelper.Tooltip(p.Item)">
+                            <div class="event-title">@AppointmentHelper.DisplayTitle(p.Item)</div>
+                            <div class="event-time">@(compact ? AppointmentHelper.TimeLabel(p.Start) : AppointmentHelper.Range(p))</div>
                             @if (!compact && p.End - p.Start >= 90 && !string.IsNullOrWhiteSpace(p.Item.Location))
                             {
                                 <div class="event-loc">@p.Item.Location</div>
@@ -133,10 +132,10 @@
     private static string HourLabel(int h) => h < 12 ? $"{h} AM" : h == 12 ? "12 PM" : $"{h - 12} PM";
 
     private static string DraftTime(int start, int end) => end - start < 60
-        ? AppointmentLayout.TimeLabel(start)
-        : $"{AppointmentLayout.TimeLabel(start)} – {AppointmentLayout.TimeLabel(end)}";
+        ? AppointmentHelper.TimeLabel(start)
+        : $"{AppointmentHelper.TimeLabel(start)} – {AppointmentHelper.TimeLabel(end)}";
 
-    private static string BoxStyle(AppointmentLayout.Placed p) => BoxStyle(p.Start, p.End, p.Column, p.Columns);
+    private static string BoxStyle(AppointmentHelper.Placed p) => BoxStyle(p.Start, p.End, p.Column, p.Columns);
 
     // Position und Größe in der Zeitleiste; Überschneidungen teilen sich die Breite
     private static string BoxStyle(int start, int end, int column, int columns)

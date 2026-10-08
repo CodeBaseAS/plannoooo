@@ -22,7 +22,6 @@ namespace planno_UI.Services
             List<Claim>? claims = TryReadClaims(token);
             if (claims is null || IsExpired(claims))
             {
-                // Ungültiger oder abgelaufener Token -> aufräumen
                 await _authService.LogoutAsync();
                 return Anonymous;
             }
@@ -31,7 +30,6 @@ namespace planno_UI.Services
             return new AuthenticationState(new ClaimsPrincipal(identity));
         }
 
-        /// <summary>Nach Login/Logout aufrufen, damit AuthorizeView & Co. neu auswerten.</summary>
         public void ReportStatusChange()
         {
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
@@ -53,7 +51,6 @@ namespace planno_UI.Services
                 List<Claim> claims = [];
                 foreach (JsonProperty property in payload.RootElement.EnumerateObject())
                 {
-                    // Arrays (z. B. mehrere Rollen) als einzelne Claims ablegen
                     if (property.Value.ValueKind == JsonValueKind.Array)
                     {
                         foreach (JsonElement item in property.Value.EnumerateArray())

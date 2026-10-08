@@ -31,7 +31,6 @@ namespace planno_UI.Services
 
         public async Task<AppointmentResponse?> UpdateAppointmentAsync(int id, AppointmentRequest appointmentRequest)
         {
-            // Der Controller erwartet [HttpPut] – mit PATCH gab es 405 Method Not Allowed
             var response = await _httpClient.PutAsJsonAsync($"Appointments/{id}", appointmentRequest);
 
             if (!response.IsSuccessStatusCode)
@@ -42,7 +41,6 @@ namespace planno_UI.Services
             return await response.Content.ReadFromJsonAsync<AppointmentResponse>();
         }
 
-        /// <returns>true, wenn der Termin gelöscht wurde.</returns>
         public async Task<bool> DeleteAppointmentAsync(int id)
         {
             var response = await _httpClient.DeleteAsync($"Appointments/{id}");

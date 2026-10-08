@@ -1,6 +1,3 @@
-@using System.Net
-@using planno_UI.Services
-@using static Models.Dtos.AuthDtos
 @inject NavigationManager Nav
 @inject AuthService Auth
 @inject TokenAuthenticationStateProvider AuthState
@@ -9,9 +6,9 @@
     <section class="auth-card">
 
         <div class="auth-intro">
-            <h1 class="auth-title">@(IsLogin ? "Anmelden" : "Konto erstellen")</h1>
+            <h1 class="auth-title">@(IsLogin ? "Sign in" : "Create account")</h1>
             <p class="auth-sub">
-                @(IsLogin ? "Weiter zu Planno" : "Plane deine Termine und behalte jede Woche im Blick.")
+                @(IsLogin ? "Continue to Planno" : "Plan your appointments and keep track of every week.")
             </p>
         </div>
 
@@ -31,25 +28,21 @@
                     <DataAnnotationsValidator />
 
                     <div class="auth-fields">
-                        <TextField Label="E-Mail-Adresse" Type="email" Autocomplete="username" Autofocus="true"
+                        <TextField Label="Email address" Type="email" Autocomplete="username" Autofocus="true"
                                    @bind-Value="_login.Email" />
-                        <TextField Label="Passwort" Type="@PasswordType" Autocomplete="current-password"
+                        <TextField Label="Password" Type="@PasswordType" Autocomplete="current-password"
                                    @bind-Value="_login.Password" />
                     </div>
 
                     <label class="check">
                         <input type="checkbox" checked="@_showPassword" @onchange="e => _showPassword = e.Value is true" />
-                        <span>Passwort anzeigen</span>
-                    </label>
-                    <label class="check">
-                        <InputCheckbox @bind-Value="_login.RememberMe" />
-                        <span>Angemeldet bleiben</span>
+                        <span>Show password</span>
                     </label>
 
                     <div class="auth-actions">
-                        <a class="text-btn" href="register">Konto erstellen</a>
+                        <a class="text-btn" href="register">Create account</a>
                         <button type="submit" class="filled-btn" disabled="@_busy">
-                            @if (_busy) { <span class="spinner" aria-label="Bitte warten"></span> } else { <span>Anmelden</span> }
+                            @if (_busy) { <span class="spinner" aria-label="Please wait"></span> } else { <span>Sign in</span> }
                         </button>
                     </div>
                 </EditForm>
@@ -60,26 +53,26 @@
                     <DataAnnotationsValidator />
 
                     <div class="auth-fields">
-                        <TextField Label="Name" Autocomplete="name" Autofocus="true" @bind-Value="_register.Name" />
-                        <TextField Label="E-Mail-Adresse" Type="email" Autocomplete="username" @bind-Value="_register.Email" />
+                        <TextField Label="Name" Autocomplete="name" Autofocus="true" @bind-Value="_register.Username" />
+                        <TextField Label="Email address" Type="email" Autocomplete="username" @bind-Value="_register.Email" />
 
                         <div class="auth-row">
-                            <TextField Label="Passwort" Type="@PasswordType" Autocomplete="new-password"
-                                       Hint="Mindestens 8 Zeichen." @bind-Value="_register.Password" />
-                            <TextField Label="Bestätigen" Type="@PasswordType" Autocomplete="new-password"
+                            <TextField Label="Password" Type="@PasswordType" Autocomplete="new-password"
+                                       Hint="At least 8 characters." @bind-Value="_register.Password" />
+                            <TextField Label="Confirm" Type="@PasswordType" Autocomplete="new-password"
                                        @bind-Value="_register.ConfirmPassword" />
                         </div>
                     </div>
 
                     <label class="check">
                         <input type="checkbox" checked="@_showPassword" @onchange="e => _showPassword = e.Value is true" />
-                        <span>Passwort anzeigen</span>
+                        <span>Show password</span>
                     </label>
 
                     <div class="auth-actions">
-                        <a class="text-btn" href="login">Stattdessen anmelden</a>
+                        <a class="text-btn" href="login">Sign in instead</a>
                         <button type="submit" class="filled-btn" disabled="@_busy">
-                            @if (_busy) { <span class="spinner" aria-label="Bitte warten"></span> } else { <span>Registrieren</span> }
+                            @if (_busy) { <span class="spinner" aria-label="Please wait"></span> } else { <span>Register</span> }
                         </button>
                     </div>
                 </EditForm>
@@ -102,10 +95,10 @@
 
     private Task SubmitLoginAsync() => RunAsync(async () =>
     {
-        bool success = await Auth.LoginAsync(_login.Email.Trim(), _login.Password, _login.RememberMe);
+        bool success = await Auth.LoginAsync(_login.Email.Trim(), _login.Password);
         if (!success)
         {
-            _error = "E-Mail-Adresse oder Passwort ist falsch.";
+            _error = "Invalid email address or password.";
             _login.Password = "";
             return;
         }
@@ -118,9 +111,9 @@
     {
         string email = _register.Email.Trim();
 
-        await Auth.RegisterAsync(new RegisterRequest(_register.Name.Trim(), email, _register.Password));
+        await Auth.RegisterAsync(new RegisterRequest(_register.Username.Trim(), email, _register.Password));
 
-        if (await Auth.LoginAsync(email, _register.Password, rememberMe: true))
+        if (await Auth.LoginAsync(email, _register.Password))
         {
             AuthState.ReportStatusChange();
             Nav.NavigateTo("/");
@@ -144,10 +137,10 @@
         {
             _error = ex.StatusCode switch
             {
-                HttpStatusCode.Conflict   => "Diese E-Mail-Adresse oder dieser Name ist bereits vergeben.",
-                HttpStatusCode.BadRequest => "Bitte überprüfe deine Eingaben.",
-                null                      => "Der Server ist nicht erreichbar. Bitte versuche es später erneut.",
-                _                         => "Das hat leider nicht geklappt. Bitte versuche es erneut."
+                HttpStatusCode.Conflict   => "This email address or name is already taken.",
+                HttpStatusCode.BadRequest => "Please check your inputs.",
+                null                      => "The server is unreachable. Please try again later.",
+                _                         => "Something went wrong. Please try again."
             };
         }
         finally

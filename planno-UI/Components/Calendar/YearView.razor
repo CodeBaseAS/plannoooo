@@ -41,7 +41,8 @@
 
     protected override void OnParametersSet()
     {
-        _busyDays = AppointmentLayout.DaysWithAppointments(
+        _busyDays = AppointmentHelper
+        .DaysWithAppointments(
             Appointments, new DateTime(Date.Year, 1, 1), new DateTime(Date.Year, 12, 31));
     }
 

@@ -6,7 +6,7 @@
     @foreach (var (d, i) in Cells().Select((d, i) => (d, i)))
     {
         var today = d.Date == DateTime.Today;
-        var items = AppointmentLayout.OnDay(Appointments, d);
+        var items = AppointmentHelper.OnDay(Appointments, d);
         var more = items.Count - MaxVisible;
 
         <div class="m-cell" data-date="@Iso(d)">
@@ -28,14 +28,14 @@
                     {
                         if (a.IsAllDay)
                         {
-                            <div class="event-chip" data-id="@a.Id" title="@AppointmentLayout.Tooltip(a)">@AppointmentLayout.DisplayTitle(a)</div>
+                            <div class="event-chip" data-id="@a.Id" title="@AppointmentHelper.Tooltip(a)">@AppointmentHelper.DisplayTitle(a)</div>
                         }
                         else
                         {
-                            <div class="m-timed" data-id="@a.Id" title="@AppointmentLayout.Tooltip(a)">
+                            <div class="m-timed" data-id="@a.Id" title="@AppointmentHelper.Tooltip(a)">
                                 <span class="m-dot"></span>
-                                <span class="m-time">@AppointmentLayout.TimeLabel(a.StartTime)</span>
-                                <span class="m-title">@AppointmentLayout.DisplayTitle(a)</span>
+                                <span class="m-time">@AppointmentHelper.TimeLabel(a.StartTime)</span>
+                                <span class="m-title">@AppointmentHelper.DisplayTitle(a)</span>
                             </div>
                         }
                     }

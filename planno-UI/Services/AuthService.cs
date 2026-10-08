@@ -7,32 +7,21 @@ using static Models.Dtos.AuthDtos;
 
 namespace planno_UI.Services
 {
-    public class AuthService(
-        HttpClient httpClient,
-        ProtectedLocalStorage protectedLocalStorage,
-        ProtectedSessionStorage protectedSessionStorage)
+    public class AuthService(HttpClient httpClient, ProtectedLocalStorage protectedLocalStorage)
     {
         private const string TokenKey = "zugangsToken";
         private readonly HttpClient _httpClient = httpClient;
         private readonly ProtectedLocalStorage _protectedLocalStorage = protectedLocalStorage;
-        private readonly ProtectedSessionStorage _protectedSessionStorage = protectedSessionStorage;
         private string? _token;
 
         public async Task RegisterAsync(RegisterRequest registerRequest)
         {
             var response = await _httpClient.PostAsJsonAsync("Auth/register", registerRequest);
-
             response.EnsureSuccessStatusCode();
         }
 
-        /// <param name="rememberMe">
-        /// true: Token bleibt auch nach dem Schließen des Browsers erhalten (LocalStorage),
-        /// false: Token gilt nur für diese Browser-Sitzung (SessionStorage).
-        /// </param>
-        /// <returns>false bei falschen Zugangsdaten; andere Fehler (Server down, 5xx) lösen eine HttpRequestException aus.</returns>
-        public async Task<bool> LoginAsync(string email, string password, bool rememberMe = true)
+        public async Task<bool> LoginAsync(string email, string password)
         {
-            // Vorher war die Bedingung umgekehrt (!IsNullOrEmpty) – jede gültige E-Mail wurde abgelehnt.
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrEmpty(password))
             {
                 return false;
@@ -54,17 +43,7 @@ namespace planno_UI.Services
                 return false;
             }
 
-            // Token nur an einer Stelle ablegen
-            if (rememberMe)
-            {
-                await _protectedLocalStorage.SetAsync(TokenKey, loginResponse.Token);
-                await _protectedSessionStorage.DeleteAsync(TokenKey);
-            }
-            else
-            {
-                await _protectedSessionStorage.SetAsync(TokenKey, loginResponse.Token);
-                await _protectedLocalStorage.DeleteAsync(TokenKey);
-            }
+            await _protectedLocalStorage.SetAsync(TokenKey, loginResponse.Token);
 
             SetToken(loginResponse.Token);
             return true;
@@ -79,7 +58,7 @@ namespace planno_UI.Services
 
             try
             {
-                string? stored = await ReadAsync(_protectedLocalStorage) ?? await ReadAsync(_protectedSessionStorage);
+                string? stored = await ReadAsync(_protectedLocalStorage);
                 if (!string.IsNullOrEmpty(stored))
                 {
                     SetToken(stored);
@@ -87,12 +66,11 @@ namespace planno_UI.Services
             }
             catch (InvalidOperationException)
             {
-                // Beim Prerendering ist noch kein JS-Interop möglich -> vorerst „nicht angemeldet“.
-                // Nichts cachen, der nächste Aufruf (interaktiv) liest den Token dann wirklich.
+                // Prerendering: Kein JS-Interop möglich
             }
             catch (JSDisconnectedException)
             {
-                // Verbindung zum Browser ist weg
+                // Verbindung zum Browser getrennt
             }
 
             return _token;
@@ -101,7 +79,6 @@ namespace planno_UI.Services
         public async Task LogoutAsync()
         {
             await _protectedLocalStorage.DeleteAsync(TokenKey);
-            await _protectedSessionStorage.DeleteAsync(TokenKey);
             _token = null;
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
@@ -121,7 +98,6 @@ namespace planno_UI.Services
             }
             catch (CryptographicException)
             {
-                // Eintrag nicht mehr entschlüsselbar (z. B. neue Data-Protection-Keys) -> verwerfen
                 await storage.DeleteAsync(TokenKey);
                 return null;
             }
