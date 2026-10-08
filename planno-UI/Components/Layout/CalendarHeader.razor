@@ -34,7 +34,7 @@
         <input type="search" placeholder="Suchen" aria-label="Suchen" />
     </label>
 
-    <ViewMenu View="View" ViewChanged="ViewChanged" />
+    <ViewModal View="View" ViewChanged="ViewChanged" />
 
     <button class="upgrade" type="button">Upgrade</button>
 
@@ -47,7 +47,7 @@
 
     @if (_menuOpen)
     {
-        <AccountMenu UserName="@_userName" Email="@_email" Initial="@_initial" OnClose="() => _menuOpen = false" />
+        <AccountModal UserName="@_userName" Email="@_email" Initial="@_initial" OnClose="() => _menuOpen = false" />
     }
 </header>
 

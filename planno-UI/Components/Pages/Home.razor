@@ -63,8 +63,7 @@
 
     @if (_createOpen)
     {
-        @* @key: bei jedem Öffnen eine frische Instanz (neuer Termin, anderer Termin, anderer Zeitraum) *@
-        <CreateAppointmentWindow @key="_windowKey"
+        <CreateAppointmentModal @key="_windowKey"
                                  Date="_date"
                                  Existing="_editing"
                                  InitialStart="_slotStart"
@@ -82,12 +81,11 @@
     private bool _sidebarOpen = true;
     private List<AppointmentResponse> _appointments = new();
 
-    // Termin-Fenster
     private bool _createOpen;
     private int _windowKey;
-    private AppointmentResponse? _editing;      // gesetzt = Bearbeiten-Modus
-    private DateTime? _slotStart, _slotEnd;     // gesetzt = im Kalender aufgezogener Zeitraum
-    private TimeSlot? _draft;                   // Vorschau-Box im Kalender
+    private AppointmentResponse? _editing;
+    private DateTime? _slotStart, _slotEnd;
+    private TimeSlot? _draft;
 
     private IJSObjectReference? _module;
     private DotNetObjectReference<Home>? _self;
@@ -97,7 +95,6 @@
 
     private void ToggleSidebar() => _sidebarOpen = !_sidebarOpen;
 
-    // ---------- Termin-Fenster öffnen/schließen ----------
     private void OpenCreate()
     {
         _editing = null;
@@ -140,7 +137,6 @@
 
     private void SetDraft(TimeSlot? slot) => _draft = slot;
 
-    // ---------- Daten ----------
     protected override async Task OnInitializedAsync()
     {
         string? token = await AuthService.GetTokenAsync();
@@ -193,7 +189,6 @@
         CloseCreate();
     }
 
-    // Drag & Drop: Dauer bleibt gleich, nur der Start ändert sich
     private async Task MoveAppointment((int Id, DateTime Start) move)
     {
         var original = _appointments.FirstOrDefault(a => a.Id == move.Id);
@@ -202,10 +197,8 @@
         var newStart = move.Start;
         var newEnd = newStart + (original.EndTime - original.StartTime);
 
-        // Sofort anzeigen, damit der Termin nicht erst zurückspringt …
         Replace(original.Id, new AppointmentResponse(original.Id, original.Title, newStart, newEnd, original.Location, original.IsAllDay));
 
-        // … und danach speichern. Schlägt das fehl, kommt der Termin an seine alte Stelle zurück.
         AppointmentResponse? saved = null;
         try
         {
@@ -225,7 +218,6 @@
         if (index >= 0) _appointments[index] = item;
     }
 
-    // ---------- Navigation ----------
     private void Today() => _date = DateTime.Today;
     private void SetView(CalendarView view) => _view = view;
 

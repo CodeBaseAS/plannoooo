@@ -87,7 +87,6 @@
         }
     </div>
 
-    @* Nur das Label (Box + Text) ist klickbar, nicht die ganze Zeile *@
     <div class="dlg-row all-day">
         <label>
             <input type="checkbox" checked="@_allDay" @onchange="OnAllDayChanged" />
@@ -136,7 +135,7 @@
 
 @if (_confirmOpen)
 {
-    <CreateAppointmentWindowClickCloseButton OnCancel="() => _confirmOpen = false"
+    <CreateAppointmentWindowCloseButton OnCancel="() => _confirmOpen = false"
                                              OnDiscard="Discard" />
 }
 
@@ -167,17 +166,13 @@
 
     [Parameter] public EventCallback<AppointmentRequest> OnSave { get; set; }
 
-    /// <summary>Bestehender Termin: das Fenster öffnet im Bearbeiten-Modus mit „Löschen“-Button.</summary>
     [Parameter] public AppointmentResponse? Existing { get; set; }
 
-    /// <summary>Vorbelegung, wenn das Fenster durch Klicken/Ziehen im Kalender geöffnet wurde.</summary>
     [Parameter] public DateTime? InitialStart { get; set; }
     [Parameter] public DateTime? InitialEnd { get; set; }
 
-    /// <summary>„Löschen“ wurde geklickt (nur im Bearbeiten-Modus).</summary>
     [Parameter] public EventCallback OnDelete { get; set; }
 
-    /// <summary>Meldet den aktuell eingestellten Zeitraum (für die Vorschau im Kalender); null bei ganztägig.</summary>
     [Parameter] public EventCallback<TimeSlot?> OnPreview { get; set; }
 
     private ElementReference _dialog, _handle, _titleInput, _timeList;
@@ -191,8 +186,6 @@
 
     private string DateLabel => _date.ToString("dddd, d. MMMM", De);
 
-    // Das Fenster wächst nur so weit, wie das jeweilige Popup Platz braucht.
-    // (Die Zeit-Listen passen ins normale Fenster und lassen es unverändert.)
     private string GrowClass => _popup switch
     {
         Popup.Date => "grow-date",
@@ -217,7 +210,7 @@
 
             if (existing.IsAllDay)
             {
-                _start = 9 * 60;                       // Vorschlag, falls „Ganztägig“ abgewählt wird
+                _start = 9 * 60;
                 _end = 10 * 60;
             }
             else
@@ -304,7 +297,6 @@
         return NotifyPreview();
     }
 
-    // Beim Erstellen zeigt der Kalender eine Vorschau-Box, die den Einstellungen im Fenster folgt
     private Task NotifyPreview()
     {
         if (Existing is not null || !OnPreview.HasDelegate) return Task.CompletedTask;
@@ -361,7 +353,6 @@
 
     private Task Save()
     {
-        // Ohne Zeitzonen-Kennzeichnung senden, damit der Server die Uhrzeit unverändert übernimmt
         var start = DateTime.SpecifyKind(_allDay ? _date : _date.AddMinutes(_start), DateTimeKind.Unspecified);
         var end = DateTime.SpecifyKind(_allDay ? _date.AddDays(1) : _date.AddMinutes(_end), DateTimeKind.Unspecified);
         return OnSave.InvokeAsync(new AppointmentRequest(_title.Trim(), start, end, _location.Trim(), _allDay));
