@@ -33,18 +33,31 @@
     private static readonly CultureInfo De = new("de-DE");
 
     [Parameter] public DateTime Date { get; set; } = DateTime.Today;
+    [Parameter] public IReadOnlyList<AppointmentResponse> Appointments { get; set; } = [];
     [Parameter] public EventCallback<DateTime> OnDayPicked { get; set; }
     [Parameter] public EventCallback<DateTime> OnMonthPicked { get; set; }
 
+    private HashSet<DateTime> _busyDays = [];
+
+    protected override void OnParametersSet()
+    {
+        _busyDays = AppointmentLayout.DaysWithAppointments(
+            Appointments, new DateTime(Date.Year, 1, 1), new DateTime(Date.Year, 12, 31));
+    }
+
+    // Immer 6 Wochen, damit alle Monate gleich hoch sind
     private static IEnumerable<DateTime> Cells(DateTime month)
     {
         var start = month.AddDays(-(((int)month.DayOfWeek + 6) % 7));
         for (var i = 0; i < 42; i++) yield return start.AddDays(i);
     }
 
+    // Hervorhebung und Punkt nur im eigenen Monat, sonst erscheint ein Tag doppelt markiert
     private string StateClass(DateTime d, DateTime month)
     {
         if (d.Month != month.Month) return "";
-        return d.Date == DateTime.Today ? "today" : d.Date == Date.Date ? "selected" : "";
+
+        var state = d.Date == DateTime.Today ? "today" : d.Date == Date.Date ? "selected" : "";
+        return _busyDays.Contains(d.Date) ? $"{state} has-event" : state;
     }
 }

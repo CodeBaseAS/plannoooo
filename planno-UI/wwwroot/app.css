@@ -385,3 +385,27 @@ a.text-btn { display: inline-flex; align-items: center; }
 .m-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
 .m-more { align-self: flex-start; height: 20px; padding: 0 6px; border-radius: 4px; font-size: 12px; font-weight: 500; color: var(--text-2); }
 .m-more:hover { background: var(--hover); }
+
+/* ---------- Termine: Interaktion (Klicken, Ziehen, Erstellen) ---------- */
+.event-box, .event-chip, .m-timed { cursor: pointer; }
+.week-grid { user-select: none; }
+
+/* Vorschau beim Erstellen */
+.event-box.draft { pointer-events: none; opacity: .9; }
+
+/* Beim Ziehen */
+.event-box.dim, .event-chip.dim, .m-timed.dim { opacity: .35; }
+.event-box.ghost { z-index: 5; pointer-events: none; box-shadow: var(--shadow-menu); }
+.week-grid.dragging, .week-grid.dragging *,
+.week-head.dragging, .week-head.dragging *,
+.month.dragging, .month.dragging * { cursor: grabbing !important; }
+.day-head.drop-target, .m-cell.drop-target { background: var(--hover); }
+
+/* Bearbeiten-Modus: roter Löschen-Button neben „Speichern“ */
+.dlg-foot { gap: 8px; }
+.filled-btn.danger { background: var(--error); }
+
+/* Jahresansicht: Punkt an Tagen mit Terminen */
+.year .mini-day { position: relative; }
+.year .mini-day.has-event::after { content: ""; position: absolute; left: 50%; bottom: 1px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--accent); }
+.year .mini-day.today.has-event::after { background: #fff; }

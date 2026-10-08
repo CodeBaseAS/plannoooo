@@ -97,6 +97,26 @@ public static class AppointmentLayout
         return string.IsNullOrWhiteSpace(a.Location) ? text : $"{text}\n{a.Location}";
     }
 
+    /// <summary>Alle Tage im Zeitraum, an denen mindestens ein Termin stattfindet (z. B. für die Punkte in der Jahresansicht).</summary>
+    public static HashSet<DateTime> DaysWithAppointments(IEnumerable<AppointmentResponse> items, DateTime from, DateTime to)
+    {
+        var days = new HashSet<DateTime>();
+        foreach (var a in items)
+        {
+            DateTime first = a.StartTime.Date;
+            DateTime last = a.EndTime > a.StartTime && a.EndTime.TimeOfDay == TimeSpan.Zero
+                ? a.EndTime.Date.AddDays(-1)     // endet exakt um Mitternacht -> der Folgetag zählt nicht mehr
+                : a.EndTime.Date;
+            if (last < first) last = first;
+
+            for (DateTime d = first < from.Date ? from.Date : first; d <= last && d <= to.Date; d = d.AddDays(1))
+            {
+                days.Add(d);
+            }
+        }
+        return days;
+    }
+
     // ---------- Intern ----------
     private static bool CoversDay(AppointmentResponse a, DateTime day)
     {
@@ -129,3 +149,6 @@ public static class AppointmentLayout
         return true;
     }
 }
+
+/// <summary>Ein Zeitraum, z. B. die im Kalender markierte Auswahl.</summary>
+public readonly record struct TimeSlot(DateTime Start, DateTime End);

@@ -5,7 +5,7 @@
 <div class="dialog @GrowClass"
      data-no-shortcuts
      role="dialog"
-     aria-label="Termin erstellen"
+     aria-label="@(Existing is null ? "Termin erstellen" : "Termin bearbeiten")"
      tabindex="-1"
      @ref="_dialog"
      @onkeydown="OnKeyDown">
@@ -126,6 +126,10 @@
     </div>
 
     <div class="dlg-foot">
+        @if (Existing is not null)
+        {
+            <button type="button" class="filled-btn danger" @onclick="OnDelete">Löschen</button>
+        }
         <button type="button" class="filled-btn" @onclick="Save">Speichern</button>
     </div>
 </div>
@@ -163,6 +167,19 @@
 
     [Parameter] public EventCallback<AppointmentRequest> OnSave { get; set; }
 
+    /// <summary>Bestehender Termin: das Fenster öffnet im Bearbeiten-Modus mit „Löschen“-Button.</summary>
+    [Parameter] public AppointmentResponse? Existing { get; set; }
+
+    /// <summary>Vorbelegung, wenn das Fenster durch Klicken/Ziehen im Kalender geöffnet wurde.</summary>
+    [Parameter] public DateTime? InitialStart { get; set; }
+    [Parameter] public DateTime? InitialEnd { get; set; }
+
+    /// <summary>„Löschen“ wurde geklickt (nur im Bearbeiten-Modus).</summary>
+    [Parameter] public EventCallback OnDelete { get; set; }
+
+    /// <summary>Meldet den aktuell eingestellten Zeitraum (für die Vorschau im Kalender); null bei ganztägig.</summary>
+    [Parameter] public EventCallback<TimeSlot?> OnPreview { get; set; }
+
     private ElementReference _dialog, _handle, _titleInput, _timeList;
     private IJSObjectReference? _module;
 
@@ -191,6 +208,40 @@
 
     protected override void OnInitialized()
     {
+        if (Existing is { } existing)
+        {
+            _title = existing.Title ?? "";
+            _location = existing.Location ?? "";
+            _allDay = existing.IsAllDay;
+            _date = existing.StartTime.Date;
+
+            if (existing.IsAllDay)
+            {
+                _start = 9 * 60;                       // Vorschlag, falls „Ganztägig“ abgewählt wird
+                _end = 10 * 60;
+            }
+            else
+            {
+                _start = existing.StartTime.Hour * 60 + existing.StartTime.Minute;
+                _end = existing.EndTime.Date > existing.StartTime.Date
+                    ? 1439
+                    : existing.EndTime.Hour * 60 + existing.EndTime.Minute;
+                if (_end <= _start) _end = Math.Min(_start + 15, 1439);
+            }
+            return;
+        }
+
+        if (InitialStart is { } slotStart)
+        {
+            var slotEnd = InitialEnd ?? slotStart.AddHours(1);
+
+            _date = slotStart.Date;
+            _start = slotStart.Hour * 60 + slotStart.Minute;
+            _end = slotEnd.Date > slotStart.Date ? 1439 : slotEnd.Hour * 60 + slotEnd.Minute;
+            if (_end <= _start) _end = Math.Min(_start + 15, 1439);
+            return;
+        }
+
         _date = Date.Date;
         _start = _date == DateTime.Today ? DateTime.Now.Hour * 60 : 9 * 60;
         _end = Math.Min(_start + 60, 1439);
@@ -203,6 +254,7 @@
             _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
             await _module.InvokeVoidAsync("registerDrag", _handle, _dialog);
             await _titleInput.FocusAsync();
+            await NotifyPreview();
         }
 
         if (_scrollPending && _module is not null)
@@ -221,31 +273,44 @@
     private void OpenPopup(Popup p) => _popup = p;
     private void ClosePopup() => _popup = Popup.None;
 
-    private void SelectDate(DateTime d)
+    private Task SelectDate(DateTime d)
     {
         _date = d.Date;
         _popup = Popup.None;
+        return NotifyPreview();
     }
 
-    private void SelectStart(int minutes)
+    private Task SelectStart(int minutes)
     {
         var duration = Math.Max(_end - _start, 15);
         _start = minutes;
         _end = Math.Min(_start + duration, 1439);
         if (_end <= _start) _end = Math.Min(_start + 15, 1439);
         _popup = Popup.None;
+        return NotifyPreview();
     }
 
-    private void SelectEnd(int minutes)
+    private Task SelectEnd(int minutes)
     {
         _end = minutes;
         _popup = Popup.None;
+        return NotifyPreview();
     }
 
-    private void OnAllDayChanged(ChangeEventArgs e)
+    private Task OnAllDayChanged(ChangeEventArgs e)
     {
         _allDay = e.Value is true;
         _popup = Popup.None;
+        return NotifyPreview();
+    }
+
+    // Beim Erstellen zeigt der Kalender eine Vorschau-Box, die den Einstellungen im Fenster folgt
+    private Task NotifyPreview()
+    {
+        if (Existing is not null || !OnPreview.HasDelegate) return Task.CompletedTask;
+
+        TimeSlot? slot = _allDay ? null : new TimeSlot(_date.AddMinutes(_start), _date.AddMinutes(_end));
+        return OnPreview.InvokeAsync(slot);
     }
 
     private void OnLocationTyped() => _popup = Popup.Location;
@@ -296,8 +361,9 @@
 
     private Task Save()
     {
-        var start = _allDay ? _date : _date.AddMinutes(_start);
-        var end = _allDay ? _date.AddDays(1) : _date.AddMinutes(_end);
+        // Ohne Zeitzonen-Kennzeichnung senden, damit der Server die Uhrzeit unverändert übernimmt
+        var start = DateTime.SpecifyKind(_allDay ? _date : _date.AddMinutes(_start), DateTimeKind.Unspecified);
+        var end = DateTime.SpecifyKind(_allDay ? _date.AddDays(1) : _date.AddMinutes(_end), DateTimeKind.Unspecified);
         return OnSave.InvokeAsync(new AppointmentRequest(_title.Trim(), start, end, _location.Trim(), _allDay));
     }
 

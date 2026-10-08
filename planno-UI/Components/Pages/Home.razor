@@ -34,25 +34,45 @@
             <WeekView Date="_date"
                       DayCount="@(_view == CalendarView.Day ? 1 : 7)"
                       Appointments="_appointments"
-                      OnDayPicked="OpenDay" />
+                      Draft="@(_createOpen && _editing is null ? _draft : null)"
+                      OnDayPicked="OpenDay"
+                      OnCreate="BeginCreate"
+                      OnAppointmentClick="OpenEdit"
+                      OnAppointmentMove="MoveAppointment" />
         }
         else if (_view == CalendarView.Month)
         {
             <PageScroller PageKey="MonthKey" OnPage="Shift">
-                <MonthView Date="_date" Appointments="_appointments" OnDayPicked="OpenDay" />
+                <MonthView Date="_date"
+                           Appointments="_appointments"
+                           OnDayPicked="OpenDay"
+                           OnAppointmentClick="OpenEdit"
+                           OnAppointmentMove="MoveAppointment" />
             </PageScroller>
         }
         else
         {
             <PageScroller PageKey="YearKey" OnPage="Shift">
-                <YearView Date="_date" OnDayPicked="OpenDay" OnMonthPicked="OpenMonth" />
+                <YearView Date="_date"
+                          Appointments="_appointments"
+                          OnDayPicked="OpenDay"
+                          OnMonthPicked="OpenMonth" />
             </PageScroller>
         }
     </div>
 
     @if (_createOpen)
     {
-        <CreateAppointmentWindow Date="_date" OnClose="CloseCreate" OnSave="@(app => SaveAppointment(app))" />
+        @* @key: bei jedem Öffnen eine frische Instanz (neuer Termin, anderer Termin, anderer Zeitraum) *@
+        <CreateAppointmentWindow @key="_windowKey"
+                                 Date="_date"
+                                 Existing="_editing"
+                                 InitialStart="_slotStart"
+                                 InitialEnd="_slotEnd"
+                                 OnClose="CloseCreate"
+                                 OnSave="@(app => SaveAppointment(app))"
+                                 OnDelete="DeleteEditing"
+                                 OnPreview="SetDraft" />
     }
 </div>
 
@@ -60,8 +80,14 @@
     private DateTime _date = DateTime.Today;
     private CalendarView _view = CalendarView.Week;
     private bool _sidebarOpen = true;
-    private bool _createOpen;
     private List<AppointmentResponse> _appointments = new();
+
+    // Termin-Fenster
+    private bool _createOpen;
+    private int _windowKey;
+    private AppointmentResponse? _editing;      // gesetzt = Bearbeiten-Modus
+    private DateTime? _slotStart, _slotEnd;     // gesetzt = im Kalender aufgezogener Zeitraum
+    private TimeSlot? _draft;                   // Vorschau-Box im Kalender
 
     private IJSObjectReference? _module;
     private DotNetObjectReference<Home>? _self;
@@ -70,14 +96,53 @@
     private DateTime YearKey => new(_date.Year, 1, 1);
 
     private void ToggleSidebar() => _sidebarOpen = !_sidebarOpen;
-    private void OpenCreate() => _createOpen = true;
-    private void CloseCreate() => _createOpen = false;
 
+    // ---------- Termin-Fenster öffnen/schließen ----------
+    private void OpenCreate()
+    {
+        _editing = null;
+        _slotStart = _slotEnd = null;
+        ShowWindow();
+    }
+
+    private void BeginCreate(TimeSlot slot)
+    {
+        _editing = null;
+        _slotStart = slot.Start;
+        _slotEnd = slot.End;
+        ShowWindow();
+    }
+
+    private void OpenEdit(int id)
+    {
+        var appointment = _appointments.FirstOrDefault(a => a.Id == id);
+        if (appointment is null) return;
+
+        _editing = appointment;
+        _slotStart = _slotEnd = null;
+        _draft = null;
+        ShowWindow();
+    }
+
+    private void ShowWindow()
+    {
+        _windowKey++;
+        _createOpen = true;
+    }
+
+    private void CloseCreate()
+    {
+        _createOpen = false;
+        _editing = null;
+        _slotStart = _slotEnd = null;
+        _draft = null;
+    }
+
+    private void SetDraft(TimeSlot? slot) => _draft = slot;
+
+    // ---------- Daten ----------
     protected override async Task OnInitializedAsync()
     {
-        // Token zuerst aus dem Browser-Speicher laden. Nach einem Seitenwechsel oder Reload ist der
-        // HttpClient sonst ohne Authorization-Header (-> 401 -> Weiterleitung zum Login).
-        // Funktioniert nur ohne Prerendering (siehe @rendermode oben), sonst ist kein JS-Interop möglich.
         string? token = await AuthService.GetTokenAsync();
         if (string.IsNullOrEmpty(token))
         {
@@ -91,7 +156,6 @@
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
-            // Token abgelaufen oder ungültig
             await AuthService.LogoutAsync();
             NavigationManager.NavigateTo("/login");
         }
@@ -103,14 +167,65 @@
 
     private async Task SaveAppointment(AppointmentRequest request)
     {
-        var response = await AppointmentService.PostAppointmentAsync(request);
-        if (response is not null)
+        if (_editing is { } existing)
         {
-            _appointments.Add(response);
+            var updated = await AppointmentService.UpdateAppointmentAsync(existing.Id, request);
+            if (updated is not null) Replace(existing.Id, updated);
         }
-        _createOpen = false;
+        else
+        {
+            var created = await AppointmentService.PostAppointmentAsync(request);
+            if (created is not null) _appointments.Add(created);
+        }
+
+        CloseCreate();
     }
 
+    private async Task DeleteEditing()
+    {
+        if (_editing is not { } existing) return;
+
+        if (await AppointmentService.DeleteAppointmentAsync(existing.Id))
+        {
+            _appointments.RemoveAll(a => a.Id == existing.Id);
+        }
+
+        CloseCreate();
+    }
+
+    // Drag & Drop: Dauer bleibt gleich, nur der Start ändert sich
+    private async Task MoveAppointment((int Id, DateTime Start) move)
+    {
+        var original = _appointments.FirstOrDefault(a => a.Id == move.Id);
+        if (original is null) return;
+
+        var newStart = move.Start;
+        var newEnd = newStart + (original.EndTime - original.StartTime);
+
+        // Sofort anzeigen, damit der Termin nicht erst zurückspringt …
+        Replace(original.Id, new AppointmentResponse(original.Id, original.Title, newStart, newEnd, original.Location, original.IsAllDay));
+
+        // … und danach speichern. Schlägt das fehl, kommt der Termin an seine alte Stelle zurück.
+        AppointmentResponse? saved = null;
+        try
+        {
+            var request = new AppointmentRequest(original.Title, newStart, newEnd, original.Location ?? "", original.IsAllDay);
+            saved = await AppointmentService.UpdateAppointmentAsync(original.Id, request);
+        }
+        catch (HttpRequestException)
+        {
+        }
+
+        Replace(original.Id, saved ?? original);
+    }
+
+    private void Replace(int id, AppointmentResponse item)
+    {
+        var index = _appointments.FindIndex(a => a.Id == id);
+        if (index >= 0) _appointments[index] = item;
+    }
+
+    // ---------- Navigation ----------
     private void Today() => _date = DateTime.Today;
     private void SetView(CalendarView view) => _view = view;
 

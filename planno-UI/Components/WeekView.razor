@@ -5,26 +5,26 @@
 <section class="week">
     <div class="week-scroll" style="--cols:@DayCount" @ref="_scroll">
 
-        <div class="week-head @(DayCount == 1 ? "single" : "")">
+        <div class="week-head @(DayCount == 1 ? "single" : "")" @ref="_head">
             <div></div>
             @foreach (var d in Days())
             {
                 var today = d.Date == DateTime.Today;
                 var allDay = AppointmentLayout.AllDayOn(Appointments, d);
 
-                <div class="day-head @(today ? "today" : "")">
+                <div class="day-head @(today ? "today" : "")" data-date="@Iso(d)">
                     <div class="day-id" @onclick="() => PickDay(d)">
                         <span class="dow">@d.ToString("ddd", De).TrimEnd('.')</span>
                         <button type="button" class="dom" aria-current="@(today ? "date" : null)">@d.Day</button>
                     </div>
 
-                    @* Ganztägige Termine stehen direkt unter dem Datum *@
+                    @* Ganztägige Termine stehen direkt unter dem Datum (per Drag & Drop auf einen anderen Tag verschiebbar) *@
                     @if (allDay.Count > 0)
                     {
                         <div class="allday-list">
                             @foreach (var a in allDay)
                             {
-                                <div class="event-chip" title="@AppointmentLayout.Tooltip(a)">@AppointmentLayout.DisplayTitle(a)</div>
+                                <div class="event-chip" data-id="@a.Id" title="@AppointmentLayout.Tooltip(a)">@AppointmentLayout.DisplayTitle(a)</div>
                             }
                         </div>
                     }
@@ -32,7 +32,7 @@
             }
         </div>
 
-        <div class="week-grid">
+        <div class="week-grid" @ref="_grid">
             <div class="hours" aria-hidden="true">
                 @for (var h = 1; h < 24; h++)
                 {
@@ -42,18 +42,33 @@
 
             @foreach (var d in Days())
             {
-                <div class="day-col" data-date="@d.ToString("yyyy-MM-dd")">
+                <div class="day-col" data-date="@Iso(d)">
                     @foreach (var p in AppointmentLayout.Layout(Appointments, d))
                     {
                         var compact = p.End - p.Start < 60;
 
-                        <div class="event-box @(compact ? "compact" : "")" style="@BoxStyle(p)" title="@AppointmentLayout.Tooltip(p.Item)">
+                        <div class="event-box @(compact ? "compact" : "")"
+                             data-id="@p.Item.Id" data-start="@p.Start" data-end="@p.End"
+                             style="@BoxStyle(p)" title="@AppointmentLayout.Tooltip(p.Item)">
                             <div class="event-title">@AppointmentLayout.DisplayTitle(p.Item)</div>
                             <div class="event-time">@(compact ? AppointmentLayout.TimeLabel(p.Start) : AppointmentLayout.Range(p))</div>
                             @if (!compact && p.End - p.Start >= 90 && !string.IsNullOrWhiteSpace(p.Item.Location))
                             {
                                 <div class="event-loc">@p.Item.Location</div>
                             }
+                        </div>
+                    }
+
+                    @* Vorschau des Termins, der gerade im Fenster erstellt wird *@
+                    @if (Draft is { } draft && draft.Start.Date == d.Date)
+                    {
+                        var dStart = draft.Start.Hour * 60 + draft.Start.Minute;
+                        var dEnd = draft.End.Date > draft.Start.Date ? 1440 : draft.End.Hour * 60 + draft.End.Minute;
+                        if (dEnd <= dStart) dEnd = Math.Min(dStart + 15, 1440);
+
+                        <div class="event-box draft @(dEnd - dStart < 60 ? "compact" : "")" style="@BoxStyle(dStart, dEnd, 0, 1)">
+                            <div class="event-title">(Kein Titel)</div>
+                            <div class="event-time">@DraftTime(dStart, dEnd)</div>
                         </div>
                     }
 
@@ -78,11 +93,24 @@
 
     [Parameter] public IReadOnlyList<AppointmentResponse> Appointments { get; set; } = [];
 
-    /// <summary>Wird ausgelöst, wenn in der Wochenansicht ein Tag angeklickt wird.</summary>
+    /// <summary>Vorschau für einen Termin, der gerade erstellt wird (optional).</summary>
+    [Parameter] public TimeSlot? Draft { get; set; }
+
+    /// <summary>Tag im Kopf der Wochenansicht angeklickt.</summary>
     [Parameter] public EventCallback<DateTime> OnDayPicked { get; set; }
 
-    private ElementReference _scroll;
+    /// <summary>Im Raster geklickt oder ein Zeitraum aufgezogen.</summary>
+    [Parameter] public EventCallback<TimeSlot> OnCreate { get; set; }
+
+    /// <summary>Ein bestehender Termin wurde angeklickt.</summary>
+    [Parameter] public EventCallback<int> OnAppointmentClick { get; set; }
+
+    /// <summary>Ein Termin wurde per Drag &amp; Drop verschoben (Id, neuer Start).</summary>
+    [Parameter] public EventCallback<(int Id, DateTime Start)> OnAppointmentMove { get; set; }
+
+    private ElementReference _scroll, _head, _grid;
     private IJSObjectReference? _module;
+    private DotNetObjectReference<WeekView>? _self;
     private System.Threading.Timer? _timer;
     private DateTime _now = DateTime.Now;
 
@@ -99,15 +127,24 @@
     private Task PickDay(DateTime day) =>
         DayCount > 1 ? OnDayPicked.InvokeAsync(day) : Task.CompletedTask;
 
+    private static string Iso(DateTime d) => d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+    private static DateTime ParseIso(string s) => DateTime.ParseExact(s, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
     private static string HourLabel(int h) => h < 12 ? $"{h} AM" : h == 12 ? "12 PM" : $"{h - 12} PM";
 
-    // Position und Größe eines Termins in der Zeitleiste; Überschneidungen teilen sich die Breite
-    private static string BoxStyle(AppointmentLayout.Placed p)
+    private static string DraftTime(int start, int end) => end - start < 60
+        ? AppointmentLayout.TimeLabel(start)
+        : $"{AppointmentLayout.TimeLabel(start)} – {AppointmentLayout.TimeLabel(end)}";
+
+    private static string BoxStyle(AppointmentLayout.Placed p) => BoxStyle(p.Start, p.End, p.Column, p.Columns);
+
+    // Position und Größe in der Zeitleiste; Überschneidungen teilen sich die Breite
+    private static string BoxStyle(int start, int end, int column, int columns)
     {
-        double top = p.Start * HourHeight / 60.0;
-        double height = Math.Max((p.End - p.Start) * HourHeight / 60.0 - 2, 18);
-        double width = 100.0 / p.Columns;
-        double left = p.Column * width;
+        double top = start * HourHeight / 60.0;
+        double height = Math.Max((end - start) * HourHeight / 60.0 - 2, 18);
+        double width = 100.0 / columns;
+        double left = column * width;
 
         return string.Create(CultureInfo.InvariantCulture,
             $"top:{top:0.##}px;height:{height:0.##}px;left:calc({left:0.##}% + 2px);width:calc({width:0.##}% - 4px)");
@@ -123,13 +160,46 @@
             await InvokeAsync(StateHasChanged);
         }, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
 
+        _self = DotNetObjectReference.Create(this);
         _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
         await _module.InvokeVoidAsync("scrollTo", _scroll, 7 * HourHeight);
+        await _module.InvokeVoidAsync("registerGrid", _grid, _self);
+        await _module.InvokeVoidAsync("registerDayDrag", _head, _self, ".event-chip[data-id]", ".day-head[data-date]");
+    }
+
+    // ---------- Aufrufe aus planno.js ----------
+    [JSInvokable]
+    public Task OnCreateRange(string date, int startMinutes, int endMinutes)
+    {
+        var day = ParseIso(date);
+        return InvokeAsync(() => OnCreate.InvokeAsync(new TimeSlot(day.AddMinutes(startMinutes), day.AddMinutes(endMinutes))));
+    }
+
+    [JSInvokable]
+    public Task OnEventClick(int id) => InvokeAsync(() => OnAppointmentClick.InvokeAsync(id));
+
+    [JSInvokable]
+    public Task OnMoveTimed(int id, string date, int startMinutes) => MoveTo(id, ParseIso(date).AddMinutes(startMinutes));
+
+    [JSInvokable]
+    public Task OnMoveToDay(int id, string date)
+    {
+        var item = Appointments.FirstOrDefault(a => a.Id == id);
+        return item is null ? Task.CompletedTask : MoveTo(id, ParseIso(date) + item.StartTime.TimeOfDay);
+    }
+
+    private Task MoveTo(int id, DateTime newStart)
+    {
+        var item = Appointments.FirstOrDefault(a => a.Id == id);
+        if (item is null || item.StartTime == newStart) return Task.CompletedTask;
+
+        return InvokeAsync(() => OnAppointmentMove.InvokeAsync((id, newStart)));
     }
 
     public async ValueTask DisposeAsync()
     {
         _timer?.Dispose();
+        _self?.Dispose();
         if (_module is null) return;
         try { await _module.DisposeAsync(); } catch (JSDisconnectedException) { }
     }

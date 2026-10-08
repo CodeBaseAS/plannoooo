@@ -1,13 +1,15 @@
 @using System.Globalization
+@implements IAsyncDisposable
+@inject IJSRuntime JS
 
-<section class="month" style="--rows:@Rows">
+<section class="month" style="--rows:@Rows" @ref="_root">
     @foreach (var (d, i) in Cells().Select((d, i) => (d, i)))
     {
         var today = d.Date == DateTime.Today;
         var items = AppointmentLayout.OnDay(Appointments, d);
         var more = items.Count - MaxVisible;
 
-        <div class="m-cell">
+        <div class="m-cell" data-date="@Iso(d)">
             @if (i < 7)
             {
                 <span class="m-dow @(today ? "today" : "")">@d.ToString("ddd", De).TrimEnd('.')</span>
@@ -26,11 +28,11 @@
                     {
                         if (a.IsAllDay)
                         {
-                            <div class="event-chip" title="@AppointmentLayout.Tooltip(a)">@AppointmentLayout.DisplayTitle(a)</div>
+                            <div class="event-chip" data-id="@a.Id" title="@AppointmentLayout.Tooltip(a)">@AppointmentLayout.DisplayTitle(a)</div>
                         }
                         else
                         {
-                            <div class="m-timed" title="@AppointmentLayout.Tooltip(a)">
+                            <div class="m-timed" data-id="@a.Id" title="@AppointmentLayout.Tooltip(a)">
                                 <span class="m-dot"></span>
                                 <span class="m-time">@AppointmentLayout.TimeLabel(a.StartTime)</span>
                                 <span class="m-title">@AppointmentLayout.DisplayTitle(a)</span>
@@ -56,6 +58,16 @@
     [Parameter] public IReadOnlyList<AppointmentResponse> Appointments { get; set; } = [];
     [Parameter] public EventCallback<DateTime> OnDayPicked { get; set; }
 
+    /// <summary>Ein Termin wurde angeklickt.</summary>
+    [Parameter] public EventCallback<int> OnAppointmentClick { get; set; }
+
+    /// <summary>Ein Termin wurde per Drag &amp; Drop auf einen anderen Tag gezogen (Id, neuer Start).</summary>
+    [Parameter] public EventCallback<(int Id, DateTime Start)> OnAppointmentMove { get; set; }
+
+    private ElementReference _root;
+    private IJSObjectReference? _module;
+    private DotNetObjectReference<MonthView>? _self;
+
     private DateTime First => new(Date.Year, Date.Month, 1);
     private int Offset => ((int)First.DayOfWeek + 6) % 7;                 // Woche beginnt am Montag
     private int Rows => (int)Math.Ceiling((Offset + DateTime.DaysInMonth(Date.Year, Date.Month)) / 7.0);
@@ -64,5 +76,39 @@
     {
         var start = First.AddDays(-Offset);
         for (var i = 0; i < Rows * 7; i++) yield return start.AddDays(i);
+    }
+
+    private static string Iso(DateTime d) => d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        _self = DotNetObjectReference.Create(this);
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
+        await _module.InvokeVoidAsync("registerDayDrag", _root, _self, ".event-chip[data-id], .m-timed[data-id]", ".m-cell[data-date]");
+    }
+
+    [JSInvokable]
+    public Task OnEventClick(int id) => InvokeAsync(() => OnAppointmentClick.InvokeAsync(id));
+
+    [JSInvokable]
+    public Task OnMoveToDay(int id, string date)
+    {
+        var item = Appointments.FirstOrDefault(a => a.Id == id);
+        if (item is null) return Task.CompletedTask;
+
+        var day = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var newStart = day + item.StartTime.TimeOfDay;                      // Uhrzeit bleibt erhalten
+        if (newStart == item.StartTime) return Task.CompletedTask;
+
+        return InvokeAsync(() => OnAppointmentMove.InvokeAsync((id, newStart)));
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _self?.Dispose();
+        if (_module is null) return;
+        try { await _module.DisposeAsync(); } catch (JSDisconnectedException) { }
     }
 }
