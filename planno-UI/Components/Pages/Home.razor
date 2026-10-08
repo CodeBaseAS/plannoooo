@@ -33,12 +33,13 @@
         {
             <WeekView Date="_date"
                       DayCount="@(_view == CalendarView.Day ? 1 : 7)"
+                      Appointments="_appointments"
                       OnDayPicked="OpenDay" />
         }
         else if (_view == CalendarView.Month)
         {
             <PageScroller PageKey="MonthKey" OnPage="Shift">
-                <MonthView Date="_date" OnDayPicked="OpenDay" />
+                <MonthView Date="_date" Appointments="_appointments" OnDayPicked="OpenDay" />
             </PageScroller>
         }
         else
@@ -74,6 +75,9 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Token zuerst aus dem Browser-Speicher laden. Nach einem Seitenwechsel oder Reload ist der
+        // HttpClient sonst ohne Authorization-Header (-> 401 -> Weiterleitung zum Login).
+        // Funktioniert nur ohne Prerendering (siehe @rendermode oben), sonst ist kein JS-Interop möglich.
         string? token = await AuthService.GetTokenAsync();
         if (string.IsNullOrEmpty(token))
         {
@@ -87,6 +91,7 @@
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
+            // Token abgelaufen oder ungültig
             await AuthService.LogoutAsync();
             NavigationManager.NavigateTo("/login");
         }

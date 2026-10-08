@@ -2,7 +2,7 @@
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 
-<div class="dialog @(Expanded ? "expanded" : "")"
+<div class="dialog @GrowClass"
      data-no-shortcuts
      role="dialog"
      aria-label="Termin erstellen"
@@ -87,10 +87,13 @@
         }
     </div>
 
-    <label class="dlg-row all-day">
-        <input type="checkbox" checked="@_allDay" @onchange="OnAllDayChanged" />
-        <span>Ganztägig</span>
-    </label>
+    @* Nur das Label (Box + Text) ist klickbar, nicht die ganze Zeile *@
+    <div class="dlg-row all-day">
+        <label>
+            <input type="checkbox" checked="@_allDay" @onchange="OnAllDayChanged" />
+            <span>Ganztägig</span>
+        </label>
+    </div>
 
     <div class="dlg-row loc-row @(_popup == Popup.Location ? "raised" : "")">
         <span class="row-icon"><Icon Name="location" /></span>
@@ -166,16 +169,24 @@
     private Popup _popup;
     private bool _scrollPending, _confirmOpen, _allDay;
     private DateTime _date;
-    private int _start, _end; 
+    private int _start, _end;
     private string _title = "", _location = "";
 
     private string DateLabel => _date.ToString("dddd, d. MMMM", De);
 
-    private bool Expanded => _popup switch
+    // Das Fenster wächst nur so weit, wie das jeweilige Popup Platz braucht.
+    // (Die Zeit-Listen passen ins normale Fenster und lassen es unverändert.)
+    private string GrowClass => _popup switch
     {
-        Popup.Date => true,
-        Popup.Location => Suggestions().Count > 0,
-        _ => false
+        Popup.Date => "grow-date",
+        Popup.Location => Suggestions().Count switch
+        {
+            >= 4 => "grow-loc-4",
+            3 => "grow-loc-3",
+            2 => "grow-loc-2",
+            _ => ""
+        },
+        _ => ""
     };
 
     protected override void OnInitialized()

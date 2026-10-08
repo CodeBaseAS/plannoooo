@@ -117,13 +117,14 @@ a { color: inherit; text-decoration: none; }
 .week-scroll { --cols: 7; flex: 1; overflow-y: auto; background: var(--surface); border-top-left-radius: 24px;
                scrollbar-width: thin; scrollbar-color: #C7C9CC transparent; }
 
-.week-head { position: sticky; top: 0; z-index: 3; height: 80px; padding-right: 30px; background: var(--surface);
+.week-head { position: sticky; top: 0; z-index: 3; min-height: 80px; padding-right: 30px; background: var(--surface);
              display: grid; grid-template-columns: var(--gutter) repeat(var(--cols), 1fr); }
 
-.day-head { display: flex; flex-direction: column; align-items: center; padding-top: 22px; gap: 2px; }
-.week-head.single .day-head { align-items: flex-start; padding-left: 78px; }
+.day-head { display: flex; flex-direction: column; align-items: stretch; min-width: 0; padding-top: 22px; }
+.day-id { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.week-head.single .day-id { align-items: flex-start; padding-left: 78px; }
 .week-head.single .dow { padding-left: 14px; }
-.week-head:not(.single) .day-head { cursor: pointer; }
+.week-head:not(.single) .day-id { cursor: pointer; }
 .dow { font-size: 11px; font-weight: 500; line-height: 16px; text-transform: uppercase; color: var(--text-2); }
 .dom { width: 40px; height: 40px; border-radius: 50%; font-size: 24px; color: var(--text-2); display: grid; place-items: center; }
 .day-head.today .dow { color: var(--accent); }
@@ -172,19 +173,23 @@ a { color: inherit; text-decoration: none; }
 .y-month .mini-grid { margin-top: 0; }
 
 /* ---------- Termin erstellen ---------- */
-.dialog { position: fixed; z-index: 50; top: 12vh; left: calc(50% - 225px); width: 450px; max-width: calc(100vw - 16px);
+.dialog { position: fixed; z-index: 50; top: 12vh; --dialog-w: 500px; left: calc(50% - var(--dialog-w) / 2); width: var(--dialog-w); max-width: calc(100vw - 16px);
           min-height: 345px; display: flex; flex-direction: column; background: var(--bg); border-radius: 28px; outline: 0;
           box-shadow: 0 4px 8px 3px rgba(0, 0, 0, .15), 0 1px 3px rgba(0, 0, 0, .3);
           transition: min-height .2s cubic-bezier(.2, 0, 0, 1); }
-.dialog.expanded { min-height: min(600px, calc(100vh - 24px)); }
+.dialog.grow-date  { min-height: min(440px, calc(100vh - 24px)); }
+.dialog.grow-loc-2 { min-height: min(390px, calc(100vh - 24px)); }
+.dialog.grow-loc-3 { min-height: min(446px, calc(100vh - 24px)); }
+.dialog.grow-loc-4 { min-height: min(502px, calc(100vh - 24px)); }
 
 .dlg-head, .dlg-title, .dlg-row, .dlg-foot { position: relative; z-index: 2; flex: none; }
 .dlg-row.raised { z-index: 3; }
 .popup-backdrop { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
 
-.dlg-head { height: 48px; display: flex; align-items: center; padding-right: 9px; }
-.drag-zone { flex: 1; height: 100%; padding-left: 19px; display: flex; align-items: center; color: var(--text-2);
-             cursor: grab; touch-action: none; user-select: none; border-top-left-radius: 28px; }
+.dlg-head { height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 9px 0 11px; }
+.drag-zone { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; color: var(--text-2);
+             cursor: grab; touch-action: none; user-select: none; }
+.drag-zone:hover { background: var(--hover); }
 .drag-zone:active { cursor: grabbing; }
 .dlg-close { width: 40px; height: 40px; color: var(--text-2); }
 
@@ -198,31 +203,24 @@ a { color: inherit; text-decoration: none; }
 .row-icon { position: absolute; left: 19px; top: 50%; height: 24px; margin-top: -12px; display: grid; place-items: center; color: var(--text-2); }
 
 .time-row { height: 40px; margin-top: 28px; }
-.field-wrap { position: relative; }
+.field-wrap { position: relative; flex: none; }
 .start-wrap { margin-left: 8px; }
 .field { height: 40px; padding: 0 14px; border: 0; border-bottom: 2px solid transparent; border-radius: 4px 4px 0 0;
          background: var(--field); font: inherit; font-size: 14px; color: var(--text); text-align: left; }
 .field.active, .field:focus-visible { border-bottom-color: var(--accent); outline: 0; }
-.date-field { width: 150px; padding: 0 8px; white-space: nowrap; }
+.date-field { min-width: 155px; padding: 0 12px; white-space: nowrap; }
 .time-field { width: 81px; padding: 0; text-align: center; }
 .dash { width: 25px; text-align: center; color: var(--text-2); }
 
-.all-day {
-    height: 52px;
-    margin-bottom: 4px;
-    gap: 20px;
-    font-size: 14px;
-    cursor: pointer;
-    width: fit-content;
-    padding-left: 68px;
-}
+.all-day { height: 52px; margin-bottom: 4px; font-size: 14px; }
+.all-day label { display: flex; align-items: center; gap: 20px; cursor: pointer; }
 .all-day input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin: 0; display: grid; place-content: center;
                  border: 2px solid var(--text-2); border-radius: 2px; cursor: pointer; }
 .all-day input:checked { background: var(--accent); border-color: var(--accent); }
 .all-day input:checked::after { content: ""; width: 5px; height: 10px; margin-top: -2px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
 
 .loc-row { height: 52px; border-top: 1px solid var(--divider); border-bottom: 1px solid var(--divider); }
-.loc-wrap { width: 328px; }
+.loc-wrap { flex: 1; margin-right: 24px; }
 .loc-field { width: 100%; padding: 0; background: transparent; border-radius: 4px 4px 0 0; }
 .loc-field::placeholder { color: var(--text-2); }
 .loc-field.active { padding: 0 10px; background: var(--field); }
@@ -250,7 +248,7 @@ a { color: inherit; text-decoration: none; }
 .time-item.selected { background: var(--field); }
 
 .loc-popup { width: 100%; padding: 4px 0; background: #F1F4F9; border-radius: 0 0 4px 4px; }
-.loc-item { display: block; width: 100%; padding: 12px 16px; font-size: 14px; line-height: 20px; text-align: left; }
+.loc-item { display: block; width: 100%; padding: 8px 16px; font-size: 14px; line-height: 20px; text-align: left; }
 .loc-item:hover { background: var(--hover); }
 .loc-name { display: block; font-weight: 500; }
 .loc-region { display: block; color: var(--text-2); }
@@ -357,3 +355,33 @@ a.text-btn { display: inline-flex; align-items: center; }
 .am-row:hover .am-plus { background: #fff; }
 
 @media (prefers-reduced-motion: reduce) { .account-menu { animation: none; } }
+
+/* ---------- Termine ---------- */
+/* Ganztägig: Chip unter dem Datum (Woche/Tag) bzw. in der Zelle (Monat) */
+.allday-list { padding: 6px 4px 6px; display: flex; flex-direction: column; gap: 2px; }
+.event-chip { height: 22px; padding: 0 8px; border-radius: 6px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 500;
+              line-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.event-chip:hover { filter: brightness(1.12); }
+
+/* Mit Uhrzeit: Box in der Zeitleiste */
+.event-box { position: absolute; z-index: 1; padding: 3px 8px; overflow: hidden; border: 1px solid var(--surface); border-radius: 8px;
+             background: var(--accent); color: #fff; font-size: 12px; line-height: 16px; }
+.event-box:hover { z-index: 3; filter: brightness(1.12); box-shadow: var(--shadow-1); }
+.event-title { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.event-time, .event-loc { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .9; }
+
+/* Kurze Termine (< 60 Min): eine Zeile „Titel, 9:00AM“ */
+.event-box.compact { display: flex; align-items: center; padding-top: 0; padding-bottom: 0; }
+.event-box.compact .event-title { flex: 0 1 auto; min-width: 0; }
+.event-box.compact .event-time { flex: none; }
+.event-box.compact .event-time::before { content: ", "; white-space: pre; }
+
+/* Monatsansicht */
+.m-events { width: 100%; min-height: 0; padding: 2px 4px 0; display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+.m-timed { height: 20px; padding: 0 4px; display: flex; align-items: center; gap: 6px; border-radius: 4px; font-size: 12px; white-space: nowrap; overflow: hidden; }
+.m-timed:hover { background: var(--hover); }
+.m-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--accent); }
+.m-time { flex: none; color: var(--text-2); }
+.m-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.m-more { align-self: flex-start; height: 20px; padding: 0 6px; border-radius: 4px; font-size: 12px; font-weight: 500; color: var(--text-2); }
+.m-more:hover { background: var(--hover); }
