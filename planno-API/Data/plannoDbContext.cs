@@ -44,6 +44,7 @@ public class PlannoDbContext : DbContext
             e.Property(x => x.StartTime).HasColumnName("start_time").HasColumnType("datetime").IsRequired();
             e.Property(x => x.EndTime).HasColumnName("end_time").HasColumnType("datetime").IsRequired();
             e.Property(x => x.Location).HasColumnName("location").HasMaxLength(50);
+            e.Property(x => x.Description).HasColumnName("description").HasMaxLength(2000);
             e.Property(x => x.IsAllDay).HasColumnName("is_all_day").IsRequired();
         });
 

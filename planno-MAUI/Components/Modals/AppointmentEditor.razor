@@ -122,6 +122,13 @@
         </div>
     </div>
 
+    <div class="dlg-row desc-row">
+        <span class="row-icon"><Icon Name="notes" /></span>
+        <textarea class="desc-field" rows="3" maxlength="2000"
+                  placeholder="Beschreibung hinzufügen" aria-label="Beschreibung"
+                  @bind="_description" @bind:event="oninput" @onfocus="ClosePopup"></textarea>
+    </div>
+
     <div class="dlg-foot">
         @if (Existing is not null)
         {
@@ -180,7 +187,7 @@
     private bool _scrollPending, _confirmOpen, _allDay, _busy;
     private DateTime _date;
     private int _start, _end;
-    private string _title = "", _location = "";
+    private string _title = "", _location = "", _description = "";
 
     private string DateLabel => _date.ToString("dddd, d. MMMM", De);
 
@@ -203,6 +210,7 @@
         {
             _title = existing.Title ?? "";
             _location = existing.Location ?? "";
+            _description = existing.Description ?? "";
             _allDay = existing.IsAllDay;
             _date = existing.StartTime.Date;
 
@@ -353,7 +361,7 @@
     {
         var start = DateTime.SpecifyKind(_allDay ? _date : _date.AddMinutes(_start), DateTimeKind.Unspecified);
         var end = DateTime.SpecifyKind(_allDay ? _date.AddDays(1) : _date.AddMinutes(_end), DateTimeKind.Unspecified);
-        return RunOnce(() => OnSave.InvokeAsync(new AppointmentRequest(_title.Trim(), start, end, _location.Trim(), _allDay)));
+        return RunOnce(() => OnSave.InvokeAsync(new AppointmentRequest(_title.Trim(), start, end, _location.Trim(), _allDay, _description.Trim())));
     }
 
     private Task Delete() => RunOnce(() => OnDelete.InvokeAsync());

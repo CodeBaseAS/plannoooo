@@ -197,12 +197,12 @@
         var newStart = move.Start;
         var newEnd = newStart + (original.EndTime - original.StartTime);
 
-        Replace(original.Id, new AppointmentResponse(original.Id, original.Title, newStart, newEnd, original.Location, original.IsAllDay));
+        Replace(original.Id, original with { StartTime = newStart, EndTime = newEnd });
 
         AppointmentResponse? saved = null;
         try
         {
-            var request = new AppointmentRequest(original.Title, newStart, newEnd, original.Location ?? "", original.IsAllDay);
+            var request = new AppointmentRequest(original.Title, newStart, newEnd, original.Location ?? "", original.IsAllDay, original.Description);
             saved = await AppointmentService.UpdateAppointmentAsync(original.Id, request);
         }
         catch (HttpRequestException)

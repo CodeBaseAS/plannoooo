@@ -12,12 +12,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>dcmaomptvt</Fingerprint>
-      <Integrity>Y3CenQZB17nOt0mmKMpbFu3MYXI3cQXiEMMu2j39lrk=</Integrity>
+      <Fingerprint>dvhkc4cxbz</Fingerprint>
+      <Integrity>ebNOSTich340+dwFBXCYxRpDuZghyHq9kiFbN8J3VNQ=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>40064</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 11:00:38 GMT</LastWriteTime>
+      <FileLength>42758</FileLength>
+      <LastWriteTime>Wed, 28 Oct 2026 11:44:44 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))">
@@ -32,12 +32,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>ztd12sjsl4</Fingerprint>
-      <Integrity>R16gEximvt55NO7bBwAEXDKY5DAIigB3y5LvV2pogBM=</Integrity>
+      <Fingerprint>yo9da0bxby</Fingerprint>
+      <Integrity>rlPn38wEQFjwddnA2MaYXh4orWqTCYxzzvXzVa8re90=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>1174</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 10:16:03 GMT</LastWriteTime>
+      <FileLength>1517</FileLength>
+      <LastWriteTime>Wed, 28 Oct 2026 11:25:35 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap.min.css'))">
@@ -92,12 +92,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>6xspnob1tm</Fingerprint>
-      <Integrity>qiWoHd7zBG1fXpI1fG60zWqeamcuBhYaEye8Un0MxMY=</Integrity>
+      <Fingerprint>4yop4icwhe</Fingerprint>
+      <Integrity>dOmBJ7GDFH+cOMgNL/jd0PtLBbao7oTKJ9zn57A0CHs=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>17455</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 10:16:03 GMT</LastWriteTime>
+      <FileLength>16719</FileLength>
+      <LastWriteTime>Wed, 28 Oct 2026 11:34:48 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\planno.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\planno-MAUI.styles.css'))">
@@ -117,7 +117,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <FileLength>3703</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 11:15:05 GMT</LastWriteTime>
+      <LastWriteTime>Wed, 28 Oct 2026 11:47:01 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\planno-MAUI.styles.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\_framework\blazor.modules.json'))">

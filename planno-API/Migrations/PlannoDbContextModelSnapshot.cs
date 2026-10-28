@@ -29,6 +29,11 @@ namespace planno_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)")
+                        .HasColumnName("description");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime")
                         .HasColumnName("end_time");

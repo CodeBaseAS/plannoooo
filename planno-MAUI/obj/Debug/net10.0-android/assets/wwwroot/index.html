@@ -18,7 +18,15 @@
 
     <div class="status-bar-safe-area"></div>
 
-    <div id="app">Loading...</div>
+    <div id="app">
+        <!-- Wird von Blazor ersetzt, sobald die App gerendert ist -->
+        <div class="app-loader" role="status" aria-label="Planno wird geladen">
+            <span class="dot blue"></span>
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+        </div>
+    </div>
 
     <div id="blazor-error-ui" data-nosnippet>
         An unhandled error has occurred.

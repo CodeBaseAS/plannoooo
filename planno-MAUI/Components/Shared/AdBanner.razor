@@ -1,0 +1,38 @@
+@implements IDisposable
+
+@* Fiktive Werbung für Nutzer ohne Premium – verschwindet, sobald ein Abo aktiv ist *@
+<aside class="ad-banner" aria-label="Werbung">
+    <span class="ad-label">Anzeige</span>
+    <div class="ad-logo" style="background:@Current.Color" aria-hidden="true">@Current.Brand[0]</div>
+    <div class="ad-text">
+        <strong>@Current.Brand</strong>
+        <span>@Current.Text</span>
+    </div>
+    <a class="ad-remove" href="upgrade">Werbefrei mit Premium</a>
+</aside>
+
+@code {
+    private static readonly (string Brand, string Text, string Color)[] Ads =
+    [
+        ("Kaffeerösterei Bohnenglück", "Frisch geröstet, direkt zu dir – 10 % auf die erste Bestellung.", "#8D6E63"),
+        ("FitPlan Studio", "Dein Training, perfekt im Kalender. Jetzt 2 Wochen gratis testen.", "#34A853"),
+        ("Reiseportal Fernweh", "Wochenendtrips ab 49 € – plane deinen nächsten Ausflug.", "#4285F4"),
+    ];
+
+    private int _index;
+    private System.Threading.Timer? _timer;
+
+    private (string Brand, string Text, string Color) Current => Ads[_index];
+
+    protected override void OnInitialized()
+    {
+        _index = Random.Shared.Next(Ads.Length);
+        _timer = new System.Threading.Timer(_ =>
+        {
+            _index = (_index + 1) % Ads.Length;
+            _ = InvokeAsync(StateHasChanged);
+        }, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+    }
+
+    public void Dispose() => _timer?.Dispose();
+}

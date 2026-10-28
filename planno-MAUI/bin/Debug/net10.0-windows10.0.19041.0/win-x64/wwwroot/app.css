@@ -75,7 +75,6 @@ a { color: inherit; text-decoration: none; }
 .menu-backdrop { position: fixed; inset: 0; z-index: 20; }
 .menu { position: absolute; z-index: 21; top: calc(100% + 8px); left: 0; width: 184px; padding: 0 0 0; background: var(--surface); border-radius: 4px; box-shadow: var(--shadow-menu); overflow: hidden; }
 .menu-item { width: 100%; height: 37px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; text-align: left; }
-.menu-item kbd { font: inherit; color: var(--text-2); }
 .menu-item:hover, .menu-item.active { background: var(--hover); }
 .menu-item.active { font-weight: 500; }
 
@@ -229,6 +228,14 @@ a { color: inherit; text-decoration: none; }
 .all-day input:checked::after { content: ""; width: 5px; height: 10px; margin-top: -2px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
 
 .loc-row { height: 52px; border-top: 1px solid var(--divider); border-bottom: 1px solid var(--divider); }
+
+.desc-row { align-items: flex-start; padding-top: 12px; padding-right: 24px; }
+.desc-row .row-icon { top: 20px; margin-top: 0; }
+.desc-field { width: 100%; min-height: 64px; max-height: 180px; padding: 8px 10px; border: 0; border-bottom: 2px solid transparent; border-radius: 4px 4px 0 0;
+              background: transparent; font: inherit; font-size: 14px; line-height: 20px; color: var(--text); resize: vertical; outline: 0; }
+.desc-field::placeholder { color: var(--text-2); }
+.desc-field:hover { background: var(--field); }
+.desc-field:focus { background: var(--field); border-bottom-color: var(--accent); }
 .loc-wrap { flex: 1; margin-right: 24px; }
 .loc-field { width: 100%; padding: 0; background: transparent; border-radius: 4px 4px 0 0; }
 .loc-field::placeholder { color: var(--text-2); }
@@ -626,4 +633,52 @@ button { -webkit-tap-highlight-color: transparent; }
     .billing-sub { margin-bottom: 32px; }
     .plans { grid-template-columns: 1fr; gap: 28px; }
     .card-block { padding: 20px 16px; border-radius: 20px; }
+}
+
+/* ---------- Ladeanimation beim App-Start (index.html) ---------- */
+.app-loader { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; gap: 12px; background: var(--bg); }
+.app-loader .dot { width: 16px; height: 16px; border-radius: 50%; animation: loader-bounce 1.2s cubic-bezier(.45, 0, .55, 1) infinite; }
+.app-loader .blue   { background: #4285F4; }
+.app-loader .red    { background: #EA4335; animation-delay: .15s; }
+.app-loader .yellow { background: #FBBC05; animation-delay: .3s; }
+.app-loader .green  { background: #34A853; animation-delay: .45s; }
+
+@keyframes loader-bounce {
+    0%, 60%, 100% { transform: translateY(0) scale(1); }
+    30%           { transform: translateY(-18px) scale(1.15); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-loader .dot { animation: loader-pulse 1.2s ease-in-out infinite; }
+    @keyframes loader-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+}
+
+@media (max-width: 800px) {
+    .desc-row { padding-right: 16px; }
+    .desc-field { height: 64px; }
+}
+
+/* ---------- Werbebanner (nur ohne Premium) ---------- */
+:root { --ad-h: 56px; }
+.ad-banner { flex: none; min-height: var(--ad-h); padding: 8px 24px calc(8px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 12px;
+             background: var(--surface); border-top: 1px solid var(--line); font-size: 14px; line-height: 20px; }
+.ad-label { flex: none; padding: 0 6px; border: 1px solid var(--outline); border-radius: 4px; font-size: 11px; line-height: 16px; color: var(--text-2); }
+.ad-logo { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border-radius: 8px; color: #fff; font-weight: 500; }
+.ad-text { flex: 1; min-width: 0; display: flex; gap: 8px; white-space: nowrap; overflow: hidden; }
+.ad-text strong { flex: none; font-weight: 500; }
+.ad-text span { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--text-2); }
+.ad-remove { flex: none; height: 36px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 18px;
+             background: var(--hover); color: var(--accent); font-weight: 500; white-space: nowrap; }
+.ad-remove:hover { filter: brightness(.96); }
+
+@media (max-width: 800px) {
+    :root { --ad-h: 64px; }
+    .ad-banner { padding-left: 12px; padding-right: 12px; gap: 10px; }
+    .ad-label { display: none; }
+    .ad-text { flex-direction: column; gap: 0; font-size: 13px; line-height: 18px; }
+    .ad-text strong { overflow: hidden; text-overflow: ellipsis; }
+    .ad-remove { height: 32px; padding: 0 12px; font-size: 13px; }
+
+    /* Der runde „+“-Button sitzt über dem Banner statt darauf */
+    .app.has-ad .fab { bottom: calc(16px + var(--ad-h) + env(safe-area-inset-bottom, 0px)); }
 }

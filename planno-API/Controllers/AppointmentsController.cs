@@ -17,7 +17,7 @@ namespace planno_API.Controllers
 
         private IQueryable<Appointment> QueryUserAppointments() => db.Appointments.Where(a => db.UserAppointments.Any(ua => ua.AppointmentId == a.Id && ua.UserId == CurrentUserId));
 
-        private static AppointmentResponse ToResponse(Appointment a) => new(a.Id, a.Title, a.StartTime, a.EndTime, a.Location, a.IsAllDay);
+        private static AppointmentResponse ToResponse(Appointment a) => new(a.Id, a.Title, a.StartTime, a.EndTime, a.Location, a.IsAllDay, a.Description);
 
         [HttpGet]
         public async Task<ActionResult<List<AppointmentResponse>>> GetAll()
@@ -44,7 +44,8 @@ namespace planno_API.Controllers
                 StartTime = request.StartTime,
                 EndTime = request.EndTime,
                 Location = request.Location,
-                IsAllDay = request.IsAllDay
+                IsAllDay = request.IsAllDay,
+                Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim()
             };
 
             db.UserAppointments.Add(new UserAppointment
@@ -71,6 +72,7 @@ namespace planno_API.Controllers
             appointment.EndTime = request.EndTime;
             appointment.Location = request.Location;
             appointment.IsAllDay = request.IsAllDay;
+            appointment.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
 
             await db.SaveChangesAsync();
             return ToResponse(appointment);

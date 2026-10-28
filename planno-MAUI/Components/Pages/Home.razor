@@ -3,11 +3,12 @@
 @inject IJSRuntime JS
 @inject AuthService AuthService
 @inject AppointmentService AppointmentService
+@inject SubscriptionService SubscriptionService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Planno</PageTitle>
 
-<div class="app">
+<div class="app @(_showAds ? "has-ad" : "")">
     <CalendarHeader Date="_date"
                     View="_view"
                     ViewChanged="SetView"
@@ -76,6 +77,11 @@
         }
     </div>
 
+    @if (_showAds)
+    {
+        <AdBanner />
+    }
+
     <button class="fab" type="button" aria-label="Termin erstellen" @onclick="OpenCreate">
         <Icon Name="add" Size="28" />
     </button>
@@ -100,6 +106,7 @@
     private bool _sidebarOpen = true;
     private bool _drawerOpen;
     private List<AppointmentResponse> _appointments = new();
+    private bool _showAds;   // erst nach geladenem Abo-Status, damit Premium-Nutzer nie kurz Werbung sehen
 
     private bool _createOpen;
     private int _windowKey;
@@ -191,6 +198,16 @@
         {
             _appointments = new();
         }
+
+        try
+        {
+            var status = await SubscriptionService.GetSubscriptionStatusAsync();
+            _showAds = status is { IsPremium: false };
+        }
+        catch (Exception)
+        {
+            _showAds = false;
+        }
     }
 
     private async Task SaveAppointment(AppointmentRequest request)
@@ -229,12 +246,12 @@
         var newStart = move.Start;
         var newEnd = newStart + (original.EndTime - original.StartTime);
 
-        Replace(original.Id, new AppointmentResponse(original.Id, original.Title, newStart, newEnd, original.Location, original.IsAllDay));
+        Replace(original.Id, original with { StartTime = newStart, EndTime = newEnd });
 
         AppointmentResponse? saved = null;
         try
         {
-            var request = new AppointmentRequest(original.Title, newStart, newEnd, original.Location ?? "", original.IsAllDay);
+            var request = new AppointmentRequest(original.Title, newStart, newEnd, original.Location ?? "", original.IsAllDay, original.Description);
             saved = await AppointmentService.UpdateAppointmentAsync(original.Id, request);
         }
         catch (HttpRequestException)
