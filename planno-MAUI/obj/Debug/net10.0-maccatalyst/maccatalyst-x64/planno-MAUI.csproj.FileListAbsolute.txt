@@ -357,3 +357,5 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\macca
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\planno-MAUI.pdb
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\planno-MAUI.genruntimeconfig.cache
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\ref\planno-MAUI.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\CommunityToolkit.Maui.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-maccatalyst\maccatalyst-x64\CommunityToolkit.Maui.Core.dll

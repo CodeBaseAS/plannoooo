@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
+using Microsoft.AspNetCore.Components.Authorization;
 using planno_MAUI.Services;
 
 namespace planno_MAUI;
@@ -11,6 +13,7 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -41,6 +44,8 @@ public static class MauiProgram
         builder.Services.AddScoped<InvoiceService>();
         builder.Services.AddScoped<PaymentService>();
         builder.Services.AddScoped<SubscriptionService>();
+        builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
+        builder.Services.AddSingleton<DownloadService>();
 
         builder.Services.AddCascadingAuthenticationState();
 

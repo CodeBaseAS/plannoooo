@@ -16,5 +16,11 @@ namespace planno_MAUI.Services
         {
             return await _httpClient.GetFromJsonAsync<SubscriptionStatusResponse>($"Subscriptions/me");
         }
+
+        public async Task<bool> CancelAsync()
+        {
+            var response = await _httpClient.PostAsync("Subscriptions/cancel", null);
+            return response.IsSuccessStatusCode;
+        }
     }
 }

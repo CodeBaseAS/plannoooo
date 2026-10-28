@@ -38,5 +38,27 @@ namespace planno_API.Controllers
                 premium ? user.ActiveSubscription!.Description : null,
                 user.SubscriptionExpiresAt);
         }
+
+        [Authorize]
+        [HttpPost("cancel")]
+        public async Task<IActionResult> Cancel()
+        {
+            User? user = await db.Users.FindAsync(CurrentUserId);
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.ActiveSubscriptionId is null || user.SubscriptionExpiresAt <= DateTime.UtcNow)
+            {
+                return NotFound("No active subscription.");
+            }
+
+            user.ActiveSubscriptionId = null;
+            user.SubscriptionExpiresAt = DateTime.UtcNow;
+            await db.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

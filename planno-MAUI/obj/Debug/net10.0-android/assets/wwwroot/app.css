@@ -63,7 +63,7 @@ a { color: inherit; text-decoration: none; }
 .search input::placeholder { color: var(--text-2); }
 .search:focus-within { outline: 2px solid var(--accent); }
 
-.upgrade { height: 40px; margin-left: 24px; padding: 0 28px; border-radius: 20px; background: var(--hover); color: var(--accent); font-size: 14px; font-weight: 500; }
+.upgrade { height: 40px; margin-left: 24px; padding: 0 28px; display: inline-flex; align-items: center; border-radius: 20px; background: var(--hover); color: var(--accent); font-size: 14px; font-weight: 500; }
 .upgrade:hover { filter: brightness(.96); }
 
 .avatar { width: 32px; height: 32px; margin-left: 24px; border-radius: 50%; background: var(--text-2); color: #fff; display: grid; place-items: center; font-size: 18px; }
@@ -80,7 +80,7 @@ a { color: inherit; text-decoration: none; }
 .menu-item.active { font-weight: 500; }
 
 /* ---------- Sidebar ---------- */
-.sidebar { width: var(--sidebar-w); flex: none; padding: 4px 49px 0 37px; overflow: hidden;
+.sidebar { width: var(--sidebar-w); flex: none; padding: 4px 49px 0 37px; overflow: hidden; display: flex; flex-direction: column;
            transition: width .2s cubic-bezier(.2, 0, 0, 1), padding .2s cubic-bezier(.2, 0, 0, 1); }
 .sidebar.collapsed { width: var(--sidebar-w-collapsed); padding-left: 26px; padding-right: 0; }
 
@@ -97,8 +97,17 @@ a { color: inherit; text-decoration: none; }
 .mini { width: 204px; margin-top: 56px; transition: opacity .15s, visibility .15s; }
 .sidebar.collapsed .mini { opacity: 0; visibility: hidden; }
 
+/* Upgrade-Button ganz unten in der Sidebar */
+.side-upgrade { flex: none; width: 100%; height: 48px; margin: auto 0 24px; padding: 0 20px; display: flex; align-items: center; overflow: hidden;
+                border-radius: 24px; background: var(--hover); color: var(--accent); font-size: 14px; font-weight: 500;
+                transition: width .2s cubic-bezier(.2, 0, 0, 1), padding .2s cubic-bezier(.2, 0, 0, 1); }
+.side-upgrade:hover { filter: brightness(.96); }
+.side-upgrade span { max-width: 120px; margin-left: 16px; white-space: nowrap; transition: max-width .2s, margin-left .2s, opacity .15s; }
+.sidebar.collapsed .side-upgrade { width: 56px; padding: 0 16px; }
+.sidebar.collapsed .side-upgrade span { max-width: 0; margin-left: 0; opacity: 0; }
+
 @media (prefers-reduced-motion: reduce) {
-    .sidebar, .create, .create span, .mini { transition: none; }
+    .sidebar, .create, .create span, .mini, .side-upgrade, .side-upgrade span { transition: none; }
 }
 .mini-head { display: flex; align-items: center; height: 32px; padding-left: 7px; }
 .mini-title { flex: 1; font-size: 14px; font-weight: 500; }
@@ -454,7 +463,9 @@ button { -webkit-tap-highlight-color: transparent; }
     .sidebar.drawer-open { transform: none; visibility: visible; }
     .sidebar .create { display: none; }                       /* ersetzt durch den runden Button unten rechts */
     .sidebar.collapsed .mini { opacity: 1; visibility: visible; }
-    .mini { margin-top: 8px; }
+    .mini { width: 100%; margin-top: 8px; }          /* volle Schubladenbreite statt fester Desktop-Breite */
+    .sidebar .mini-dow { font-size: 11px; }
+    .sidebar .mini-day { width: 32px; height: 32px; font-size: 12px; }   /* größere Tippflächen */
     .drawer-head { display: flex; align-items: center; gap: 4px; margin: 0 0 8px -8px; }
     .drawer-title { font-size: 28px; line-height: 1; letter-spacing: -.5px; }
     .drawer-scrim { display: block; position: fixed; inset: 0; z-index: 39; background: rgba(0, 0, 0, .32); }
@@ -536,3 +547,83 @@ button { -webkit-tap-highlight-color: transparent; }
         right: 0.75rem;
         top: 0.5rem;
     }
+
+/* ---------- Upgrade / Abos & Rechnungen ---------- */
+.billing { min-height: 100vh; background: var(--bg); }
+.billing-top { height: calc(64px + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) 16px 0 12px; display: flex; align-items: center; gap: 12px; }
+.billing-brand { font-size: 24px; line-height: 1; letter-spacing: -.3px; }
+
+.tabs { display: flex; gap: 8px; padding: 0 24px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.tab { position: relative; height: 48px; padding: 0 16px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; color: var(--text-2); white-space: nowrap; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); }
+.tab.active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; background: var(--accent); }
+
+.billing-main { max-width: 880px; margin: 0 auto; padding: 40px 24px calc(48px + env(safe-area-inset-bottom, 0px)); }
+.billing-main > .auth-alert { margin-bottom: 24px; }
+.billing-title { margin: 0 0 8px; font-size: 32px; line-height: 40px; font-weight: 400; text-align: center; }
+.billing-sub { margin: 0 0 40px; font-size: 16px; line-height: 24px; color: var(--text-2); text-align: center; }
+.billing-loading { padding: 80px 0; display: grid; place-items: center; }
+.spinner.dark { border-color: rgba(9, 87, 208, .2); border-top-color: var(--accent); }
+
+/* Abo-Karten */
+.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 340px)); justify-content: center; gap: 24px; }
+.plan { position: relative; padding: 32px 28px 28px; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; }
+.plan.featured:not(.current) { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.plan-badge { position: absolute; top: -13px; left: 28px; height: 26px; padding: 0 12px; display: inline-flex; align-items: center;
+              border-radius: 13px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 500; }
+.plan.current .plan-badge { background: var(--hover); color: var(--accent); }
+.plan-name { margin: 0; font-size: 22px; line-height: 28px; font-weight: 400; }
+.plan-price { margin-top: 16px; display: flex; align-items: baseline; gap: 6px; }
+.plan-amount { font-size: 36px; line-height: 44px; }
+.plan-per { font-size: 14px; color: var(--text-2); }
+.plan-note { margin-top: 4px; font-size: 14px; line-height: 20px; color: var(--text-2); }
+.plan-features { margin: 24px 0 28px; padding: 24px 0 0; border-top: 1px solid var(--line); list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 14px; line-height: 20px; }
+.plan-features li { display: flex; align-items: flex-start; gap: 12px; }
+.plan-features .icon { flex: none; color: var(--accent); }
+.plan-btn { width: 100%; margin-top: auto; }
+.plan > button.plan-btn:not(.filled-btn) { height: 42px; border: 1px solid var(--line); border-radius: 21px; color: var(--text-2); font-size: 14px; font-weight: 500; cursor: default; }
+
+/* Abos & Rechnungen */
+.card-block { margin-top: 24px; padding: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; }
+.billing-title + .card-block { margin-top: 32px; }
+.block-title { margin: 0 0 16px; font-size: 18px; line-height: 24px; font-weight: 500; }
+.muted { margin: 0; font-size: 14px; line-height: 20px; color: var(--text-2); }
+
+.sub-row { display: flex; align-items: center; gap: 16px; }
+.sub-icon, .inv-icon { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--hover); color: var(--accent); }
+.sub-name { font-size: 16px; line-height: 24px; font-weight: 500; }
+.sub-meta, .inv-meta { font-size: 14px; line-height: 20px; color: var(--text-2); }
+.sub-actions { margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.text-btn.danger { color: var(--error); }
+.text-btn.danger:hover { background: #FCE8E6; }
+
+.invoice-list { margin: 0; padding: 0; list-style: none; }
+.invoice { padding: 12px 0; display: flex; align-items: center; gap: 16px; border-top: 1px solid var(--line); }
+.invoice:first-child { padding-top: 0; border-top: 0; }
+.inv-main { flex: 1; min-width: 0; }
+.inv-desc { font-size: 14px; line-height: 20px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inv-amount { font-size: 14px; white-space: nowrap; }
+.invoice .icon-btn:disabled { cursor: default; opacity: .6; }
+
+/* Kauf- und Kündigungsdialog */
+.checkout { max-height: calc(100vh - 32px); overflow-y: auto; background: var(--surface); }
+.confirm-title.tight { margin-bottom: 16px; }
+.co-text { margin: 0 0 20px; font-size: 14px; line-height: 20px; color: var(--text-2); }
+.co-text strong { font-weight: 500; color: var(--text); }
+.co-summary { margin-bottom: 20px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-radius: 12px; background: var(--bg); font-size: 14px; }
+.co-summary strong { font-size: 18px; font-weight: 500; }
+.co-hint { margin: 4px 0 24px; font-size: 12px; line-height: 16px; color: var(--text-2); }
+
+@media (max-width: 800px) {
+    .sidebar.collapsed .side-upgrade { width: 100%; padding: 0 20px; }
+    .sidebar.collapsed .side-upgrade span { max-width: 120px; margin-left: 16px; opacity: 1; }
+    .side-upgrade { margin-bottom: env(safe-area-inset-bottom, 0px); }
+
+    .tabs { padding: 0 8px; }
+    .billing-main { padding: 24px 16px calc(32px + env(safe-area-inset-bottom, 0px)); }
+    .billing-title { font-size: 24px; line-height: 32px; }
+    .billing-sub { margin-bottom: 32px; }
+    .plans { grid-template-columns: 1fr; gap: 28px; }
+    .card-block { padding: 20px 16px; border-radius: 20px; }
+}

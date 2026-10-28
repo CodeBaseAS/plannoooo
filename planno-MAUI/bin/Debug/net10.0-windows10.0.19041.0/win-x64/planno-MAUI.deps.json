@@ -9,6 +9,7 @@
     ".NETCoreApp,Version=v10.0/win-x64": {
       "planno-MAUI/1.0": {
         "dependencies": {
+          "CommunityToolkit.Maui": "13.0.0",
           "Microsoft.AspNetCore.Components.Authorization": "10.0.14",
           "Microsoft.AspNetCore.Components.WebView.Maui": "10.0.20",
           "Microsoft.Extensions.Http": "10.0.14",
@@ -35,6 +36,31 @@
           "WinRT.Runtime.dll": {
             "assemblyVersion": "2.2.0.0",
             "fileVersion": "2.2.0.48161"
+          }
+        }
+      },
+      "CommunityToolkit.Maui/13.0.0": {
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.20"
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.0.0"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.20",
+          "Microsoft.Maui.Essentials": "10.0.20",
+          "System.Speech": "9.0.5"
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.0.0"
           }
         }
       },
@@ -767,6 +793,14 @@
           }
         }
       },
+      "System.Speech/9.0.5": {
+        "runtime": {
+          "runtimes/win/lib/net9.0/System.Speech.dll": {
+            "assemblyVersion": "9.0.0.5",
+            "fileVersion": "9.0.525.21509"
+          }
+        }
+      },
       "Models/1.0.0": {
         "runtime": {
           "Models.dll": {
@@ -827,6 +861,20 @@
       "type": "runtimepack",
       "serviceable": false,
       "sha512": ""
+    },
+    "CommunityToolkit.Maui/13.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RlWY2UN1pqFPLpL0zyS4cbvoP2UiIqkUmEO9YgNgpEG1pdW4qg89QSAuAMfGrfGBDOI3sTLsDsikltTq10gFHA==",
+      "path": "communitytoolkit.maui/13.0.0",
+      "hashPath": "communitytoolkit.maui.13.0.0.nupkg.sha512"
+    },
+    "CommunityToolkit.Maui.Core/13.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-euega0VzzYOR7CuqIHTaa5pHK/Qjo8KUPHwoPlLftkdEPXzFguLKO5eb/MLPXbf74nf9ReUZc6/nSh2rjLAMQQ==",
+      "path": "communitytoolkit.maui.core/13.0.0",
+      "hashPath": "communitytoolkit.maui.core.13.0.0.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authorization/10.0.14": {
       "type": "package",
@@ -1128,6 +1176,13 @@
       "sha512": "sha512-zeVFVrkFYPkAL1cmXo62D1LVC66VqBiMx+WfZ3aDUmizNECCJewMTk0JwjlgYQcIqxqsK1SjF1CeG74TsokWpQ==",
       "path": "microsoft.windowsappsdk/1.7.250909003",
       "hashPath": "microsoft.windowsappsdk.1.7.250909003.nupkg.sha512"
+    },
+    "System.Speech/9.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nPZ2rcEVaZlxaLwBamFzz8f5MVM7Y08kzmDbcedXgeSWCGS9NN8mFjSsuTZm3W5pQLI4QhHmcu4h7A0Wf+cD/Q==",
+      "path": "system.speech/9.0.5",
+      "hashPath": "system.speech.9.0.5.nupkg.sha512"
     },
     "Models/1.0.0": {
       "type": "project",

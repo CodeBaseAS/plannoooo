@@ -19,7 +19,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets\msbuild.buildMultiTargeting.planno-MAUI.props
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets\msbuild.buildTransitive.planno-MAUI.props
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets.pack.json
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets.upToDateCheck.txt
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets.publish.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets.publish.endpoints.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\swae.publish.ex.cache
@@ -479,10 +478,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.WindowsAppRuntime.Bootstrap.dll
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Windows.SDK.NET.dll
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\WinRT.Runtime.dll
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Maui.Controls.HotReload.Forms.dll
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.VisualStudio.DesignTools.TapContract.dll
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.VisualStudio.DesignTools.XamlTapContract.dll
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Web.WebView2.Core.Projection.dll
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Models.dll
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Models.pdb
@@ -576,3 +571,11 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt.intermediate
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\planno-MAUI.btiuzpgiy3.bundle.scp.css
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\CommunityToolkit.Maui.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\CommunityToolkit.Maui.Core.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\System.Speech.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.Maui.Controls.HotReload.Forms.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.VisualStudio.DesignTools.TapContract.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Microsoft.VisualStudio.DesignTools.XamlTapContract.dll
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets.upToDateCheck.txt

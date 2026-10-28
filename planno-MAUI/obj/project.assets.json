@@ -2,6 +2,40 @@
   "version": 4,
   "targets": {
     "net10.0-android": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -2897,6 +2931,40 @@
       }
     },
     "net10.0-android/android-arm64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -5792,6 +5860,40 @@
       }
     },
     "net10.0-android/android-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -8687,6 +8789,40 @@
       }
     },
     "net10.0-android/iossimulator-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -11582,6 +11718,40 @@
       }
     },
     "net10.0-android/maccatalyst-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -14477,6 +14647,40 @@
       }
     },
     "net10.0-android/win-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "GoogleGson/2.13.1.1": {
         "type": "package",
         "dependencies": {
@@ -17372,6 +17576,40 @@
       }
     },
     "net10.0-ios": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -18247,6 +18485,40 @@
       }
     },
     "net10.0-ios/android-arm64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -19122,6 +19394,40 @@
       }
     },
     "net10.0-ios/android-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -19997,6 +20303,40 @@
       }
     },
     "net10.0-ios/iossimulator-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -20872,6 +21212,40 @@
       }
     },
     "net10.0-ios/maccatalyst-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -21747,6 +22121,40 @@
       }
     },
     "net10.0-ios/win-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -22622,6 +23030,40 @@
       }
     },
     "net10.0-maccatalyst": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -23497,6 +23939,40 @@
       }
     },
     "net10.0-maccatalyst/android-arm64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -24372,6 +24848,40 @@
       }
     },
     "net10.0-maccatalyst/android-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -25247,6 +25757,40 @@
       }
     },
     "net10.0-maccatalyst/iossimulator-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -26122,6 +26666,40 @@
       }
     },
     "net10.0-maccatalyst/maccatalyst-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -26997,6 +27575,40 @@
       }
     },
     "net10.0-maccatalyst/win-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -27872,6 +28484,41 @@
       }
     },
     "net10.0-windows10.0.19041.0": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10",
+          "System.Speech": "9.0.5"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -28986,6 +29633,28 @@
           }
         }
       },
+      "System.Speech/9.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net9.0/System.Speech.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
       "Models/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -28998,6 +29667,41 @@
       }
     },
     "net10.0-windows10.0.19041.0/android-arm64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10",
+          "System.Speech": "9.0.5"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -30048,6 +30752,22 @@
         "build": {
           "buildTransitive/Microsoft.WindowsAppSDK.props": {},
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
+        }
+      },
+      "System.Speech/9.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
         }
       },
       "Models/1.0.0": {
@@ -30062,6 +30782,41 @@
       }
     },
     "net10.0-windows10.0.19041.0/android-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10",
+          "System.Speech": "9.0.5"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -31112,6 +31867,22 @@
         "build": {
           "buildTransitive/Microsoft.WindowsAppSDK.props": {},
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
+        }
+      },
+      "System.Speech/9.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
         }
       },
       "Models/1.0.0": {
@@ -31126,6 +31897,41 @@
       }
     },
     "net10.0-windows10.0.19041.0/iossimulator-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10",
+          "System.Speech": "9.0.5"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -32176,6 +32982,22 @@
         "build": {
           "buildTransitive/Microsoft.WindowsAppSDK.props": {},
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
+        }
+      },
+      "System.Speech/9.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
         }
       },
       "Models/1.0.0": {
@@ -32190,6 +33012,41 @@
       }
     },
     "net10.0-windows10.0.19041.0/maccatalyst-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10",
+          "System.Speech": "9.0.5"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -33242,6 +34099,22 @@
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
         }
       },
+      "System.Speech/9.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
+        }
+      },
       "Models/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -33254,6 +34127,41 @@
       }
     },
     "net10.0-windows10.0.19041.0/win-x64": {
+      "CommunityToolkit.Maui/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "CommunityToolkit.Maui.Core": "13.0.0",
+          "Microsoft.Maui.Controls": "10.0.10"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Maui.Core/13.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Core": "10.0.10",
+          "Microsoft.Maui.Essentials": "10.0.10",
+          "System.Speech": "9.0.5"
+        },
+        "compile": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authorization/10.0.14": {
         "type": "package",
         "dependencies": {
@@ -34316,6 +35224,22 @@
           "buildTransitive/Microsoft.WindowsAppSDK.targets": {}
         }
       },
+      "System.Speech/9.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "runtimes/win/lib/net9.0/System.Speech.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
+        }
+      },
       "Models/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -34329,6 +35253,55 @@
     }
   },
   "libraries": {
+    "CommunityToolkit.Maui/13.0.0": {
+      "sha512": "RlWY2UN1pqFPLpL0zyS4cbvoP2UiIqkUmEO9YgNgpEG1pdW4qg89QSAuAMfGrfGBDOI3sTLsDsikltTq10gFHA==",
+      "type": "package",
+      "path": "communitytoolkit.maui/13.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ReadMe.txt",
+        "analyzers/dotnet/cs/CommunityToolkit.Maui.Analyzers.CodeFixes.dll",
+        "analyzers/dotnet/cs/CommunityToolkit.Maui.Analyzers.dll",
+        "analyzers/dotnet/cs/CommunityToolkit.Maui.SourceGenerators.dll",
+        "communitytoolkit.maui.13.0.0.nupkg.sha512",
+        "communitytoolkit.maui.nuspec",
+        "icon.png",
+        "lib/net10.0-android36.0/CommunityToolkit.Maui.dll",
+        "lib/net10.0-android36.0/CommunityToolkit.Maui.xml",
+        "lib/net10.0-ios26.0/CommunityToolkit.Maui.dll",
+        "lib/net10.0-ios26.0/CommunityToolkit.Maui.xml",
+        "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.dll",
+        "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.xml",
+        "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.dll",
+        "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.xml",
+        "lib/net10.0/CommunityToolkit.Maui.dll",
+        "lib/net10.0/CommunityToolkit.Maui.xml"
+      ]
+    },
+    "CommunityToolkit.Maui.Core/13.0.0": {
+      "sha512": "euega0VzzYOR7CuqIHTaa5pHK/Qjo8KUPHwoPlLftkdEPXzFguLKO5eb/MLPXbf74nf9ReUZc6/nSh2rjLAMQQ==",
+      "type": "package",
+      "path": "communitytoolkit.maui.core/13.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ReadMe.txt",
+        "communitytoolkit.maui.core.13.0.0.nupkg.sha512",
+        "communitytoolkit.maui.core.nuspec",
+        "icon.png",
+        "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.dll",
+        "lib/net10.0-android36.0/CommunityToolkit.Maui.Core.xml",
+        "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.dll",
+        "lib/net10.0-ios26.0/CommunityToolkit.Maui.Core.xml",
+        "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.dll",
+        "lib/net10.0-maccatalyst26.0/CommunityToolkit.Maui.Core.xml",
+        "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.dll",
+        "lib/net10.0-windows10.0.19041/CommunityToolkit.Maui.Core.xml",
+        "lib/net10.0/CommunityToolkit.Maui.Core.dll",
+        "lib/net10.0/CommunityToolkit.Maui.Core.xml"
+      ]
+    },
     "GoogleGson/2.13.1.1": {
       "sha512": "1yD5W1UPmgEEHrqdtVJI7330h1foGWiehVC07er3NiZxJPMmphTmPz2kuSXawIo8xmeIvd92WpiTOEmYpk6mzQ==",
       "type": "package",
@@ -36923,6 +37896,35 @@
         "tools/x86/GenXbf.dll"
       ]
     },
+    "System.Speech/9.0.5": {
+      "sha512": "nPZ2rcEVaZlxaLwBamFzz8f5MVM7Y08kzmDbcedXgeSWCGS9NN8mFjSsuTZm3W5pQLI4QhHmcu4h7A0Wf+cD/Q==",
+      "type": "package",
+      "path": "system.speech/9.0.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net8.0/_._",
+        "buildTransitive/netcoreapp2.0/System.Speech.targets",
+        "lib/net462/_._",
+        "lib/net8.0/System.Speech.dll",
+        "lib/net8.0/System.Speech.xml",
+        "lib/net9.0/System.Speech.dll",
+        "lib/net9.0/System.Speech.xml",
+        "lib/netstandard2.0/System.Speech.dll",
+        "lib/netstandard2.0/System.Speech.xml",
+        "runtimes/win/lib/net8.0/System.Speech.dll",
+        "runtimes/win/lib/net8.0/System.Speech.xml",
+        "runtimes/win/lib/net9.0/System.Speech.dll",
+        "runtimes/win/lib/net9.0/System.Speech.xml",
+        "system.speech.9.0.5.nupkg.sha512",
+        "system.speech.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "Xamarin.Android.Glide/4.16.0.14": {
       "sha512": "zoo2thzoKv5SuY9PeB3Iaf41L7P4Z0jyPRMLUrb5u35KPHgWyQvj9hBablvtaFXuZIMMYyctwkHJwc4a4NPEKA==",
       "type": "package",
@@ -39309,6 +40311,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0-android": [
+      "CommunityToolkit.Maui >= 13.0.0",
       "Microsoft.AspNetCore.Components.Authorization >= 10.0.14",
       "Microsoft.AspNetCore.Components.WebView.Maui >= 10.0.20",
       "Microsoft.Extensions.Http >= 10.0.14",
@@ -39318,6 +40321,7 @@
       "Models >= 1.0.0"
     ],
     "net10.0-ios": [
+      "CommunityToolkit.Maui >= 13.0.0",
       "Microsoft.AspNetCore.Components.Authorization >= 10.0.14",
       "Microsoft.AspNetCore.Components.WebView.Maui >= 10.0.20",
       "Microsoft.Extensions.Http >= 10.0.14",
@@ -39327,6 +40331,7 @@
       "Models >= 1.0.0"
     ],
     "net10.0-maccatalyst": [
+      "CommunityToolkit.Maui >= 13.0.0",
       "Microsoft.AspNetCore.Components.Authorization >= 10.0.14",
       "Microsoft.AspNetCore.Components.WebView.Maui >= 10.0.20",
       "Microsoft.Extensions.Http >= 10.0.14",
@@ -39336,6 +40341,7 @@
       "Models >= 1.0.0"
     ],
     "net10.0-windows10.0.19041.0": [
+      "CommunityToolkit.Maui >= 13.0.0",
       "Microsoft.AspNetCore.Components.Authorization >= 10.0.14",
       "Microsoft.AspNetCore.Components.WebView.Maui >= 10.0.20",
       "Microsoft.Extensions.Http >= 10.0.14",
@@ -39432,6 +40438,10 @@
         "framework": "net10.0-android36.0",
         "targetAlias": "net10.0-android",
         "dependencies": {
+          "CommunityToolkit.Maui": {
+            "target": "Package",
+            "version": "[13.0.0, )"
+          },
           "Microsoft.AspNetCore.Components.Authorization": {
             "target": "Package",
             "version": "[10.0.14, )"
@@ -39761,6 +40771,10 @@
         "framework": "net10.0-ios26.5",
         "targetAlias": "net10.0-ios",
         "dependencies": {
+          "CommunityToolkit.Maui": {
+            "target": "Package",
+            "version": "[13.0.0, )"
+          },
           "Microsoft.AspNetCore.Components.Authorization": {
             "target": "Package",
             "version": "[10.0.14, )"
@@ -40090,6 +41104,10 @@
         "framework": "net10.0-maccatalyst26.5",
         "targetAlias": "net10.0-maccatalyst",
         "dependencies": {
+          "CommunityToolkit.Maui": {
+            "target": "Package",
+            "version": "[13.0.0, )"
+          },
           "Microsoft.AspNetCore.Components.Authorization": {
             "target": "Package",
             "version": "[10.0.14, )"
@@ -40420,6 +41438,10 @@
         "framework": "net10.0-windows10.0.19041",
         "targetAlias": "net10.0-windows10.0.19041.0",
         "dependencies": {
+          "CommunityToolkit.Maui": {
+            "target": "Package",
+            "version": "[13.0.0, )"
+          },
           "Microsoft.AspNetCore.Components.Authorization": {
             "target": "Package",
             "version": "[10.0.14, )"

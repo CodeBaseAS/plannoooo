@@ -1,0 +1,431 @@
+@page "/upgrade"
+@page "/upgrade/{Tab}"
+@using static Models.Dtos.BillingDtos
+@inject AuthService AuthService
+@inject DownloadService DownloadService
+@inject SubscriptionService SubscriptionService
+@inject PaymentService PaymentService
+@inject InvoiceService InvoiceService
+@inject NavigationManager Nav
+
+<PageTitle>@(IsInvoices ? "Abos & Rechnungen" : "Upgrade") – Planno</PageTitle>
+
+<div class="billing">
+    <header class="billing-top">
+        <a class="icon-btn" href="/" aria-label="Zurück zum Kalender" title="Zurück zum Kalender">
+            <Icon Name="arrow_back" />
+        </a>
+        <span class="billing-brand">Planno</span>
+    </header>
+
+    <nav class="tabs" role="tablist">
+        <a class="tab @(IsInvoices ? "" : "active")" href="upgrade" role="tab" aria-selected="@(!IsInvoices)">Pläne</a>
+        <a class="tab @(IsInvoices ? "active" : "")" href="upgrade/rechnungen" role="tab" aria-selected="@IsInvoices">Abos &amp; Rechnungen</a>
+    </nav>
+
+    <main class="billing-main">
+        @if (_error is not null)
+        {
+            <div class="auth-alert" role="alert">@_error</div>
+        }
+        @if (_info is not null)
+        {
+            <div class="auth-alert info" role="status">@_info</div>
+        }
+
+        @if (_loading)
+        {
+            <div class="billing-loading"><span class="spinner dark" aria-label="Wird geladen"></span></div>
+        }
+        else if (!IsInvoices)
+        {
+            <h1 class="billing-title">Mehr aus Planno herausholen</h1>
+            <p class="billing-sub">Wähle ein Premium-Abo. Jederzeit kündbar.</p>
+
+            <div class="plans">
+                @foreach (var plan in _plans)
+                {
+                    var current = IsCurrent(plan);
+                    var saving = SavingPercent(plan);
+
+                    <section class="plan @(saving is not null ? "featured" : "") @(current ? "current" : "")">
+                        @if (current)
+                        {
+                            <span class="plan-badge">Dein Abo</span>
+                        }
+                        else if (saving is not null)
+                        {
+                            <span class="plan-badge">@saving % sparen</span>
+                        }
+
+                        <h2 class="plan-name">@plan.Description</h2>
+                        <div class="plan-price">
+                            <span class="plan-amount">@Money(plan.Price)</span>
+                            <span class="plan-per">@Per(plan.Interval)</span>
+                        </div>
+                        <div class="plan-note">
+                            @(plan.Interval > 1 ? $"entspricht {Money(plan.Price / plan.Interval)} pro Monat" : "monatlich abgerechnet")
+                        </div>
+
+                        <ul class="plan-features">
+                            @foreach (var feature in Features)
+                            {
+                                <li><Icon Name="check" Size="20" /><span>@feature</span></li>
+                            }
+                        </ul>
+
+                        @if (current)
+                        {
+                            <button type="button" class="plan-btn" disabled>Aktuelles Abo</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="filled-btn plan-btn" @onclick="() => OpenCheckout(plan)">
+                                @(IsPremium ? "Zu diesem Abo wechseln" : "Abonnieren")
+                            </button>
+                        }
+                    </section>
+                }
+            </div>
+        }
+        else
+        {
+            <h1 class="billing-title">Abos &amp; Rechnungen</h1>
+
+            <section class="card-block">
+                <h2 class="block-title">Dein Abo</h2>
+
+                @if (_status is { IsPremium: true } status)
+                {
+                    <div class="sub-row">
+                        <div class="sub-icon"><Icon Name="star" /></div>
+                        <div class="sub-info">
+                            <div class="sub-name">@status.Description</div>
+                            <div class="sub-meta">Aktiv bis @Date(status.ExpiresAt)</div>
+                        </div>
+                    </div>
+                    <div class="sub-actions">
+                        <button type="button" class="text-btn danger" @onclick="() => _confirmCancel = true">Kündigen</button>
+                        <a class="filled-btn" href="upgrade">Abo wechseln</a>
+                    </div>
+                }
+                else
+                {
+                    <p class="muted">Du hast derzeit kein aktives Abo.</p>
+                    <div class="sub-actions">
+                        <a class="filled-btn" href="upgrade">Upgrade</a>
+                    </div>
+                }
+            </section>
+
+            <section class="card-block">
+                <h2 class="block-title">Rechnungen</h2>
+
+                @if (_invoices.Count == 0)
+                {
+                    <p class="muted">Noch keine Rechnungen.</p>
+                }
+                else
+                {
+                    <ul class="invoice-list">
+                        @foreach (var invoice in _invoices)
+                        {
+                            <li class="invoice">
+                                <div class="inv-icon"><Icon Name="credit_card" /></div>
+                                <div class="inv-main">
+                                    <div class="inv-desc">@invoice.Description</div>
+                                    <div class="inv-meta">@invoice.InvoiceNumber · @Date(invoice.IssuedAt)</div>
+                                </div>
+                                <div class="inv-amount">@Money(invoice.Amount)</div>
+                                <button type="button" class="icon-btn"
+                                        aria-label="@($"Rechnung {invoice.InvoiceNumber} herunterladen")" title="Herunterladen"
+                                        disabled="@(_downloading is not null)"
+                                        @onclick="() => DownloadAsync(invoice.InvoiceNumber)">
+                                    @if (_downloading == invoice.InvoiceNumber) { <span class="spinner dark"></span> } else { <Icon Name="download" /> }
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                }
+            </section>
+        }
+    </main>
+</div>
+
+@if (_checkoutPlan is { } checkoutPlan)
+{
+    <div class="scrim">
+        <div class="confirm checkout" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+            @if (_purchase is { } purchase)
+            {
+                <h2 class="confirm-title tight" id="checkout-title">Vielen Dank!</h2>
+                <p class="co-text">
+                    <strong>@checkoutPlan.Description</strong> ist aktiv bis @Date(purchase.SubscriptionExpiresAt).
+                    Die Rechnung @purchase.InvoiceNumber findest du jederzeit unter „Abos &amp; Rechnungen“.
+                </p>
+                <div class="confirm-actions">
+                    <button type="button" class="text-btn" disabled="@(_downloading is not null)" @onclick="() => DownloadAsync(purchase.InvoiceNumber)">
+                        Rechnung herunterladen
+                    </button>
+                    <button type="button" class="filled-btn" @onclick="FinishCheckout">Fertig</button>
+                </div>
+            }
+            else
+            {
+                <h2 class="confirm-title tight" id="checkout-title">@checkoutPlan.Description</h2>
+
+                <div class="co-summary">
+                    <span>Heute fällig</span>
+                    <strong>@Money(checkoutPlan.Price)</strong>
+                </div>
+
+                @if (IsPremium)
+                {
+                    <p class="co-text">Dein aktuelles Abo wird ersetzt. Die neue Laufzeit schließt an die bereits bezahlte an (ab @Date(_status!.ExpiresAt)).</p>
+                }
+
+                @if (_checkoutError is not null)
+                {
+                    <div class="auth-alert" role="alert">@_checkoutError</div>
+                }
+
+                <EditForm Model="_card" OnValidSubmit="PayAsync" novalidate>
+                    <DataAnnotationsValidator />
+
+                    <div class="auth-fields">
+                        <TextField Label="Kartennummer" Autocomplete="cc-number" Autofocus="true" @bind-Value="_card.CardNumber" />
+                        <div class="auth-row">
+                            <TextField Label="Ablaufdatum (MM/JJ)" Autocomplete="cc-exp" @bind-Value="_card.Expiry" />
+                            <TextField Label="CVC" Autocomplete="cc-csc" @bind-Value="_card.Cvc" />
+                        </div>
+                    </div>
+
+                    <p class="co-hint">Demo – es wird keine echte Zahlung ausgeführt.</p>
+
+                    <div class="confirm-actions">
+                        <button type="button" class="text-btn" disabled="@_busy" @onclick="CloseCheckout">Abbrechen</button>
+                        <button type="submit" class="filled-btn" disabled="@_busy">
+                            @if (_busy) { <span class="spinner" aria-label="Bitte warten"></span> } else { <span>Kaufen</span> }
+                        </button>
+                    </div>
+                </EditForm>
+            }
+        </div>
+    </div>
+}
+
+@if (_confirmCancel && _status is { IsPremium: true } active)
+{
+    <div class="scrim">
+        <div class="confirm" role="alertdialog" aria-modal="true" aria-labelledby="cancel-title">
+            <h2 class="confirm-title tight" id="cancel-title">Abo kündigen?</h2>
+            <p class="co-text">@active.Description endet sofort. Bereits bezahlte Zeit wird nicht erstattet.</p>
+            <div class="confirm-actions">
+                <button type="button" class="text-btn" disabled="@_busy" @onclick="() => _confirmCancel = false">Abbrechen</button>
+                <button type="button" class="filled-btn danger" disabled="@_busy" @onclick="CancelAsync">
+                    @if (_busy) { <span class="spinner" aria-label="Bitte warten"></span> } else { <span>Kündigen</span> }
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private static readonly CultureInfo De = new("de-DE");
+
+    private static readonly string[] Features =
+    [
+        "Alle Premium-Funktionen von Planno",
+        "Rechnung als PDF zu jeder Zahlung",
+        "Jederzeit kündbar"
+    ];
+
+    [Parameter] public string? Tab { get; set; }
+
+    private List<SubscriptionResponse> _plans = [];
+    private SubscriptionStatusResponse? _status;
+    private List<InvoiceResponse> _invoices = [];
+
+    private bool _loading = true;
+    private bool _busy;
+    private string? _error;
+    private string? _info;
+    private string? _downloading;
+
+    private SubscriptionResponse? _checkoutPlan;
+    private CheckoutModel _card = new();
+    private CheckoutResponse? _purchase;
+    private string? _checkoutError;
+
+    private bool _confirmCancel;
+
+    private bool IsInvoices => string.Equals(Tab, "rechnungen", StringComparison.OrdinalIgnoreCase);
+    private bool IsPremium => _status?.IsPremium == true;
+
+    private bool IsCurrent(SubscriptionResponse plan) => IsPremium && _status!.SubscriptionId == plan.Id;
+
+    // Ersparnis gegenüber dem Monatsabo, z. B. Jahresabo: 29,99 € statt 12 × 2,99 €
+    private int? SavingPercent(SubscriptionResponse plan)
+    {
+        var monthly = _plans.Where(p => p.Interval == 1).Select(p => (decimal?)p.Price).Min();
+        if (plan.Interval <= 1 || monthly is not > 0) return null;
+
+        var percent = (int)Math.Round((1 - plan.Price / (monthly.Value * plan.Interval)) * 100);
+        return percent > 0 ? percent : null;
+    }
+
+    private static string Money(decimal amount) => amount.ToString("C", De);
+
+    private static string Per(int interval) => interval switch
+    {
+        1  => "/ Monat",
+        12 => "/ Jahr",
+        _  => $"/ {interval} Monate"
+    };
+
+    private static string Date(DateTime? date) => date?.ToLocalTime().ToString("d. MMMM yyyy", De) ?? "–";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(await AuthService.GetTokenAsync()))
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        try
+        {
+            var plans = SubscriptionService.GetSubscriptionsAsync();
+            var status = SubscriptionService.GetSubscriptionStatusAsync();
+            var invoices = InvoiceService.GetInvoicesAsync();
+
+            _plans = await plans ?? [];
+            _status = await status;
+            _invoices = await invoices ?? [];
+            _error = null;
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            await AuthService.LogoutAsync();
+            Nav.NavigateTo("/login");
+        }
+        catch (HttpRequestException)
+        {
+            _error = "Der Server ist nicht erreichbar. Bitte versuche es später erneut.";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void OpenCheckout(SubscriptionResponse plan)
+    {
+        _card = new();
+        _purchase = null;
+        _checkoutError = null;
+        _checkoutPlan = plan;
+    }
+
+    private void CloseCheckout() => _checkoutPlan = null;
+
+    private void FinishCheckout()
+    {
+        _checkoutPlan = null;
+        _purchase = null;
+        Nav.NavigateTo("upgrade/rechnungen");
+    }
+
+    private async Task PayAsync()
+    {
+        if (_checkoutPlan is not { } plan) return;
+
+        _busy = true;
+        _checkoutError = null;
+
+        try
+        {
+            var result = await PaymentService.CheckoutAsync(_card.ToRequest(plan.Id));
+            if (result is null)
+            {
+                _checkoutError = "Die Zahlung ist fehlgeschlagen. Bitte prüfe deine Kartendaten.";
+                return;
+            }
+
+            _purchase = result;
+            await LoadAsync();
+        }
+        catch (HttpRequestException)
+        {
+            _checkoutError = "Der Server ist nicht erreichbar. Bitte versuche es später erneut.";
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private async Task CancelAsync()
+    {
+        _busy = true;
+
+        try
+        {
+            if (!await SubscriptionService.CancelAsync())
+            {
+                _error = "Das Abo konnte nicht gekündigt werden.";
+            }
+
+            await LoadAsync();
+        }
+        catch (HttpRequestException)
+        {
+            _error = "Der Server ist nicht erreichbar. Bitte versuche es später erneut.";
+        }
+        finally
+        {
+            _busy = false;
+            _confirmCancel = false;
+        }
+    }
+
+    // Android: landet in „Downloads“, Windows: „Speichern unter“-Dialog
+    private async Task DownloadAsync(string invoiceNumber)
+    {
+        _downloading = invoiceNumber;
+        _error = _info = null;
+
+        try
+        {
+            var pdf = await InvoiceService.DownloadPdfAsync(invoiceNumber);
+            if (pdf is not { Length: > 0 })
+            {
+                _error = "Die Rechnung konnte nicht geladen werden.";
+                return;
+            }
+
+            var location = await DownloadService.SaveAsync($"{invoiceNumber}.pdf", pdf, "application/pdf");
+            if (location is not null)
+            {
+                _info = $"Rechnung gespeichert: {location}";
+            }
+        }
+        catch (HttpRequestException)
+        {
+            _error = "Der Server ist nicht erreichbar. Bitte versuche es später erneut.";
+        }
+        catch (Exception)
+        {
+            _error = "Die Rechnung konnte nicht gespeichert werden.";
+        }
+        finally
+        {
+            _downloading = null;
+        }
+    }
+}

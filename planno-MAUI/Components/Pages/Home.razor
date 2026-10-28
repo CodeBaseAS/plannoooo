@@ -37,6 +37,11 @@
             </button>
 
             <MiniCalendar Selected="_date" SelectedChanged="PickDate" />
+
+            <a class="side-upgrade" href="upgrade" aria-label="Upgrade" title="Upgrade">
+                <Icon Name="star" />
+                <span>Upgrade</span>
+            </a>
         </aside>
 
         @if (_view is CalendarView.Day or CalendarView.Week)

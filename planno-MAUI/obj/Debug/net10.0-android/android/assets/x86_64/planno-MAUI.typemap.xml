@@ -1,10 +1,10 @@
-<api type="debug" assembly-name="planno-MAUI" mvid="a9d68f837cc74ed6b8be26b99a89b563">
+<api type="debug" assembly-name="planno-MAUI" mvid="cdf90337d53e4fafb4144b8e293484ba">
   <java-to-managed>
-    <entry java-name="crc6468aa6cda262cd3be/MainActivity" managed-name="planno_MAUI.MainActivity, planno-MAUI" managed-type-token-id="33554444" />
-    <entry java-name="crc6468aa6cda262cd3be/MainApplication" managed-name="planno_MAUI.MainApplication, planno-MAUI" managed-type-token-id="33554445" />
+    <entry java-name="crc6468aa6cda262cd3be/MainActivity" managed-name="planno_MAUI.MainActivity, planno-MAUI" managed-type-token-id="33554458" />
+    <entry java-name="crc6468aa6cda262cd3be/MainApplication" managed-name="planno_MAUI.MainApplication, planno-MAUI" managed-type-token-id="33554459" />
   </java-to-managed>
   <managed-to-java>
-    <entry java-name="crc6468aa6cda262cd3be/MainActivity" managed-name="planno_MAUI.MainActivity, planno-MAUI" managed-type-token-id="33554444" />
-    <entry java-name="crc6468aa6cda262cd3be/MainApplication" managed-name="planno_MAUI.MainApplication, planno-MAUI" managed-type-token-id="33554445" />
+    <entry java-name="crc6468aa6cda262cd3be/MainActivity" managed-name="planno_MAUI.MainActivity, planno-MAUI" managed-type-token-id="33554458" />
+    <entry java-name="crc6468aa6cda262cd3be/MainApplication" managed-name="planno_MAUI.MainApplication, planno-MAUI" managed-type-token-id="33554459" />
   </managed-to-java>
 </api>
