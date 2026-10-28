@@ -1,0 +1,129 @@
+@implements IDisposable
+@inject AuthenticationStateProvider AuthProvider
+
+<header class="header">
+    <div class="brand">
+        <button class="icon-btn menu-btn" type="button"
+                aria-label="Seitenleiste ein- oder ausklappen"
+                aria-expanded="@SidebarOpen"
+                @onclick="OnMenu">
+            <Icon Name="menu" Size="40" />
+        </button>
+
+        <a class="logo" href="/">Planno</a>
+    </div>
+
+    <button class="pill today-pill" type="button" @onclick="OnToday">Heute</button>
+    <button class="icon-btn today-btn" type="button" aria-label="Heute" @onclick="OnToday">
+        <Icon Name="today" />
+    </button>
+
+    <div class="nav">
+        <button class="icon-btn" type="button" aria-label="Zurück" @onclick="OnPrev">
+            <Icon Name="chevron_left" />
+        </button>
+        <button class="icon-btn" type="button" aria-label="Weiter" @onclick="OnNext">
+            <Icon Name="chevron_right" />
+        </button>
+    </div>
+
+    <h1 class="period @(Title.Length > 17 ? "long" : "")">@Title</h1>
+
+    <label class="search">
+        <Icon Name="search" Size="22" />
+        <input type="search" placeholder="Suchen" aria-label="Suchen" />
+    </label>
+
+    <ViewModal View="View" ViewChanged="ViewChanged" />
+
+    <button class="upgrade" type="button">Upgrade</button>
+
+    <button type="button" class="avatar"
+            aria-label="@($"Konto: {_userName}")"
+            aria-haspopup="dialog"
+            aria-expanded="@_menuOpen"
+            title="@_userName"
+            @onclick="() => _menuOpen = !_menuOpen">@_initial</button>
+
+    @if (_menuOpen)
+    {
+        <AccountModal UserName="@_userName" Email="@_email" Initial="@_initial" OnClose="() => _menuOpen = false" />
+    }
+</header>
+
+@code {
+    private static readonly CultureInfo De = new("de-DE");
+
+    [Parameter] public DateTime Date { get; set; } = DateTime.Today;
+    [Parameter] public CalendarView View { get; set; } = CalendarView.Week;
+    [Parameter] public EventCallback<CalendarView> ViewChanged { get; set; }
+    [Parameter] public EventCallback OnToday { get; set; }
+    [Parameter] public EventCallback OnPrev { get; set; }
+    [Parameter] public EventCallback OnNext { get; set; }
+    [Parameter] public EventCallback OnMenu { get; set; }
+    [Parameter] public bool SidebarOpen { get; set; } = true;
+
+    private string _initial = "?";
+    private string _userName = "";
+    private string? _email;
+    private bool _menuOpen;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
+        await UpdateUserAsync(AuthProvider.GetAuthenticationStateAsync());
+    }
+
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+        => _ = InvokeAsync(async () =>
+        {
+            await UpdateUserAsync(task);
+            StateHasChanged();
+        });
+
+    private async Task UpdateUserAsync(Task<AuthenticationState> task)
+    {
+        AuthenticationState state = await task;
+        string? name = FindUserName(state.User);
+
+        _userName = name ?? "";
+        _email = state.User.FindFirst("email")?.Value ?? state.User.FindFirst(ClaimTypes.Email)?.Value;
+        _initial = string.IsNullOrWhiteSpace(name)
+            ? "?"
+            : StringInfo.GetNextTextElement(name.Trim()).ToUpper(De);
+    }
+
+    private static string? FindUserName(ClaimsPrincipal user)
+    {
+        if (user.Identity?.IsAuthenticated != true) return null;
+
+        return user.Identity.Name
+            ?? user.FindFirst("name")?.Value
+            ?? user.FindFirst("preferred_username")?.Value
+            ?? user.FindFirst(ClaimTypes.Name)?.Value
+            ?? user.FindFirst("email")?.Value;
+    }
+
+    public void Dispose() => AuthProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
+
+    private string Title => View switch
+    {
+        CalendarView.Day  => Date.ToString("d. MMMM yyyy", De),
+        CalendarView.Year => Date.Year.ToString(CultureInfo.InvariantCulture),
+        CalendarView.Week => WeekTitle(),
+        _                 => Date.ToString("MMMM yyyy", De)
+    };
+
+    private static readonly string[] ShortMonths =
+        { "Jan.", "Feb.", "März", "Apr.", "Mai", "Juni", "Juli", "Aug.", "Sept.", "Okt.", "Nov.", "Dez." };
+
+    private string WeekTitle()
+    {
+        var start = Date.Date.AddDays(-(((int)Date.DayOfWeek + 6) % 7));
+        var end = start.AddDays(6);
+
+        if (start.Month == end.Month) return end.ToString("MMMM yyyy", De);
+        if (start.Year == end.Year) return $"{ShortMonths[start.Month - 1]} – {ShortMonths[end.Month - 1]} {end.Year}";
+        return $"{ShortMonths[start.Month - 1]} {start.Year} – {ShortMonths[end.Month - 1]} {end.Year}";
+    }
+}

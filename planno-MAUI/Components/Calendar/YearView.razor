@@ -1,0 +1,60 @@
+<section class="year">
+    @for (var m = 1; m <= 12; m++)
+    {
+        var month = new DateTime(Date.Year, m, 1);
+        <div class="y-month">
+            <button type="button" class="y-title" @onclick="() => OnMonthPicked.InvokeAsync(month)">
+                @De.DateTimeFormat.GetMonthName(m)
+            </button>
+
+            <div class="mini-grid">
+                @foreach (var letter in "MDMDFSS")
+                {
+                    <span class="mini-dow">@letter</span>
+                }
+
+                @foreach (var d in Cells(month))
+                {
+                    var day = d;
+                    <button type="button"
+                            class="mini-day @StateClass(day, month)"
+                            @onclick="() => OnDayPicked.InvokeAsync(day)">
+                        @day.Day
+                    </button>
+                }
+            </div>
+        </div>
+    }
+</section>
+
+@code {
+    private static readonly CultureInfo De = new("de-DE");
+
+    [Parameter] public DateTime Date { get; set; } = DateTime.Today;
+    [Parameter] public IReadOnlyList<AppointmentResponse> Appointments { get; set; } = [];
+    [Parameter] public EventCallback<DateTime> OnDayPicked { get; set; }
+    [Parameter] public EventCallback<DateTime> OnMonthPicked { get; set; }
+
+    private HashSet<DateTime> _busyDays = [];
+
+    protected override void OnParametersSet()
+    {
+        _busyDays = AppointmentHelper
+        .DaysWithAppointments(
+            Appointments, new DateTime(Date.Year, 1, 1), new DateTime(Date.Year, 12, 31));
+    }
+
+    private static IEnumerable<DateTime> Cells(DateTime month)
+    {
+        var start = month.AddDays(-(((int)month.DayOfWeek + 6) % 7));
+        for (var i = 0; i < 42; i++) yield return start.AddDays(i);
+    }
+
+    private string StateClass(DateTime d, DateTime month)
+    {
+        if (d.Month != month.Month) return "";
+
+        var state = d.Date == DateTime.Today ? "today" : d.Date == Date.Date ? "selected" : "";
+        return _busyDays.Contains(d.Date) ? $"{state} has-event" : state;
+    }
+}

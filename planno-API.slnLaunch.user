@@ -1,6 +1,6 @@
 [
   {
-    "Name": "App",
+    "Name": "Blazor",
     "Projects": [
       {
         "Path": "planno-API\\planno-API.csproj",
@@ -8,6 +8,19 @@
       },
       {
         "Path": "planno-UI\\planno-UI.csproj",
+        "Action": "Start"
+      }
+    ]
+  },
+  {
+    "Name": "MAUI",
+    "Projects": [
+      {
+        "Path": "planno-API\\planno-API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "planno-MAUI\\planno-MAUI.csproj",
         "Action": "Start"
       }
     ]

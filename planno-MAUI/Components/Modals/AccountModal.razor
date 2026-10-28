@@ -1,0 +1,65 @@
+@inject AuthService Auth
+@inject TokenAuthenticationStateProvider AuthState
+@inject NavigationManager Nav
+
+<div class="menu-scrim" @onclick="OnClose"></div>
+
+<div class="account-menu"
+     data-no-shortcuts
+     role="dialog"
+     aria-label="Kontomenü"
+     tabindex="-1"
+     @ref="_root"
+     @onkeydown="OnKeyDown">
+
+    <div class="am-top">
+        <button type="button" class="icon-btn am-close" aria-label="Schließen" @onclick="OnClose">
+            <Icon Name="close" />
+        </button>
+    </div>
+
+    <div class="am-group">
+        <div class="am-profile">
+            <div class="am-avatar" aria-hidden="true">@Initial</div>
+            <div class="am-who">
+                <div class="am-name">@UserName</div>
+                @if (!string.IsNullOrEmpty(Email))
+                {
+                    <div class="am-email">@Email</div>
+                }
+            </div>
+        </div>
+
+        <button type="button" class="am-row" @onclick="LogoutAsync">
+            <span class="am-icon"><Icon Name="logout" /></span>
+            <span>Abmelden</span>
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string UserName { get; set; } = "";
+    [Parameter] public string? Email { get; set; }
+    [Parameter] public string Initial { get; set; } = "?";
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private ElementReference _root;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) await _root.FocusAsync();
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape") await OnClose.InvokeAsync();
+    }
+
+    private async Task LogoutAsync()
+    {
+        await Auth.LogoutAsync();
+        AuthState.ReportStatusChange();
+        await OnClose.InvokeAsync();
+        Nav.NavigateTo("/login");
+    }
+}

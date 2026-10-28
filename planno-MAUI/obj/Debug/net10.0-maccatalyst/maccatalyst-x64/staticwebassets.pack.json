@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Labor\\.nuget\\packages\\microsoft.aspnetcore.components.webview\\10.0.0\\staticwebassets\\blazor.modules.json",
+      "PackagePath": "staticwebassets\\_framework\\blazor.modules.json"
+    },
+    {
+      "Id": "C:\\Users\\Labor\\.nuget\\packages\\microsoft.aspnetcore.components.webview\\10.0.0\\staticwebassets\\blazor.webview.js",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webview.js"
+    },
+    {
+      "Id": "C:\\Users\\Labor\\Desktop\\plannoooo\\planno-MAUI\\obj\\Debug\\net10.0-maccatalyst\\maccatalyst-x64\\scopedcss\\bundle\\planno-MAUI.styles.css",
+      "PackagePath": "staticwebassets\\planno-MAUI.styles.css"
+    },
+    {
+      "Id": "C:\\Users\\Labor\\Desktop\\plannoooo\\planno-MAUI\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\Labor\\Desktop\\plannoooo\\planno-MAUI\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\Labor\\Desktop\\plannoooo\\planno-MAUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Labor\\Desktop\\plannoooo\\planno-MAUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Labor\\Desktop\\plannoooo\\planno-MAUI\\wwwroot\\planno.js",
+      "PackagePath": "staticwebassets\\planno.js"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.build.planno-MAUI.props",
+      "PackagePath": "build\\planno-MAUI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.buildMultiTargeting.planno-MAUI.props",
+      "PackagePath": "buildMultiTargeting\\planno-MAUI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.buildTransitive.planno-MAUI.props",
+      "PackagePath": "buildTransitive\\planno-MAUI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.planno-MAUI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-maccatalyst\\maccatalyst-x64\\staticwebassets\\msbuild.planno-MAUI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
