@@ -21,7 +21,6 @@
                         class="menu-item @(v == View ? "active" : "")"
                         @onclick="() => Select(v)">
                     <span>@item.Label</span>
-                    <kbd>@item.Key</kbd>
                 </button>
             }
         </div>
@@ -29,12 +28,12 @@
 </div>
 
 @code {
-    private static readonly (CalendarView View, string Label, string Key)[] Items =
+    private static readonly (CalendarView View, string Label)[] Items =
     {
-        (CalendarView.Day,   "Tag",   "D"),
-        (CalendarView.Week,  "Woche", "W"),
-        (CalendarView.Month, "Monat", "M"),
-        (CalendarView.Year,  "Jahr",  "Y"),
+        (CalendarView.Day,   "Tag"),
+        (CalendarView.Week,  "Woche"),
+        (CalendarView.Month, "Monat"),
+        (CalendarView.Year,  "Jahr"),
     };
 
     [Parameter] public CalendarView View { get; set; }

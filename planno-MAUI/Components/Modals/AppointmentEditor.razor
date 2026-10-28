@@ -2,7 +2,6 @@
 @inject IJSRuntime JS
 
 <div class="dialog @GrowClass"
-     data-no-shortcuts
      role="dialog"
      aria-label="@(Existing is null ? "Termin erstellen" : "Termin bearbeiten")"
      tabindex="-1"
@@ -126,9 +125,9 @@
     <div class="dlg-foot">
         @if (Existing is not null)
         {
-            <button type="button" class="filled-btn danger" @onclick="OnDelete">Löschen</button>
+            <button type="button" class="filled-btn danger" disabled="@_busy" @onclick="Delete">Löschen</button>
         }
-        <button type="button" class="filled-btn" @onclick="Save">Speichern</button>
+        <button type="button" class="filled-btn" disabled="@_busy" @onclick="Save">Speichern</button>
     </div>
 </div>
 
@@ -178,7 +177,7 @@
     private IJSObjectReference? _module;
 
     private Popup _popup;
-    private bool _scrollPending, _confirmOpen, _allDay;
+    private bool _scrollPending, _confirmOpen, _allDay, _busy;
     private DateTime _date;
     private int _start, _end;
     private string _title = "", _location = "";
@@ -354,7 +353,25 @@
     {
         var start = DateTime.SpecifyKind(_allDay ? _date : _date.AddMinutes(_start), DateTimeKind.Unspecified);
         var end = DateTime.SpecifyKind(_allDay ? _date.AddDays(1) : _date.AddMinutes(_end), DateTimeKind.Unspecified);
-        return OnSave.InvokeAsync(new AppointmentRequest(_title.Trim(), start, end, _location.Trim(), _allDay));
+        return RunOnce(() => OnSave.InvokeAsync(new AppointmentRequest(_title.Trim(), start, end, _location.Trim(), _allDay)));
+    }
+
+    private Task Delete() => RunOnce(() => OnDelete.InvokeAsync());
+
+    // Schnelle Mehrfachklicks kommen an, bevor der Button neu gerendert (deaktiviert) ist – daher zusätzlich das Flag prüfen
+    private async Task RunOnce(Func<Task> action)
+    {
+        if (_busy) return;
+        _busy = true;
+
+        try
+        {
+            await action();
+        }
+        finally
+        {
+            _busy = false;
+        }
     }
 
     public async ValueTask DisposeAsync()

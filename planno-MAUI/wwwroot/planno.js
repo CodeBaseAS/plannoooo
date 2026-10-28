@@ -4,26 +4,6 @@ export function scrollTo(element, top) {
     if (element) element.scrollTop = top;
 }
 
-// ---------- Tastenkürzel ----------
-let keyHandler = null;
-
-export function registerShortcuts(dotNet) {
-    unregisterShortcuts();
-    keyHandler = (e) => {
-        if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
-        const t = e.target;
-        if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
-        if (t && t.closest && t.closest("[data-no-shortcuts]")) return;   // z. B. im Termin-Fenster
-        dotNet.invokeMethodAsync("OnShortcut", e.key);
-    };
-    document.addEventListener("keydown", keyHandler);
-}
-
-export function unregisterShortcuts() {
-    if (keyHandler) document.removeEventListener("keydown", keyHandler);
-    keyHandler = null;
-}
-
 // ---------- Seitenweises Blättern per Mausrad ----------
 export function registerWheelPaging(element, dotNet) {
     let locked = false;

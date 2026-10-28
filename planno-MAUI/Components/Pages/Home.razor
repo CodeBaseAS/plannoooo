@@ -108,7 +108,6 @@
     private TimeSlot? _draft;
 
     private IJSObjectReference? _module;
-    private DotNetObjectReference<Home>? _self;
 
     private DateTime MonthKey => new(_date.Year, _date.Month, 1);
     private DateTime YearKey => new(_date.Year, 1, 1);
@@ -280,9 +279,7 @@
 
         try
         {
-            _self = DotNetObjectReference.Create(this);
             _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
-            await _module.InvokeVoidAsync("registerShortcuts", _self);
 
             if (await _module.InvokeAsync<bool>("isCompact"))
             {
@@ -295,29 +292,11 @@
         }
     }
 
-    [JSInvokable]
-    public async Task OnShortcut(string key)
-    {
-        switch (key.ToLowerInvariant())
-        {
-            case "d": _view = CalendarView.Day; break;
-            case "w": _view = CalendarView.Week; break;
-            case "m": _view = CalendarView.Month; break;
-            case "y": _view = CalendarView.Year; break;
-            case "t": _date = DateTime.Today; break;
-            default: return;
-        }
-
-        await InvokeAsync(StateHasChanged);
-    }
-
     public async ValueTask DisposeAsync()
     {
-        _self?.Dispose();
         if (_module is null) return;
         try
         {
-            await _module.InvokeVoidAsync("unregisterShortcuts");
             await _module.DisposeAsync();
         }
         catch (JSDisconnectedException) { }
