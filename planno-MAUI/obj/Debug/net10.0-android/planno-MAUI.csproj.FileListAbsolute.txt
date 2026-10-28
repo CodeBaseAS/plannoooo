@@ -5,7 +5,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\rpswa.dsw
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\rjimswa.dswa.cache.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\rjsmrazor.dswa.cache.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\rjsmcshtml.dswa.cache.json
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\scopedcss\bundle\planno-MAUI.styles.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\scopedcss\projectbundle\planno-MAUI.bundle.scp.css
@@ -1692,7 +1691,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\Ab
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\wwwroot\_framework\blazor.modules.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\wwwroot\_framework\blazor.webview.js
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\wwwroot\planno-MAUI.styles.css
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\wwwroot\planno-MAUI.hkzl6wa5zy.bundle.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\wwwroot\app.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\wwwroot\index.html
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
@@ -1719,3 +1717,4 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\stamp\_Co
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\stamp\_GenerateJavaStubs.stamp
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\stamp\_ResolveLibraryProjectImports.stamp
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-android\assets\wwwroot\planno-MAUI.btiuzpgiy3.bundle.scp.css

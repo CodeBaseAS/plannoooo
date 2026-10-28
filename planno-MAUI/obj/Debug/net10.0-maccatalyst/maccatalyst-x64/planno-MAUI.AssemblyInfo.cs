@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("planno-MAUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+4cbaecc55822d08a083f40ef9371b2bf625c6d86")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+803825c1670d384d923bd0aa105d40c37fb20fed")]
 [assembly: System.Reflection.AssemblyProductAttribute("planno-MAUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("planno-MAUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

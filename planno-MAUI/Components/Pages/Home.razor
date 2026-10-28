@@ -18,14 +18,12 @@
                     SidebarOpen="_sidebarOpen" />
 
     <div class="body">
-        @* Nur auf dem Handy sichtbar (siehe app.css): dunkelt hinter der Schublade ab, Tippen schließt sie *@
         @if (_drawerOpen)
         {
             <div class="drawer-scrim" @onclick="CloseDrawer"></div>
         }
 
         <aside class="sidebar @(_sidebarOpen ? "" : "collapsed") @(_drawerOpen ? "drawer-open" : "")">
-            @* Nur auf dem Handy sichtbar: Zurück-Pfeil, damit sich die Schublade wieder schließen lässt *@
             <div class="drawer-head">
                 <button type="button" class="icon-btn" aria-label="Seitenleiste schließen" @onclick="CloseDrawer">
                     <Icon Name="arrow_back" />
@@ -73,7 +71,6 @@
         }
     </div>
 
-    @* Nur auf dem Handy sichtbar: ersetzt den „Termin“-Button der Seitenleiste *@
     <button class="fab" type="button" aria-label="Termin erstellen" @onclick="OpenCreate">
         <Icon Name="add" Size="28" />
     </button>
@@ -95,8 +92,8 @@
 @code {
     private DateTime _date = DateTime.Today;
     private CalendarView _view = CalendarView.Week;
-    private bool _sidebarOpen = true;     // Desktop: Seitenleiste aufgeklappt
-    private bool _drawerOpen;             // Handy: Schublade sichtbar
+    private bool _sidebarOpen = true;
+    private bool _drawerOpen;
     private List<AppointmentResponse> _appointments = new();
 
     private bool _createOpen;
@@ -111,7 +108,6 @@
     private DateTime MonthKey => new(_date.Year, _date.Month, 1);
     private DateTime YearKey => new(_date.Year, 1, 1);
 
-    // Der Hamburger schaltet beides um: am Desktop klappt die Leiste ein/aus, am Handy fährt die Schublade aus/ein
     private void ToggleSidebar()
     {
         _sidebarOpen = !_sidebarOpen;
@@ -283,7 +279,6 @@
             _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
             await _module.InvokeVoidAsync("registerShortcuts", _self);
 
-            // Auf dem Handy startet die Tagesansicht (7 Spalten wären zu schmal)
             if (await _module.InvokeAsync<bool>("isCompact"))
             {
                 _view = CalendarView.Day;

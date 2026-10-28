@@ -104,6 +104,7 @@
     private DotNetObjectReference<WeekView>? _self;
     private System.Threading.Timer? _timer;
     private DateTime _now = DateTime.Now;
+    private bool _disposed;
 
     private int NowTop => (int)Math.Round(_now.TimeOfDay.TotalMinutes / 60.0 * HourHeight);
 
@@ -150,11 +151,18 @@
             await InvokeAsync(StateHasChanged);
         }, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
 
-        _self = DotNetObjectReference.Create(this);
-        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
-        await _module.InvokeVoidAsync("scrollTo", _scroll, 7 * HourHeight);
-        await _module.InvokeVoidAsync("registerGrid", _grid, _self);
-        await _module.InvokeVoidAsync("registerDayDrag", _head, _self, ".event-chip[data-id]", ".day-head[data-date]");
+        // Die Komponente kann zwischen den awaits entfernt werden (z.B. Ansichtswechsel, Weiterleitung) – dann still abbrechen
+        try
+        {
+            _self = DotNetObjectReference.Create(this);
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./planno.js");
+            if (_disposed) return;
+            await _module.InvokeVoidAsync("scrollTo", _scroll, 7 * HourHeight);
+            await _module.InvokeVoidAsync("registerGrid", _grid, _self);
+            await _module.InvokeVoidAsync("registerDayDrag", _head, _self, ".event-chip[data-id]", ".day-head[data-date]");
+        }
+        catch (ObjectDisposedException) { }
+        catch (JSDisconnectedException) { }
     }
 
     [JSInvokable]
@@ -187,6 +195,7 @@
 
     public async ValueTask DisposeAsync()
     {
+        _disposed = true;
         _timer?.Dispose();
         _self?.Dispose();
         if (_module is null) return;

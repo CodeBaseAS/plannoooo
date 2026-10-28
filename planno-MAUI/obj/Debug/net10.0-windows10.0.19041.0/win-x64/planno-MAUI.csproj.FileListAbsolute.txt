@@ -5,7 +5,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\rjimswa.dswa.cache.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\rjsmrazor.dswa.cache.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\rjsmcshtml.dswa.cache.json
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\scopedcss\bundle\planno-MAUI.styles.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\scopedcss\projectbundle\planno-MAUI.bundle.scp.css
@@ -40,7 +39,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\_framework\blazor.modules.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\_framework\blazor.webview.js
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\planno-MAUI.styles.css
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\planno-MAUI.hkzl6wa5zy.bundle.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\app.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\index.html
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
@@ -103,7 +101,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\dotnet_bot.scale-150.png
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\dotnet_bot.scale-200.png
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\dotnet_bot.scale-400.png
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Components\Layout\MainLayout.razor.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Components\Layout\NavMenu.razor.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\planno-MAUI.staticwebassets.endpoints.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\CoreMessagingXP.dll
@@ -578,3 +575,4 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt.intermediate
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\MultipleQualifiersPerDimensionFound.txt
+C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\planno-MAUI.btiuzpgiy3.bundle.scp.css

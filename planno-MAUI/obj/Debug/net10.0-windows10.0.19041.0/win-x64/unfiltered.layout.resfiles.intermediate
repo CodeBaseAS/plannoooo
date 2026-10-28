@@ -1,6 +1,5 @@
 wwwroot\_framework\blazor.modules.json
 wwwroot\_framework\blazor.webview.js
-Components\Layout\MainLayout.razor.css
 Components\Layout\NavMenu.razor.css
 OpenSans-Regular.ttf
 appicon.ico
@@ -60,7 +59,7 @@ splashSplashScreen.scale-150.png
 splashSplashScreen.scale-200.png
 splashSplashScreen.scale-400.png
 wwwroot\planno-MAUI.styles.css
-wwwroot\planno-MAUI.hkzl6wa5zy.bundle.scp.css
+wwwroot\planno-MAUI.btiuzpgiy3.bundle.scp.css
 AboutAssets.txt
 wwwroot\app.css
 wwwroot\index.html
