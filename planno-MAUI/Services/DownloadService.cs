@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Storage;
+
 #if ANDROID
 using Android.Content;
 using Android.Provider;
@@ -10,11 +11,9 @@ namespace planno_MAUI.Services
     {
         private readonly IFileSaver _fileSaver = fileSaver;
 
-        // Gibt den Speicherort zurück oder null, wenn der Nutzer den Speichern-Dialog abgebrochen hat
         public async Task<string?> SaveAsync(string fileName, byte[] content, string mimeType)
         {
 #if ANDROID
-            // Android: direkt in den öffentlichen „Downloads“-Ordner, wie ein Browser-Download
             if (OperatingSystem.IsAndroidVersionAtLeast(29))
             {
                 return await SaveToMediaStoreAsync(fileName, content, mimeType);
@@ -34,7 +33,7 @@ namespace planno_MAUI.Services
             var result = await _fileSaver.SaveAsync(fileName, stream, CancellationToken.None);
 
             if (result.IsSuccessful) return result.FilePath;
-            if (result.Exception is FileSaveException) return null;   // Dialog abgebrochen
+            if (result.Exception is FileSaveException) return null;
 
             throw result.Exception ?? new IOException("Speichern fehlgeschlagen.");
 #endif
@@ -62,7 +61,6 @@ namespace planno_MAUI.Services
                     await output.WriteAsync(content);
                 }
 
-                // Erst jetzt für andere Apps (Dateien, PDF-Viewer) sichtbar machen
                 values.Clear();
                 values.Put(MediaStore.IMediaColumns.IsPending, 0);
                 resolver.Update(uri, values, null, null);

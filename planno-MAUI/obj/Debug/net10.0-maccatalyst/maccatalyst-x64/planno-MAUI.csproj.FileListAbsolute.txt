@@ -293,9 +293,7 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\macca
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\rjimswa.dswa.cache.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\rjsmrazor.dswa.cache.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\rjsmcshtml.dswa.cache.json
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\scopedcss\bundle\planno-MAUI.styles.css
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\scopedcss\projectbundle\planno-MAUI.bundle.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\staticwebassets.build.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\staticwebassets.build.json.cache
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-maccatalyst\maccatalyst-x64\staticwebassets.development.json

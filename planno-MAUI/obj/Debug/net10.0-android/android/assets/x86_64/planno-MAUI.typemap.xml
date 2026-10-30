@@ -1,4 +1,4 @@
-<api type="debug" assembly-name="planno-MAUI" mvid="5bc4e595b892491c85542eefe685e0b5">
+<api type="debug" assembly-name="planno-MAUI" mvid="252604d593cc4fd7bf6ec173ba9664cf">
   <java-to-managed>
     <entry java-name="crc6468aa6cda262cd3be/MainActivity" managed-name="planno_MAUI.MainActivity, planno-MAUI" managed-type-token-id="33554458" />
     <entry java-name="crc6468aa6cda262cd3be/MainApplication" managed-name="planno_MAUI.MainApplication, planno-MAUI" managed-type-token-id="33554459" />

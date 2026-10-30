@@ -1,4 +1,4 @@
-<div class="view-menu" @onkeydown="OnKeyDown">
+<div class="view-menu">
     <button type="button"
             class="pill view-switch @(_open ? "open" : "")"
             aria-haspopup="menu"
@@ -30,10 +30,10 @@
 @code {
     private static readonly (CalendarView View, string Label)[] Items =
     {
-        (CalendarView.Day,   "Tag"),
-        (CalendarView.Week,  "Woche"),
-        (CalendarView.Month, "Monat"),
-        (CalendarView.Year,  "Jahr"),
+        (CalendarView.Day,   "Day"),
+        (CalendarView.Week,  "Week"),
+        (CalendarView.Month, "Month"),
+        (CalendarView.Year,  "Year"),
     };
 
     [Parameter] public CalendarView View { get; set; }
@@ -60,10 +60,5 @@
     {
         _open = false;
         await ViewChanged.InvokeAsync(v);
-    }
-
-    private void OnKeyDown(KeyboardEventArgs e)
-    {
-        if (e.Key == "Escape") _open = false;
     }
 }

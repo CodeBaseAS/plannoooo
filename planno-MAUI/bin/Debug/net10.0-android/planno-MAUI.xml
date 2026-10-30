@@ -10,12 +10,6 @@
             Exposes the Android Resource designer assembly into the project Namespace.
             </summary>
         </member>
-        <member name="P:planno_MAUI.Components.Calendar.MonthView.OnAppointmentClick">
-            <summary>Ein Termin wurde angeklickt.</summary>
-        </member>
-        <member name="P:planno_MAUI.Components.Calendar.MonthView.OnAppointmentMove">
-            <summary>Ein Termin wurde per Drag &amp; Drop auf einen anderen Tag gezogen (Id, neuer Start).</summary>
-        </member>
         <member name="M:CheckoutModel.ExpiryPattern">
             <remarks>
             Pattern:<br/>

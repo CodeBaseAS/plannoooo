@@ -53,7 +53,7 @@ namespace planno_API.Services
                         table.Cell().Text("VAT 20%");
                         table.Cell().AlignRight().Text(vat.ToString("C", Culture));
 
-                        table.Cell().Text("Total (Gross)").Bold();
+                        table.Cell().Text("Total").Bold();
                         table.Cell().AlignRight().Text(d.Gross.ToString("C", Culture)).Bold();
                     });
 

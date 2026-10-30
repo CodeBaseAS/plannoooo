@@ -151,7 +151,6 @@
             await InvokeAsync(StateHasChanged);
         }, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
 
-        // Die Komponente kann zwischen den awaits entfernt werden (z.B. Ansichtswechsel, Weiterleitung) – dann still abbrechen
         try
         {
             _self = DotNetObjectReference.Create(this);

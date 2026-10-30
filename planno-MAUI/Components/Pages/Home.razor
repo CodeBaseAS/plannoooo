@@ -1,5 +1,7 @@
 @page "/"
+
 @implements IAsyncDisposable
+
 @inject IJSRuntime JS
 @inject AuthService AuthService
 @inject AppointmentService AppointmentService
@@ -106,7 +108,7 @@
     private bool _sidebarOpen = true;
     private bool _drawerOpen;
     private List<AppointmentResponse> _appointments = new();
-    private bool _showAds;   // erst nach geladenem Abo-Status, damit Premium-Nutzer nie kurz Werbung sehen
+    private bool _showAds;
 
     private bool _createOpen;
     private int _windowKey;

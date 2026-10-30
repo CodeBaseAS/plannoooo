@@ -3,10 +3,9 @@
 
 <div class="dialog @GrowClass"
      role="dialog"
-     aria-label="@(Existing is null ? "Termin erstellen" : "Termin bearbeiten")"
+     aria-label="@(Existing is null ? "Create Appointment" : "Edit Appointment")"
      tabindex="-1"
-     @ref="_dialog"
-     @onkeydown="OnKeyDown">
+     @ref="_dialog">
 
     <div class="dlg-head">
         <div class="drag-zone" @ref="_handle" title="Verschieben">
@@ -345,14 +344,6 @@
         return $"{h12}:{m:00}{(h < 12 ? "AM" : "PM")}";
     }
 
-    private void OnKeyDown(KeyboardEventArgs e)
-    {
-        if (e.Key != "Escape") return;
-
-        if (_popup != Popup.None) ClosePopup();
-        else RequestClose();
-    }
-
     private void RequestClose() => _confirmOpen = true;
 
     private Task Discard() => OnClose.InvokeAsync();
@@ -366,7 +357,6 @@
 
     private Task Delete() => RunOnce(() => OnDelete.InvokeAsync());
 
-    // Schnelle Mehrfachklicks kommen an, bevor der Button neu gerendert (deaktiviert) ist – daher zusätzlich das Flag prüfen
     private async Task RunOnce(Func<Task> action)
     {
         if (_busy) return;

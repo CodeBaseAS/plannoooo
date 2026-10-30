@@ -1,0 +1,15 @@
+<api>
+  <jcw-types>
+    <type name="MainActivity" package="crc6468aa6cda262cd3be" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiAppCompatActivity" partial_assembly_qualified_name="planno_MAUI.MainActivity, planno-MAUI">
+      <constructors>
+        <constructor name="MainActivity" method="n_.ctor:()V:" jni_signature="()V" managed_parameters="" retval="void" is_dynamically_registered="True" />
+        <constructor name="MainActivity" method="n_.ctor:(I)V:" jni_signature="(I)V" managed_parameters="System.Int32, System.Private.CoreLib" params="int p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+      </constructors>
+    </type>
+    <type name="MainApplication" package="crc6468aa6cda262cd3be" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiApplication" is_application="True" partial_assembly_qualified_name="planno_MAUI.MainApplication, planno-MAUI" application_constructor="MainApplication" />
+  </jcw-types>
+  <acw-types partial-assembly-name="planno-MAUI" module-name="planno-MAUI.dll">
+    <type assembly-qualified-name="planno_MAUI.MainActivity, planno-MAUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="planno_maui.MainActivity" java-key="crc6468aa6cda262cd3be.MainActivity" managed-key="planno_MAUI.MainActivity" partial-assembly-qualified-name="planno_MAUI.MainActivity, planno-MAUI" />
+    <type assembly-qualified-name="planno_MAUI.MainApplication, planno-MAUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="planno_maui.MainApplication" java-key="crc6468aa6cda262cd3be.MainApplication" managed-key="planno_MAUI.MainApplication" partial-assembly-qualified-name="planno_MAUI.MainApplication, planno-MAUI" />
+  </acw-types>
+</api>

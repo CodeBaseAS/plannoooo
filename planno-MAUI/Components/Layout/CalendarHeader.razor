@@ -39,7 +39,7 @@
     <a class="upgrade" href="upgrade">Upgrade</a>
 
     <button type="button" class="avatar"
-            aria-label="@($"Konto: {_userName}")"
+            aria-label="@($"Account: {_userName}")"
             aria-haspopup="dialog"
             aria-expanded="@_menuOpen"
             title="@_userName"
@@ -114,8 +114,8 @@
         _                 => Date.ToString("MMMM yyyy", De)
     };
 
-    private static readonly string[] ShortMonths =
-        { "Jan.", "Feb.", "März", "Apr.", "Mai", "Juni", "Juli", "Aug.", "Sept.", "Okt.", "Nov.", "Dez." };
+private static readonly string[] ShortMonths =
+    { "Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec." };
 
     private string WeekTitle()
     {

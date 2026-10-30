@@ -12,12 +12,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>dvhkc4cxbz</Fingerprint>
-      <Integrity>ebNOSTich340+dwFBXCYxRpDuZghyHq9kiFbN8J3VNQ=</Integrity>
+      <Fingerprint>f1poq902j9</Fingerprint>
+      <Integrity>wzIv7kxz+iRt+QlUWpQN9+/XhdC4NkIshlDPp41j//A=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>42758</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 11:44:44 GMT</LastWriteTime>
+      <FileLength>42130</FileLength>
+      <LastWriteTime>Fri, 30 Oct 2026 07:24:49 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))">
@@ -99,26 +99,6 @@
       <FileLength>16719</FileLength>
       <LastWriteTime>Wed, 28 Oct 2026 11:34:48 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\planno.js'))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\planno-MAUI.styles.css'))">
-      <SourceType>Package</SourceType>
-      <SourceId>planno-MAUI</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>/</BasePath>
-      <RelativePath>planno-MAUI.styles.css</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>CurrentProject</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName>ScopedCss</AssetTraitName>
-      <AssetTraitValue>ApplicationBundle</AssetTraitValue>
-      <Fingerprint>btiuzpgiy3</Fingerprint>
-      <Integrity>Qb4vV4bdHdrNiZ6SQHMrHL0KBnDcNArOn3eJuaGnt4o=</Integrity>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>3703</FileLength>
-      <LastWriteTime>Wed, 28 Oct 2026 11:47:01 GMT</LastWriteTime>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\planno-MAUI.styles.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\_framework\blazor.modules.json'))">
       <SourceType>Package</SourceType>

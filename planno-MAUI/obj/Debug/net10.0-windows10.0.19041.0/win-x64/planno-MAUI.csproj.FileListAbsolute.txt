@@ -2,8 +2,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\AboutAssets.txt
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\_framework\blazor.modules.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\_framework\blazor.webview.js
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\planno-MAUI.styles.css
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\planno-MAUI.btiuzpgiy3.bundle.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\app.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\index.html
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
@@ -66,7 +64,6 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\appiconLogo.scale-125.png
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\appiconLogo.scale-100.png
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\appicon.ico
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\Components\Layout\NavMenu.razor.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\planno-MAUI.staticwebassets.endpoints.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\CoreMessagingXP.dll
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\bin\Debug\net10.0-windows10.0.19041.0\win-x64\dcompi.dll
@@ -463,9 +460,7 @@ C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\rjimswa.dswa.cache.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\rjsmrazor.dswa.cache.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\rjsmcshtml.dswa.cache.json
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\scopedcss\bundle\planno-MAUI.styles.css
-C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\scopedcss\projectbundle\planno-MAUI.bundle.scp.css
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets.build.json
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets.build.json.cache
 C:\Users\Labor\Desktop\plannoooo\planno-MAUI\obj\Debug\net10.0-windows10.0.19041.0\win-x64\staticwebassets.development.json

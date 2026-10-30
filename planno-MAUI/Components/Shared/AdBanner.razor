@@ -1,14 +1,13 @@
 @implements IDisposable
 
-@* Fiktive Werbung für Nutzer ohne Premium – verschwindet, sobald ein Abo aktiv ist *@
-<aside class="ad-banner" aria-label="Werbung">
-    <span class="ad-label">Anzeige</span>
+<aside class="ad-banner" aria-label="Advertisement">
+    <span class="ad-label">Ad</span>
     <div class="ad-logo" style="background:@Current.Color" aria-hidden="true">@Current.Brand[0]</div>
     <div class="ad-text">
         <strong>@Current.Brand</strong>
         <span>@Current.Text</span>
     </div>
-    <a class="ad-remove" href="upgrade">Werbefrei mit Premium</a>
+    <a class="ad-remove" href="upgrade">Go ad-free with Premium</a>
 </aside>
 
 @code {
